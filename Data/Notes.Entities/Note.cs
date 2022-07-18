@@ -2,6 +2,7 @@
 
 public class Note
 {
+    public int Id { get; set; }
     public string Name { get; set; } = String.Empty;
     public DateTime StartDateTime { get; set; }
     public DateTime EndDateTime { get; set; }

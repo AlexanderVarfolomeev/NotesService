@@ -31,4 +31,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
+    <ProjectReference Include="..\..\Services\Notes.Settings\Notes.Settings.csproj" />
+  </ItemGroup>
+
 </Project>
