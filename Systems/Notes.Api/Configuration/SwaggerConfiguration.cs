@@ -1,4 +1,6 @@
-﻿namespace Notes.Api.Configuration;
+﻿using Notes.Settings.Interfaces;
+
+namespace Notes.Api.Configuration;
 
 public static class SwaggerConfiguration
 {

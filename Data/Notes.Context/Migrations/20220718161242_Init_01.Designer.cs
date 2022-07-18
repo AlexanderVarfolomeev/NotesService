@@ -12,8 +12,8 @@ using Notes.Context.Context;
 namespace Notes.Context.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    [Migration("20220718152512_Init")]
-    partial class Init
+    [Migration("20220718161242_Init_01")]
+    partial class Init_01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,10 +27,7 @@ namespace Notes.Context.Migrations
             modelBuilder.Entity("Notes.Entities.Note", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -51,14 +48,9 @@ namespace Notes.Context.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("Notes");
+                    b.ToTable("notes", (string)null);
                 });
 
             modelBuilder.Entity("Notes.Entities.TaskType", b =>
@@ -78,18 +70,23 @@ namespace Notes.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskType");
+                    b.ToTable("taskTypes", (string)null);
                 });
 
             modelBuilder.Entity("Notes.Entities.Note", b =>
                 {
                     b.HasOne("Notes.Entities.TaskType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
+                        .WithMany("Notes")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Notes.Entities.TaskType", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

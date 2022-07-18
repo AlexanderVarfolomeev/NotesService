@@ -22,6 +22,7 @@ services.AddAppSwagger();
 
 services.AddAppServices();
 
+services.AddAutoMappers();
 
 var app = builder.Build();
 

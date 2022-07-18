@@ -7,12 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Configuration\" />
+    <Folder Include="Controllers\Notes\Models\" />
     <Folder Include="Middlewares\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
       <PrivateAssets>all</PrivateAssets>
@@ -23,6 +24,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.0.0" />
     <PackageReference Include="Serilog.Expressions" Version="3.4.0" />
@@ -33,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
+    <ProjectReference Include="..\..\Services\Notes.NotesService\Notes.NotesService.csproj" />
     <ProjectReference Include="..\..\Services\Notes.Settings\Notes.Settings.csproj" />
   </ItemGroup>
 
