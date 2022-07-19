@@ -26,6 +26,8 @@ services.AddAutoMappers();
 
 var app = builder.Build();
 
+app.UseAppMiddlewares();
+
 app.UseAuthorization();
 
 app.UseRouting();
