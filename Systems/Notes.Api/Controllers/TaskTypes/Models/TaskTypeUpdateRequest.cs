@@ -5,16 +5,16 @@ using ColorTaskType = Notes.Common.Classes.ColorTaskType;
 
 namespace Notes.Api.Controllers.TaskTypes.Models;
 
-public class TaskTypeAddRequest
+public class TaskTypeUpdateRequest
 {
     public string Name { get; set; } = string.Empty;
     public ColorTaskType Color { get; set; }
 }
 
-public class TaskTypeAddRequestProfile : Profile
+public class TaskTypeUpdateRequestProfile : Profile
 {
-    public TaskTypeAddRequestProfile()
+    public TaskTypeUpdateRequestProfile()
     {
-        CreateMap<TaskTypeAddRequestProfile, TaskTypeAddModel>();
+        CreateMap<TaskTypeUpdateRequest, TaskTypeUpdateModel>();
     }
 }

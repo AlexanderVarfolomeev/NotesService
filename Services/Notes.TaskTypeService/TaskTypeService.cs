@@ -31,7 +31,7 @@ public class TaskTypeService : ITaskTypeService
     {
         using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
-            .Where(x => x.Id == taskId);
+            .FirstOrDefault(x => x.Id == taskId);
 
         var data = mapper.Map<TaskTypeModel>(type);
         return data;

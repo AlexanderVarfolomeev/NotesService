@@ -28,6 +28,8 @@ var app = builder.Build();
 
 app.UseAuthorization();
 
+app.UseRouting();
+
 app.UseSerilogRequestLogging();
 
 app.MapControllers();

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Notes.Api.Controllers.TaskTypes.Models;
 using Notes.NotesService;
 using Notes.TaskTypeService;
+using Notes.TaskTypeService.Models;
 
 namespace Notes.Api.Controllers.TaskTypes
 {
@@ -20,9 +22,42 @@ namespace Notes.Api.Controllers.TaskTypes
         }
 
         [HttpGet("")]
-        public async Task GetTypes()
+        public async Task<IEnumerable<TaskTypeResponse>> GetTypes()
         {
-            var a = await typesService.GetTaskTypes();
+            var data = await typesService.GetTaskTypes();
+            var result = mapper.Map<IEnumerable<TaskTypeResponse>>(data);
+            return result;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<TaskTypeResponse> GetTypeById([FromRoute] int id)
+        {
+            var data = await typesService.GetTaskById(id);
+            var result = mapper.Map<TaskTypeResponse>(data);
+            return result;
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> AddType([FromBody] TaskTypeAddRequest type)
+        {
+            var data = mapper.Map<TaskTypeAddModel>(type);
+            await typesService.AddTask(data);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateType([FromRoute] int id, [FromBody] TaskTypeUpdateRequest type)
+        {
+            var data = mapper.Map<TaskTypeUpdateModel>(type);
+            await typesService.UpdateTask(data, id);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteType([FromRoute] int id)
+        {
+            await typesService.DeleteTask(id);
+            return Ok();
         }
     }
 }
