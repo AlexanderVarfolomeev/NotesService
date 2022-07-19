@@ -1,5 +1,6 @@
 ﻿using Notes.NotesService;
 using Notes.Settings;
+using Notes.TaskTypeService;
 
 namespace Notes.Api;
 
@@ -9,6 +10,7 @@ public static class Bootstrapper
     {
         services
             .AddSettings()
+            .AddTaskTypesService()
             .AddNotesService();
         return services;
     }

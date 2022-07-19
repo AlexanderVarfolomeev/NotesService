@@ -38,6 +38,7 @@
     <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
     <ProjectReference Include="..\..\Services\Notes.NotesService\Notes.NotesService.csproj" />
     <ProjectReference Include="..\..\Services\Notes.Settings\Notes.Settings.csproj" />
+    <ProjectReference Include="..\..\Services\Notes.TaskTypeService\Notes.TaskTypeService.csproj" />
   </ItemGroup>
 
 </Project>
