@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Notes.Common.Validator;
 using Notes.Context.Context;
 using Notes.Entities;
 using Notes.NotesService.Models;
@@ -10,11 +11,18 @@ public class NotesService : INotesService
 {
     private readonly IDbContextFactory<MainDbContext> contextFactory;
     private readonly IMapper mapper;
+    private readonly IModelValidator<AddNoteModel> addModelValidator;
+    private readonly IModelValidator<UpdateNoteModel> updaModelValidator;
 
-    public NotesService(IDbContextFactory<MainDbContext> contextFactory, IMapper mapper)
+    public NotesService(IDbContextFactory<MainDbContext> contextFactory, 
+        IMapper mapper,
+        IModelValidator<AddNoteModel> addModelValidator,
+        IModelValidator<UpdateNoteModel> updaModelValidator)
     {
         this.contextFactory = contextFactory;
         this.mapper = mapper;
+        this.addModelValidator = addModelValidator;
+        this.updaModelValidator = updaModelValidator;
     }
     public async Task<IEnumerable<NoteModel>> GetNotes()
     {
@@ -41,6 +49,7 @@ public class NotesService : INotesService
 
     public async Task AddNote(AddNoteModel model)
     {
+        addModelValidator.Check(model);
         using var context = await contextFactory.CreateDbContextAsync();
         var note = mapper.Map<Note>(model);
         await context.Notes.AddAsync(note);
@@ -60,6 +69,7 @@ public class NotesService : INotesService
 
     public async Task UpdateNote(int id, UpdateNoteModel model)
     {
+        updaModelValidator.Check(model);
         using var context = await contextFactory.CreateDbContextAsync();
         var note = context.Notes
             .FirstOrDefault(x => x.Id == id);

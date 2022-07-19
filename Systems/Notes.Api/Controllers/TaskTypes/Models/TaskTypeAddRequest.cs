@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Notes.Entities;
 using Notes.TaskTypeService.Models;
 
@@ -15,5 +16,21 @@ public class TaskTypeAddRequestProfile : Profile
     public TaskTypeAddRequestProfile()
     {
         CreateMap<TaskTypeAddRequest, TaskTypeAddModel>();
+    }
+}
+
+public class TaskTypeAddRequestValidator : AbstractValidator<TaskTypeAddRequest>
+{
+    public TaskTypeAddRequestValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage("Name is required.")
+            .MaximumLength(60)
+            .WithMessage("Name is too long.");
+
+        RuleFor(x => x.Color)
+            .IsInEnum()
+            .WithMessage("The color must have a valid value.");
     }
 }

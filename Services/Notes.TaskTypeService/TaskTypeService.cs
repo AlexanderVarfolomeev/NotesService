@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Notes.Common.Validator;
 using Notes.Context.Context;
 using Notes.Context.Factories;
 using Notes.Entities;
@@ -11,11 +12,18 @@ public class TaskTypeService : ITaskTypeService
 {
     private readonly IMapper mapper;
     private readonly IDbContextFactory<MainDbContext> contextFactory;
+    private readonly IModelValidator<TaskTypeAddModel> addModelValidator;
+    private readonly IModelValidator<TaskTypeUpdateModel> updateModelValidator;
 
-    public TaskTypeService(IMapper mapper, IDbContextFactory<MainDbContext> contextFactory)
+    public TaskTypeService(IMapper mapper,
+        IDbContextFactory<MainDbContext> contextFactory,
+        IModelValidator<TaskTypeAddModel> addModelValidator,
+        IModelValidator<TaskTypeUpdateModel> updateModelValidator)
     {
         this.mapper = mapper;
         this.contextFactory = contextFactory;
+        this.addModelValidator = addModelValidator;
+        this.updateModelValidator = updateModelValidator;
     }
 
     public async Task<IEnumerable<TaskTypeModel>> GetTaskTypes()
@@ -39,6 +47,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task AddTask(TaskTypeAddModel task)
     {
+        addModelValidator.Check(task);
         using var context = await contextFactory.CreateDbContextAsync();
         var type = mapper.Map<TaskType>(task);
         await context.Tasks.AddAsync(type);
@@ -47,6 +56,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task UpdateTask(TaskTypeUpdateModel task, int taskId)
     {
+        updateModelValidator.Check(task);
         using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);
