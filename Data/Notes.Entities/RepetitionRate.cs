@@ -2,7 +2,7 @@
 
 public enum RepetitionRate
 {
-    Without,
+    Without = 1,
     Day,
     Week,
     Month,

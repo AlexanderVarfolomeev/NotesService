@@ -5,6 +5,6 @@
 /// </summary>
 public enum ColorTaskType
 {
-    Green = 0,
-    Red = 1,
+    Green = 1,
+    Red = 2,
 }

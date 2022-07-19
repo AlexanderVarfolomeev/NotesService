@@ -16,7 +16,7 @@ builder.Host.UseSerilog((host, cfg) =>
 
 services.AddAppDbContext(settings);
 
-services.AddControllers();
+services.AddControllers().AddValidator();
 
 services.AddAppSwagger();
 

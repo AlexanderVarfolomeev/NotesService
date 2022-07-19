@@ -2,7 +2,7 @@
 
 public enum TaskStatus
 {
-    Done,
+    Done = 1,
     Waiting,
     Failed
 }
