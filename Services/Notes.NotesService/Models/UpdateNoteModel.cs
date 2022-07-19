@@ -5,7 +5,7 @@ using TaskStatus = Notes.Common.Classes.TaskStatus;
 
 namespace Notes.NotesService.Models;
 
-public class AddNoteModel
+public class UpdateNoteModel
 {
     public string Name { get; set; } = String.Empty;
     public DateTime StartDateTime { get; set; }
@@ -16,11 +16,11 @@ public class AddNoteModel
     public TaskStatus Status { get; set; }
 }
 
-public class AddNoteModelProfile : Profile
+public class UpdateNoteModelProfile : Profile
 {
-    public AddNoteModelProfile()
+    public UpdateNoteModelProfile()
     {
-        CreateMap<AddNoteModel, Note>()
+        CreateMap<UpdateNoteModel, Note>()
             .ForMember(n => n.Type.Name, opts => opts.MapFrom(x => x.Type));
     }
 }
