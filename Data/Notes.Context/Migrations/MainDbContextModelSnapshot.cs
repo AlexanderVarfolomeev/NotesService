@@ -25,7 +25,10 @@ namespace Notes.Context.Migrations
             modelBuilder.Entity("Notes.Entities.Note", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -50,6 +53,8 @@ namespace Notes.Context.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TaskTypeId");
 
                     b.ToTable("notes", (string)null);
                 });
@@ -78,7 +83,7 @@ namespace Notes.Context.Migrations
                 {
                     b.HasOne("Notes.Entities.TaskType", "Type")
                         .WithMany("Notes")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("TaskTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

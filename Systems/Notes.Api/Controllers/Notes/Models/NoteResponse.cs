@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Notes.Entities;
 using Notes.NotesService.Models;
-using TaskStatus = System.Threading.Tasks.TaskStatus;
+using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.Api.Controllers.Notes.Models;
 

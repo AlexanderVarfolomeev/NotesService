@@ -16,8 +16,8 @@ public class MainDbContext : DbContext
         modelBuilder.Entity<Note>().ToTable("notes");
         modelBuilder.Entity<TaskType>().ToTable("taskTypes");
 
-        modelBuilder.Entity<Note>().HasOne(x => x.Type).WithMany(x => x.Notes).HasForeignKey(x => x.Id);
-        modelBuilder.Entity<TaskType>().HasMany(x => x.Notes).WithOne(x => x.Type).HasForeignKey(x => x.Id);
+        modelBuilder.Entity<Note>().HasOne(x => x.Type).WithMany(x => x.Notes).HasForeignKey(x => x.TaskTypeId);
+        modelBuilder.Entity<TaskType>().HasMany(x => x.Notes).WithOne(x => x.Type).HasForeignKey(x => x.TaskTypeId);
         
     }
 }

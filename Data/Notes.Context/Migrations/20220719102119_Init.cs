@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Notes.Context.Migrations
 {
-    public partial class Init_01 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,11 +27,13 @@ namespace Notes.Context.Migrations
                 name: "notes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TaskTypeId = table.Column<int>(type: "int", nullable: false),
                     RepetitionRate = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -39,12 +41,17 @@ namespace Notes.Context.Migrations
                 {
                     table.PrimaryKey("PK_notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_notes_taskTypes_Id",
-                        column: x => x.Id,
+                        name: "FK_notes_taskTypes_TaskTypeId",
+                        column: x => x.TaskTypeId,
                         principalTable: "taskTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_notes_TaskTypeId",
+                table: "notes",
+                column: "TaskTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

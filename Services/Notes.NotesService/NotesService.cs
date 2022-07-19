@@ -29,7 +29,10 @@ public class NotesService : INotesService
     public async Task<NoteModel> GetNoteById(int id)
     {
         using var context = await contextFactory.CreateDbContextAsync();
-        var note = context.Notes
+        var notes = context.Notes
+                .Include(x => x.Type)
+                .AsQueryable();
+        var note = notes
             .FirstOrDefault(x => x.Id == id);
 
         var data = mapper.Map<NoteModel>(note);

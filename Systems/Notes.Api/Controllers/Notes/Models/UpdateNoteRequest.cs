@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Notes.Entities;
+using Notes.NotesService.Models;
 using TaskStatus = Notes.Entities.TaskStatus;
 
-namespace Notes.NotesService.Models;
+namespace Notes.Api.Controllers.Notes.Models;
 
-public class NoteModel
+public class UpdateNoteRequest
 {
-    public int Id { get; set; }
     public string Name { get; set; } = String.Empty;
     public DateTime StartDateTime { get; set; }
     public DateTime EndDateTime { get; set; }
@@ -16,11 +16,10 @@ public class NoteModel
     public TaskStatus Status { get; set; }
 }
 
-public class NoteModelProfile : Profile
+public class UpdateNoteRequestProfile : Profile
 {
-    public NoteModelProfile()
+    public UpdateNoteRequestProfile()
     {
-        CreateMap<Note, NoteModel>()
-            .ForPath(n => n.Type, opt => opt.MapFrom(src => src.Type.Name));
+        CreateMap<UpdateNoteRequest, UpdateNoteModel>();
     }
 }

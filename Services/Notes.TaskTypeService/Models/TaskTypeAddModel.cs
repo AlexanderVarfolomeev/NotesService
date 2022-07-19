@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Notes.Entities;
-using ColorTaskType = Notes.Common.Classes.ColorTaskType;
 
 namespace Notes.TaskTypeService.Models;
 

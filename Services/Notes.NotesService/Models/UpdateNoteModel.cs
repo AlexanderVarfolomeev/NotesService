@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Notes.Entities;
-using RepetitionRate = Notes.Common.Classes.RepetitionRate;
-using TaskStatus = Notes.Common.Classes.TaskStatus;
+using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.NotesService.Models;
 
@@ -21,6 +20,6 @@ public class UpdateNoteModelProfile : Profile
     public UpdateNoteModelProfile()
     {
         CreateMap<UpdateNoteModel, Note>()
-            .ForMember(n => n.Type.Name, opts => opts.MapFrom(x => x.Type));
+            .ForPath(n => n.Type.Name, opts => opts.MapFrom(x => x.Type));
     }
 }
