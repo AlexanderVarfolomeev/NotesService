@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  notes_api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - shared-note
+    ports:
+      - "5000:80"
+    env_file:
+      - env.api
+
+  notes_sqlserver:
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password
+      - MSSQL_PID=Express
+    ports:
+      - "21433:1433"
+    networks:
+      - shared-note
+    volumes:      
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:
+
+networks:
+  shared-note:
+    name: NoteService
+    driver: bridge

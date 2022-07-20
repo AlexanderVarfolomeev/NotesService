@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  notes_api:
+    image: ${DOCKER_REGISTRY-}notesapi
+    build:
+      context: .
+      dockerfile: Systems/Notes.Api/Dockerfile
+
+  notes_sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest

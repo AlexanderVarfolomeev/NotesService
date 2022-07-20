@@ -93,6 +93,10 @@ public class NotesService : INotesService
         return result;
     }
 
+    /// <summary>
+    /// Changing the status of failed tasks and create the next notes
+    /// </summary>
+    /// <returns></returns>
     public async Task UpdateNoteStatus()
     {
         using var context = await contextFactory.CreateDbContextAsync();
@@ -105,12 +109,16 @@ public class NotesService : INotesService
         {
             if (note.EndDateTime < DateTime.Now && note.Status != TaskStatus.Failed)
             {
-                note.Status = TaskStatus.Failed;
-                context.Entry(note).State = EntityState.Modified;
-                await context.SaveChangesAsync();
+                if (note.Status != TaskStatus.Done)
+                {
+                    note.Status = TaskStatus.Failed;
+                    context.Entry(note).State = EntityState.Modified;
+                    await context.SaveChangesAsync();
+                }
+
                 if (note.RepetitionRate != RepetitionRate.Without)
                 {
-                    var newNote = CreateNewNote(note);
+                    var newNote = CreateNextNoteFromRepetition(note);
                     newNote.Status = TaskStatus.Waiting;
                     newNote.Id = 0;
                     await context.Notes.AddAsync(newNote);
@@ -120,7 +128,7 @@ public class NotesService : INotesService
         }
     }
 
-    private Note CreateNewNote(Note note)
+    private Note CreateNextNoteFromRepetition(Note note)
     {
         switch (note.RepetitionRate)
         {
@@ -145,6 +153,11 @@ public class NotesService : INotesService
         return note;
     }
 
+    /// <summary>
+    /// Checking that the date is for the last 4 weeks
+    /// </summary>
+    /// <param name="date"></param>
+    /// <returns></returns>
     private bool IncludeInLastFourWeek(DateTime date)
     {
         var today = DateTime.Now.DayOfWeek;
