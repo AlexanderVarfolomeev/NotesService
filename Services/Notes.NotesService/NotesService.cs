@@ -89,7 +89,7 @@ public class NotesService : INotesService
             .Include(x => x.Type)
             .AsQueryable();
         var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
-        var result = data.Select(x => x).Where(x =>IncludeInLastFourWeek(x.StartDateTime)).ToList();
+        var result = data.Select(x => x).Where(x =>IncludeInLastFourWeek(x.StartDateTime) && x.Status == TaskStatus.Done).ToList();
         return result;
     }
 
