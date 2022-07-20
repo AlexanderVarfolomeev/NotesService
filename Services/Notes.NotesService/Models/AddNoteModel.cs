@@ -50,6 +50,10 @@ public class AddNoteModelValidator : AbstractValidator<AddNoteModel>
             .IsInEnum()
             .WithMessage("Repetition must have a valid value");
 
+        RuleFor(x => x.Description)
+            .MaximumLength(600)
+            .WithMessage("Description is too long.");
+
         RuleFor(x => x.Status)
             .NotEmpty()
             .WithMessage("Status is required.")

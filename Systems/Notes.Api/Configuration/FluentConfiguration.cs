@@ -29,7 +29,6 @@ public static class FluentConfiguration
 
                 var result = new BadRequestObjectResult(new ErrorResponse()
                 {
-                    ErrorCode = -1,
                     Message = "One or more validation errors occurred.",
                     FieldErrors = fieldErrors
                 });

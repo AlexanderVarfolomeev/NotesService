@@ -48,13 +48,17 @@ public class UpdateNoteModelValidator : AbstractValidator<UpdateNoteModel>
             .NotEmpty()
             .WithMessage("Repetition rate is required.")
             .IsInEnum()
-            .WithMessage("Repetition must have a valid value");
+            .WithMessage("Repetition must have a valid value.");
+
+        RuleFor(x => x.Description)
+            .MaximumLength(600)
+            .WithMessage("Description is too long.");
 
         RuleFor(x => x.Status)
             .NotEmpty()
             .WithMessage("Status is required.")
             .IsInEnum()
-            .WithMessage("Status must have a valid value");
+            .WithMessage("Status must have a valid value.");
 
     }
 }

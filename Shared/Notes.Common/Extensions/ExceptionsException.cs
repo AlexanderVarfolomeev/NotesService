@@ -7,7 +7,12 @@ namespace Notes.Common.Extensions
     /// Extenstion for exceptions
     /// </summary>
     public static class ExceptionsException
-    {
+    { 
+        /// <summary>
+        /// Convert validation exception to ErrorResponse
+        /// </summary>
+        /// <param name="data">Process exception</param>
+        /// <returns></returns>
         public static ErrorResponse ToErrorResponse(this ValidationResult data)
         {
             var res = new ErrorResponse()
@@ -53,7 +58,6 @@ namespace Notes.Common.Extensions
         {
             var res = new ErrorResponse()
             {
-                ErrorCode = -1,
                 Message = data.Message
             };
 

@@ -51,11 +51,15 @@ public class AddNoteRequestValidator : AbstractValidator<AddNoteRequest>
             .IsInEnum()
             .WithMessage("Repetition must have a valid value");
 
+        RuleFor(x => x.Description)
+            .MaximumLength(600)
+            .WithMessage("Description is too long.");
+
         RuleFor(x => x.Status)
             .NotEmpty()
             .WithMessage("Status is required.")
             .IsInEnum()
-            .WithMessage("Status must have a valid value");
+            .WithMessage("Status must have a valid value.");
 
     }
 }
