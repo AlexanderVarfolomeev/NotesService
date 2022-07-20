@@ -4,6 +4,8 @@ using Notes.Common.Validator;
 using Notes.Context.Context;
 using Notes.Entities;
 using Notes.NotesService.Models;
+using DateTime = System.DateTime;
+using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.NotesService;
 
@@ -14,7 +16,7 @@ public class NotesService : INotesService
     private readonly IModelValidator<AddNoteModel> addModelValidator;
     private readonly IModelValidator<UpdateNoteModel> updaModelValidator;
 
-    public NotesService(IDbContextFactory<MainDbContext> contextFactory, 
+    public NotesService(IDbContextFactory<MainDbContext> contextFactory,
         IMapper mapper,
         IModelValidator<AddNoteModel> addModelValidator,
         IModelValidator<UpdateNoteModel> updaModelValidator)
@@ -78,5 +80,75 @@ public class NotesService : INotesService
         var data = mapper.Map(model, note);
         context.Notes.Update(data);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<NoteModel>> GetCompletedTaskForLastFourWeeks()
+    {
+        using var context = await contextFactory.CreateDbContextAsync();
+        var notes = context.Notes
+            .Include(x => x.Type)
+            .AsQueryable();
+        var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
+        var result = data.Select(x => x).Where(x =>IncludeInLastFourWeek(x.StartDateTime)).ToList();
+        return result;
+    }
+
+    public async Task UpdateNoteStatus()
+    {
+        using var context = await contextFactory.CreateDbContextAsync();
+        var notes = context.Notes
+            .Include(x => x.Type)
+            .AsQueryable()
+            .ToList();
+
+        foreach (var note in notes)
+        {
+            if (note.EndDateTime < DateTime.Now && note.Status != TaskStatus.Failed)
+            {
+                note.Status = TaskStatus.Failed;
+                context.Entry(note).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+                if (note.RepetitionRate != RepetitionRate.Without)
+                {
+                    var newNote = CreateNewNote(note);
+                    newNote.Status = TaskStatus.Waiting;
+                    newNote.Id = 0;
+                    await context.Notes.AddAsync(newNote);
+                }
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+
+    private Note CreateNewNote(Note note)
+    {
+        switch (note.RepetitionRate)
+        {
+            case RepetitionRate.Day:
+                note.StartDateTime = note.StartDateTime.AddDays(1);
+                note.EndDateTime = note.EndDateTime.AddDays(1);
+                break;
+            case RepetitionRate.Week:
+                note.StartDateTime = note.StartDateTime.AddDays(7);
+                note.EndDateTime = note.EndDateTime.AddDays(7);
+                break;
+            case RepetitionRate.Month:
+                note.StartDateTime = note.StartDateTime.AddMonths(1);
+                note.EndDateTime = note.EndDateTime.AddMonths(1);
+                break;
+            case RepetitionRate.Year:
+                note.StartDateTime = note.StartDateTime.AddYears(1);
+                note.EndDateTime = note.EndDateTime.AddYears(1);
+                break;
+        }
+
+        return note;
+    }
+
+    private bool IncludeInLastFourWeek(DateTime date)
+    {
+        var today = DateTime.Now.DayOfWeek;
+        var startDate = DateTime.Now.AddDays(-21 - (int)today);
+        return date >= startDate && date <= DateTime.Now;
     }
 }

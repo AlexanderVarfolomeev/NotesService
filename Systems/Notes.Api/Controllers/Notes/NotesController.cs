@@ -25,6 +25,7 @@ namespace Notes.Api.Controllers.Notes
         [HttpGet("")]
         public async Task<IEnumerable<NoteResponse>> GetNotes()
         {
+            await notesService.UpdateNoteStatus();
             var data = await notesService.GetNotes();
             var result = mapper.Map<IEnumerable<NoteResponse>>(data);
             return result;

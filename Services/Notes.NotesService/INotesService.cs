@@ -9,4 +9,6 @@ public interface INotesService
     Task AddNote(AddNoteModel model);
     Task DeleteNote(int id);
     Task UpdateNote(int id, UpdateNoteModel model);
+    Task UpdateNoteStatus();
+    Task<IEnumerable<NoteModel>> GetCompletedTaskForLastFourWeeks();
 }

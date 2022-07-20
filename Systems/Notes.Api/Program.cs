@@ -16,13 +16,15 @@ builder.Host.UseSerilog((host, cfg) =>
 
 services.AddAppDbContext(settings);
 
-services.AddControllers().AddValidator();
-
 services.AddAppSwagger();
 
 services.AddAppServices();
 
+services.AddControllers().AddValidator();
+
+
 services.AddAutoMappers();
+
 
 var app = builder.Build();
 
