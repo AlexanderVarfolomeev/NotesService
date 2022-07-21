@@ -18,6 +18,8 @@ services.AddAppDbContext(settings);
 
 services.AddAppSwagger();
 
+services.AddAppCors();
+
 services.AddAppServices();
 
 services.AddControllers().AddValidator();
@@ -33,6 +35,8 @@ app.UseAppMiddlewares();
 app.UseAuthorization();
 
 app.UseRouting();
+
+app.UseAppCors();
 
 app.UseSerilogRequestLogging();
 
