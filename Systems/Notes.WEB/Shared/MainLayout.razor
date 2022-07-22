@@ -8,10 +8,9 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudText Typo="Typo.h5" >Birthdays api</MudText>
+        <MudText Typo="Typo.h5" >Notes</MudText>
         <MudSpacer/>
         <MudIconButton Icon="@(_darkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" @onclick="@DarkModeSwitch" Color="Color.Inherit" Edge="Edge.End"/>
-        <UserMenu/>
     </MudAppBar>
     <MudMainContent>
         @Body
