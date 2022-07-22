@@ -30,6 +30,7 @@ public class TaskTypeService : ITaskTypeService
     {
         using var context = await contextFactory.CreateDbContextAsync();
         var types = context.Tasks
+            .Include(x => x.Color)
             .AsQueryable();
         var data = (await types.ToListAsync()).Select(x => mapper.Map<TaskTypeModel>(x));
         return data;
@@ -38,7 +39,11 @@ public class TaskTypeService : ITaskTypeService
     public async Task<TaskTypeModel> GetTaskById(int taskId)
     {
         using var context = await contextFactory.CreateDbContextAsync();
-        var type = context.Tasks
+        var types = context.Tasks
+            .Include(x => x.Color)
+            .AsQueryable();
+
+        var type = types
             .FirstOrDefault(x => x.Id == taskId);
 
         var data = mapper.Map<TaskTypeModel>(type);

@@ -3,6 +3,7 @@
 @using Notes.WEB.Pages.TaskTypes.Models
 @using Notes.WEB.Pages.TaskTypes.Services
 @using MudBlazor.Utilities
+@using Notes.WEB.Pages.TaskTypes
 @layout MainLayout
 
 
@@ -14,7 +15,7 @@
 <MudTable Items="@Elements.Take(100)" Hover="true" Breakpoint="Breakpoint.Sm">
     <ToolBarContent>
         <MudButton Variant="Variant.Outlined" OnClick="ReloadData">Reload</MudButton>
-        <MudButton Variant="Variant.Outlined" OnClick="ReloadData">Add note</MudButton>
+        <MudButton Variant="Variant.Outlined" OnClick="AddTaskType">Add note</MudButton>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Name</MudTh>
@@ -52,8 +53,19 @@
         Elements = await TaskTypeService.GetTaskTypes();
     }
 
-   
+    private async Task AddTaskType()
+    {
+        var parameters = new DialogParameters();
 
-   
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+        var dialog = DialogService.Show<AddTaskTypeDialog>("Add task type", parameters, options);
+        var result = await dialog.Result;
 
+        if (!result.Cancelled)
+        {
+            await TaskTypeService.AddTask(((AddTaskTypeDialog)dialog.Dialog).model);
+            await ReloadData();
+        }
+    }
+    
 }

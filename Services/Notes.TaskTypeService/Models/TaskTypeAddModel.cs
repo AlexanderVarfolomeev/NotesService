@@ -7,7 +7,7 @@ namespace Notes.TaskTypeService.Models;
 public class TaskTypeAddModel
 {
     public string Name { get; set; } = string.Empty;
-    public ColorTaskType Color { get; set; }
+    public int TypeColorId { get; set; }
 }
 
 public class TaskTypeAddModelProfile : Profile
@@ -28,8 +28,5 @@ public class TaskTypeAddModelValidator : AbstractValidator<TaskTypeAddModel>
             .MaximumLength(60)
             .WithMessage("Name is too long.");
 
-        RuleFor(x => x.Color)
-            .IsInEnum()
-            .WithMessage("The color must have a valid value.");
     }
 }

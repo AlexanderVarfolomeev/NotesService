@@ -8,7 +8,7 @@ namespace Notes.Api.Controllers.TaskTypes.Models;
 public class TaskTypeAddRequest
 {
     public string Name { get; set; } = string.Empty;
-    public ColorTaskType Color { get; set; }
+    public int TypeColorId { get; set; }
 }
 
 public class TaskTypeAddRequestProfile : Profile
@@ -29,8 +29,6 @@ public class TaskTypeAddRequestValidator : AbstractValidator<TaskTypeAddRequest>
             .MaximumLength(60)
             .WithMessage("Name is too long.");
 
-        RuleFor(x => x.Color)
-            .IsInEnum()
-            .WithMessage("The color must have a valid value.");
+        
     }
 }
