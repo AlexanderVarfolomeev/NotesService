@@ -5,10 +5,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Notes.Context.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "taskTypesColors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_taskTypesColors", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "taskTypes",
                 columns: table => new
@@ -16,11 +30,17 @@ namespace Notes.Context.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<int>(type: "int", nullable: false)
+                    TypeColorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_taskTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_taskTypes_taskTypesColors_TypeColorId",
+                        column: x => x.TypeColorId,
+                        principalTable: "taskTypesColors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,6 +72,11 @@ namespace Notes.Context.Migrations
                 name: "IX_notes_TaskTypeId",
                 table: "notes",
                 column: "TaskTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_taskTypes_TypeColorId",
+                table: "taskTypes",
+                column: "TypeColorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -61,6 +86,9 @@ namespace Notes.Context.Migrations
 
             migrationBuilder.DropTable(
                 name: "taskTypes");
+
+            migrationBuilder.DropTable(
+                name: "taskTypesColors");
         }
     }
 }

@@ -12,8 +12,8 @@ using Notes.Context.Context;
 namespace Notes.Context.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    [Migration("20220719102119_Init")]
-    partial class Init
+    [Migration("20220722145754_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -69,8 +69,31 @@ namespace Notes.Context.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Color")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TypeColorId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeColorId");
+
+                    b.ToTable("taskTypes", (string)null);
+                });
+
+            modelBuilder.Entity("Notes.Entities.TypeColor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -78,7 +101,7 @@ namespace Notes.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("taskTypes", (string)null);
+                    b.ToTable("taskTypesColors", (string)null);
                 });
 
             modelBuilder.Entity("Notes.Entities.Note", b =>
@@ -94,7 +117,23 @@ namespace Notes.Context.Migrations
 
             modelBuilder.Entity("Notes.Entities.TaskType", b =>
                 {
+                    b.HasOne("Notes.Entities.TypeColor", "Color")
+                        .WithMany("TaskTypes")
+                        .HasForeignKey("TypeColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+                });
+
+            modelBuilder.Entity("Notes.Entities.TaskType", b =>
+                {
                     b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("Notes.Entities.TypeColor", b =>
+                {
+                    b.Navigation("TaskTypes");
                 });
 #pragma warning restore 612, 618
         }

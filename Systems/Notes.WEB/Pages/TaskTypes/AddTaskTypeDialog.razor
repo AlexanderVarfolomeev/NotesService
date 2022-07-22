@@ -18,7 +18,7 @@
                     </MudTextField>
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudColorPicker PickerVariant="PickerVariant.Static"  ColorPickerView="ColorPickerView.Palette" Palette="CustomPalette" />
+                    <MudColorPicker PickerVariant="PickerVariant.Static" ColorPickerView="ColorPickerView.Palette" Palette="CustomPalette" @bind-Text="SelectedColor" />
                 </MudItem>
             </MudGrid>
         </MudForm>
@@ -32,7 +32,7 @@
 @code {
     public IEnumerable<MudColor> CustomPalette { get; set; } = new MudColor[]
     {
-        "#FF0000", "#00FF00"
+        "#FF0000", "#00FF00", "#FF69B4", "#FFFF00", "#00FFFF"
     };
 
     [CascadingParameter]
@@ -43,17 +43,35 @@
     [Parameter]
     public AddTaskType model { get; set; } = new();
 
+    public string SelectedColor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
 
         model.Name = "Enter name";
-
+       
     }
 
     async Task Submit()
     {
-
+        switch (SelectedColor.ToUpper())
+        {
+            case "#FF0000":
+                model.TypeColorId = 1;
+                break;
+            case "#00FF00":
+                model.TypeColorId = 2;
+                break;
+            case "#FF69B4":
+                model.TypeColorId = 3;
+                break;
+            case "#FFFF00":
+                model.TypeColorId = 4;
+                break;
+            case "#00FFFF":
+                model.TypeColorId = 5;
+                break;
+        }
         await form.Validate();
         if (form.IsValid)
         {
