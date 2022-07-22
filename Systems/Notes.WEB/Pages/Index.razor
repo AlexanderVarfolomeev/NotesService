@@ -2,7 +2,7 @@
 @using Notes.WEB
 @using Notes.WEB.Pages.TaskTypes.Models
 @using Notes.WEB.Pages.TaskTypes.Services
-
+@using MudBlazor.Utilities
 @layout MainLayout
 
 
@@ -13,7 +13,8 @@
 
 <MudTable Items="@Elements.Take(100)" Hover="true" Breakpoint="Breakpoint.Sm">
     <ToolBarContent>
-        <MudButton StartIcon="@Icons.Material.Filled.CalendarMonth" Variant="Variant.Outlined" OnClick="ReloadData">All birthday</MudButton>
+        <MudButton Variant="Variant.Outlined" OnClick="ReloadData">Reload</MudButton>
+        <MudButton Variant="Variant.Outlined" OnClick="ReloadData">Add note</MudButton>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Name</MudTh>
@@ -22,6 +23,11 @@
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Color">@context.Color.ToString()</MudTd>
+        <MudTd>
+            <MudButton Variant="Variant.Outlined" >Edit</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" >Delete</MudButton>
+        </MudTd>
+
     </RowTemplate>
 </MudTable>
 

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Notes.WEB.Pages.TaskTypes.Models;
 
 namespace Notes.WEB.Pages.TaskTypes.Services;
@@ -24,28 +25,76 @@ public class TaskTypeService : ITaskTypeService
             throw new Exception(content);
         }
 
-        var data = JsonSerializer.Deserialize<IEnumerable<TaskType>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<TaskType>();
+        var data = JsonSerializer.Deserialize<IEnumerable<TaskType>>
+            (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? new List<TaskType>();
 
         return data;
     }
 
-    public Task<TaskType> GetTaskById(int taskId)
+    public async Task<TaskType> GetTaskById(int taskId)
     {
-        throw new NotImplementedException();
+        string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
+
+        var response = await client.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        var data = JsonSerializer.Deserialize<TaskType>
+            (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? new TaskType();
+
+        return data;
     }
 
-    public Task AddTask(AddTaskType task)
+    public async Task AddTask(AddTaskType task)
     {
-        throw new NotImplementedException();
+        string url = $"{Settings.ApiRoot}/TaskTypes";
+
+
+        var body = JsonSerializer.Serialize(task);
+        var request = new StringContent(body, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(url, request);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
     }
 
-    public Task UpdateTask(UpdateTaskType task, int taskId)
+    public async Task UpdateTask(UpdateTaskType task, int taskId)
     {
-        throw new NotImplementedException();
+        string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
+
+        var body = JsonSerializer.Serialize(task);
+        var request = new StringContent(body, Encoding.UTF8, "application/json");
+
+        var response = await client.PutAsync(url, request);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
     }
 
-    public Task DeleteTask(int taskId)
+    public async Task DeleteTask(int taskId)
     {
-        throw new NotImplementedException();
+        string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
+
+        var response = await client.DeleteAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
     }
 }

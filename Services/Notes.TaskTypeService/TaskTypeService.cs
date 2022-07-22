@@ -72,7 +72,7 @@ public class TaskTypeService : ITaskTypeService
         using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);
-        if(type == null)
+        if (type == null)
             throw new NotImplementedException();
         context.Tasks.Remove(type);
         await context.SaveChangesAsync();
