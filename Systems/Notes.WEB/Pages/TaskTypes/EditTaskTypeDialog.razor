@@ -41,18 +41,23 @@
     MudForm form = default!;
 
     [Parameter]
-    public AddTaskType model { get; set; } = new();
+    public int TaskTypeId { get; set; }
+
+    [Parameter]
+    public UpdateTaskType model{ get; set; } = new();
 
     public string SelectedColor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        model.Name = "Enter name";
+        var type = await TaskTypesService.GetTaskById(TaskTypeId);
+        model.Name = type.Name;
+        model.TypeColorId = type.TypeColorId;
+        SelectedColor = ColorHelper.ColorToString(type.Id);
     }
 
     async Task Submit()
     {
-
         model.TypeColorId = ColorHelper.ToInt(SelectedColor);
         await form.Validate();
         if (form.IsValid)
