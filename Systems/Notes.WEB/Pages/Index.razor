@@ -3,6 +3,7 @@
 @using Notes.WEB.Pages.TaskTypes.Models
 @using Notes.WEB.Pages.TaskTypes.Services
 @using MudBlazor.Utilities
+@using Notes.WEB.Components
 @using Notes.WEB.Pages.TaskTypes
 @layout MainLayout
 
@@ -26,7 +27,7 @@
         <MudTd DataLabel="Color">@context.Color.Name</MudTd>
         <MudTd>
             <MudButton Variant="Variant.Outlined" OnClick="@((e) => EditTaskType(context.Id))">Edit</MudButton>
-            <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" >Delete</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" OnClick="@((e) => DeleteTaskType(context.Id))">Delete</MudButton>
         </MudTd>
 
     </RowTemplate>
@@ -68,17 +69,36 @@
         }
     }
 
-    private async Task EditTaskType(int id)
+    private async Task EditTaskType(int taskTypeId)
     {
         var parameters = new DialogParameters();
-        parameters.Add("TaskTypeId", id);
+        parameters.Add("TaskTypeId", taskTypeId);
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true };
         var dialog = DialogService.Show<EditTaskTypeDialog>("Edit task type", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            await TaskTypeService.UpdateTask(((EditTaskTypeDialog)dialog.Dialog).model, id);
+            await TaskTypeService.UpdateTask(((EditTaskTypeDialog)dialog.Dialog).model, taskTypeId);
+            await ReloadData();
+        }
+    }
+
+    private async Task DeleteTaskType(int taskTypeId)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete this task type? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = DialogService.Show<ConfirmationDialog>("Delete task type", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await TaskTypeService.DeleteTask(taskTypeId);
             await ReloadData();
         }
     }
