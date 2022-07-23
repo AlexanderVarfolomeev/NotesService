@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using Notes.WEB;
+using Notes.WEB.Pages.NotesPages.Services;
 using Notes.WEB.Pages.TaskTypes.Services;
 using Notes.WEB.Services;
 
@@ -18,7 +19,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
 builder.Services.AddScoped<ITaskTypeService, TaskTypeService>();
-
+builder.Services.AddScoped<INoteService, NoteService>();
 builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();

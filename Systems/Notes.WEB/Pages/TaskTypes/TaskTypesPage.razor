@@ -1,10 +1,11 @@
-﻿@page "/"
-@using Notes.WEB
+﻿@page "/taskTypes"
+
 @using Notes.WEB.Pages.TaskTypes.Models
 @using Notes.WEB.Pages.TaskTypes.Services
 @using MudBlazor.Utilities
 @using Notes.WEB.Components
 @using Notes.WEB.Pages.TaskTypes
+
 @layout MainLayout
 
 
@@ -20,7 +21,7 @@
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Name</MudTh>
-        <MudTh>Color</MudTh>
+        <MudTh >Color</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>

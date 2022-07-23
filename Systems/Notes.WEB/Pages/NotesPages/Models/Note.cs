@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using Notes.Entities;
-using Notes.NotesService.Models;
-using TaskStatus = Notes.Entities.TaskStatus;
+﻿using Notes.WEB.Shared.Common;
+using TaskStatus = Notes.WEB.Shared.Common.TaskStatus;
 
-namespace Notes.Api.Controllers.Notes.Models;
+namespace Notes.WEB.Pages.NotesPages.Models;
 
-public class NoteResponse
+public class Note
 {
     public int Id { get; set; }
     public string Name { get; set; } = String.Empty;
@@ -13,15 +11,7 @@ public class NoteResponse
     public DateTime EndDateTime { get; set; }
     public string? Description { get; set; } = String.Empty;
     public string Type { get; set; }
-    public int TaskTypeId { get; set; }
     public RepetitionRate RepetitionRate { get; set; }
     public TaskStatus Status { get; set; }
 }
 
-public class NoteResponseProfile : Profile
-{
-    public NoteResponseProfile()
-    {
-        CreateMap<NoteModel, NoteResponse>();
-    }
-}

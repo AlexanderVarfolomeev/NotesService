@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\NotesPages\Services\" />
     <Folder Include="Pages\TaskTypes\Services\" />
   </ItemGroup>
 

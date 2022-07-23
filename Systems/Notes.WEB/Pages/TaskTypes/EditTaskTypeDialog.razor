@@ -10,14 +10,14 @@
     <DialogContent>
         <MudForm Model="model" @ref="form">
             <MudGrid>
-                <MudItem xs="12" sm="6">
+                <MudItem xs="3" sm="6">
                     <MudTextField Label="Name" @bind-Value="model.Name"
                                   For="@(() => model.Name)"
                                   Required="true"
                                   RequiredError="Name is required!">
                     </MudTextField>
                 </MudItem>
-                <MudItem xs="12" sm="6">
+                <MudItem xs="3" sm="6">
                     <MudColorPicker PickerVariant="PickerVariant.Static" ColorPickerView="ColorPickerView.Palette" Palette="CustomPalette" @bind-Text="SelectedColor" />
                 </MudItem>
             </MudGrid>
