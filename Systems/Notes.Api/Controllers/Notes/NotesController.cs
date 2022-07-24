@@ -31,6 +31,16 @@ namespace Notes.Api.Controllers.Notes
             return result;
         }
 
+        [HttpGet("get-last-four-weeks-completed")]
+        public async Task<IEnumerable<NoteResponse>> GetCompletedTaskForLastFourWeeks()
+        {
+            await notesService.UpdateNoteStatus();
+            var data = await notesService.GetCompletedTaskForLastFourWeeks();
+            var result = mapper.Map<IEnumerable<NoteResponse>>(data);
+            return result;
+        }
+
+
         [HttpGet("{id}")]
         public async Task<NoteResponse> GetNoteById([FromRoute] int id)
         {
