@@ -1,4 +1,4 @@
-﻿namespace Notes.Common.Extensions
+﻿namespace Notes.Common.Exceptions
 {
     public class ProcessException : Exception
     {

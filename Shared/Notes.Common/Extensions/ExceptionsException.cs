@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Notes.Common.Exceptions;
 using Notes.Common.Responses;
 
 namespace Notes.Common.Extensions
