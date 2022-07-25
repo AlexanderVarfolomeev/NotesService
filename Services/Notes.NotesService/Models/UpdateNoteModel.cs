@@ -12,7 +12,7 @@ public class UpdateNoteModel
     public DateTime EndDateTime { get; set; }
     public string? Description { get; set; } = String.Empty;
     public int TaskTypeId { get; set; }
-    public RepetitionRate RepetitionRate { get; set; }
+    public RepeatFrequency RepeatFrequency { get; set; }
     public TaskStatus Status { get; set; }
 }
 
@@ -44,7 +44,7 @@ public class UpdateNoteModelValidator : AbstractValidator<UpdateNoteModel>
             .NotEmpty()
             .WithMessage("Task type is required.");
 
-        RuleFor(x => x.RepetitionRate)
+        RuleFor(x => x.RepeatFrequency)
             .NotEmpty()
             .WithMessage("Repetition rate is required.")
             .IsInEnum()

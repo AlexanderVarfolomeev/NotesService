@@ -116,7 +116,7 @@ public class NotesService : INotesService
                     await context.SaveChangesAsync();
                 }
 
-                if (note.RepetitionRate != RepetitionRate.Without)
+                if (note.RepeatFrequency != RepeatFrequency.None)
                 {
                     var newNote = CreateNextNoteFromRepetition(note);
                     newNote.Status = TaskStatus.Waiting;
@@ -130,21 +130,21 @@ public class NotesService : INotesService
 
     private Note CreateNextNoteFromRepetition(Note note)
     {
-        switch (note.RepetitionRate)
+        switch (note.RepeatFrequency)
         {
-            case RepetitionRate.Day:
+            case RepeatFrequency.Daily:
                 note.StartDateTime = note.StartDateTime.AddDays(1);
                 note.EndDateTime = note.EndDateTime.AddDays(1);
                 break;
-            case RepetitionRate.Week:
+            case RepeatFrequency.Weekly:
                 note.StartDateTime = note.StartDateTime.AddDays(7);
                 note.EndDateTime = note.EndDateTime.AddDays(7);
                 break;
-            case RepetitionRate.Month:
+            case RepeatFrequency.Monthly:
                 note.StartDateTime = note.StartDateTime.AddMonths(1);
                 note.EndDateTime = note.EndDateTime.AddMonths(1);
                 break;
-            case RepetitionRate.Year:
+            case RepeatFrequency.Annually:
                 note.StartDateTime = note.StartDateTime.AddYears(1);
                 note.EndDateTime = note.EndDateTime.AddYears(1);
                 break;

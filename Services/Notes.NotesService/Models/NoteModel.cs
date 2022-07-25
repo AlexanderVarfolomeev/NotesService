@@ -13,7 +13,7 @@ public class NoteModel
     public string? Description { get; set; } = String.Empty;
     public string Type { get; set; }
     public int TaskTypeId { get; set; }
-    public RepetitionRate RepetitionRate { get; set; }
+    public RepeatFrequency RepeatFrequency { get; set; }
     public TaskStatus Status { get; set; }
 }
 

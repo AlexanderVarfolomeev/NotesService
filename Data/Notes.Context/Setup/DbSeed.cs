@@ -47,7 +47,7 @@ public class DbSeed
     //        Status = TaskStatus.Waiting,
     //        StartDateTime = new DateTime(2022, 7, 10, 15, 30, 0),
     //        EndDateTime = new DateTime(2022, 7, 10, 16, 30, 0),
-    //        RepetitionRate = RepetitionRate.Week,
+    //        RepeatFrequency = RepeatFrequency.Weekly,
     //        TaskTypeId = 1
     //    };
 
@@ -60,7 +60,7 @@ public class DbSeed
     //        Status = TaskStatus.Waiting,
     //        StartDateTime = new DateTime(2022, 7, 10, 15, 30, 0),
     //        EndDateTime = new DateTime(2022, 7, 10, 16, 30, 0),
-    //        RepetitionRate = RepetitionRate.Day,
+    //        RepeatFrequency = RepeatFrequency.Daily,
     //        TaskTypeId = 2
     //    };
 

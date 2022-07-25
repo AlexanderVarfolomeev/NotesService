@@ -42,7 +42,7 @@ namespace Notes.Context.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RepetitionRate")
+                    b.Property<int>("RepeatFrequency")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDateTime")
