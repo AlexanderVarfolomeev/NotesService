@@ -47,7 +47,7 @@ public static class FluentConfiguration
         FluentValidationRegisterHelper.Register(builder.Services);
 
         builder.Services.AddSingleton(typeof(IModelValidator<>), typeof(ModelValidator<>));
-
+        
         return builder;
     }
 }
