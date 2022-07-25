@@ -7,7 +7,7 @@ using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.Api.Controllers.Notes.Models;
 
-public class AddNoteRequest : IAddNote
+public class NoteRequest : INoteRequest
 {
     public string Name { get; set; } = String.Empty;
     public DateTimeOffset StartDateTime { get; set; }
@@ -22,16 +22,16 @@ public class AddNoteRequestProfile : Profile
 {
     public AddNoteRequestProfile()
     {
-        CreateMap<AddNoteRequest, AddNoteModel>()
+        CreateMap<NoteRequest, NoteRequestModel>()
            .AfterMap((s, d) => d.StartDateTime = s.StartDateTime.UtcDateTime)
            .AfterMap((s, d) => d.EndDateTime = s.EndDateTime.UtcDateTime);
     }
 }
 
-public class AddNoteRequestValidator : AbstractValidator<AddNoteRequest>
+public class AddNoteRequestValidator : AbstractValidator<NoteRequest>
 {
     public AddNoteRequestValidator()
     {
-        Include(new IAddNoteValidator());
+        Include(new INoteRequestValidator());
     }
 }

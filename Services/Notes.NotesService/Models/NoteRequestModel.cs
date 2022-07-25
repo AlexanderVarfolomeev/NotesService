@@ -6,7 +6,7 @@ using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.NotesService.Models;
 
-public class AddNoteModel : IAddNote
+public class NoteRequestModel : INoteRequest
 {
     public string Name { get; set; } = String.Empty;
     public DateTimeOffset StartDateTime { get; set; }
@@ -21,14 +21,14 @@ public class AddNoteModelProfile : Profile
 {
     public AddNoteModelProfile()
     {
-        CreateMap<AddNoteModel, Note>();
+        CreateMap<NoteRequestModel, Note>();
     }
 }
 
-public class AddNoteModelValidator : AbstractValidator<AddNoteModel>
+public class AddNoteModelValidator : AbstractValidator<NoteRequestModel>
 {
     public AddNoteModelValidator()
     {
-        Include(new IAddNoteValidator());
+        Include(new INoteRequestValidator());
     }
 }

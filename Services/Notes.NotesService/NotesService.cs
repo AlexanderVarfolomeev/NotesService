@@ -13,18 +13,17 @@ public class NotesService : INotesService
 {
     private readonly IDbContextFactory<MainDbContext> contextFactory;
     private readonly IMapper mapper;
-    private readonly IModelValidator<AddNoteModel> addModelValidator;
-    private readonly IModelValidator<UpdateNoteModel> updaModelValidator;
+    private readonly IModelValidator<NoteRequestModel> modelValidator;
+  
 
     public NotesService(IDbContextFactory<MainDbContext> contextFactory,
         IMapper mapper,
-        IModelValidator<AddNoteModel> addModelValidator,
-        IModelValidator<UpdateNoteModel> updaModelValidator)
+        IModelValidator<NoteRequestModel> modelValidator)
     {
         this.contextFactory = contextFactory;
         this.mapper = mapper;
-        this.addModelValidator = addModelValidator;
-        this.updaModelValidator = updaModelValidator;
+        this.modelValidator = modelValidator;
+       
     }
     public async Task<IEnumerable<NoteModel>> GetNotes()
     {
@@ -49,11 +48,11 @@ public class NotesService : INotesService
         return data;
     }
 
-    public async Task AddNote(AddNoteModel model)
+    public async Task AddNote(NoteRequestModel requestModel)
     {
-        addModelValidator.Check(model);
+        modelValidator.Check(requestModel);
         using var context = await contextFactory.CreateDbContextAsync();
-        var note = mapper.Map<Note>(model);
+        var note = mapper.Map<Note>(requestModel);
         await context.Notes.AddAsync(note);
         await context.SaveChangesAsync();
     }
@@ -69,15 +68,15 @@ public class NotesService : INotesService
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateNote(int id, UpdateNoteModel model)
+    public async Task UpdateNote(int id, NoteRequestModel requestModel)
     {
-        updaModelValidator.Check(model);
+        modelValidator.Check(requestModel);
         using var context = await contextFactory.CreateDbContextAsync();
         var note = context.Notes
             .FirstOrDefault(x => x.Id == id);
         if (note == null)
             throw new NotImplementedException();
-        var data = mapper.Map(model, note);
+        var data = mapper.Map(requestModel, note);
         context.Notes.Update(data);
         await context.SaveChangesAsync();
     }

@@ -1,32 +1,23 @@
-﻿using AutoMapper;
+﻿using Notes.Entities;
 using FluentValidation;
-using Notes.Entities;
 using TaskStatus = Notes.Entities.TaskStatus;
 
-namespace Notes.NotesService.Models;
+namespace Notes.Common.Interfaces;
 
-public class UpdateNoteModel
+public interface INoteRequest
 {
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; set; }
     public DateTimeOffset StartDateTime { get; set; }
     public DateTimeOffset EndDateTime { get; set; }
-    public string? Description { get; set; } = String.Empty;
+    public string? Description { get; set; }
     public int TaskTypeId { get; set; }
     public RepeatFrequency RepeatFrequency { get; set; }
     public TaskStatus Status { get; set; }
 }
 
-public class UpdateNoteModelProfile : Profile
+public class INoteRequestValidator : AbstractValidator<INoteRequest>
 {
-    public UpdateNoteModelProfile()
-    {
-        CreateMap<UpdateNoteModel, Note>();
-    }
-}
-
-public class UpdateNoteModelValidator : AbstractValidator<UpdateNoteModel>
-{
-    public UpdateNoteModelValidator()
+    public INoteRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -48,7 +39,7 @@ public class UpdateNoteModelValidator : AbstractValidator<UpdateNoteModel>
             .NotEmpty()
             .WithMessage("Repetition rate is required.")
             .IsInEnum()
-            .WithMessage("Repetition must have a valid value.");
+            .WithMessage("Repetition must have a valid value");
 
         RuleFor(x => x.Description)
             .MaximumLength(600)

@@ -50,17 +50,17 @@ namespace Notes.Api.Controllers.Notes
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> AddNote([FromBody] AddNoteRequest note)
+        public async Task<IActionResult> AddNote([FromBody] NoteRequest note)
         {
-            var data = mapper.Map<AddNoteModel>(note);
+            var data = mapper.Map<NoteRequestModel>(note);
             await notesService.AddNote(data);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNote([FromRoute] int id, [FromBody] UpdateNoteRequest type)
+        public async Task<IActionResult> UpdateNote([FromRoute] int id, [FromBody] NoteRequest type)
         {
-            var data = mapper.Map<UpdateNoteModel>(type);
+            var data = mapper.Map<NoteRequestModel>(type);
             await notesService.UpdateNote(id, data);
             return Ok();
         }
