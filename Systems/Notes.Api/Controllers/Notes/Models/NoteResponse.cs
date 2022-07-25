@@ -9,8 +9,8 @@ public class NoteResponse
 {
     public int Id { get; set; }
     public string Name { get; set; } = String.Empty;
-    public DateTime StartDateTime { get; set; }
-    public DateTime EndDateTime { get; set; }
+    public DateTimeOffset StartDateTime { get; set; }
+    public DateTimeOffset EndDateTime { get; set; }
     public string? Description { get; set; } = String.Empty;
     public string Type { get; set; }
     public int TaskTypeId { get; set; }
@@ -22,6 +22,8 @@ public class NoteResponseProfile : Profile
 {
     public NoteResponseProfile()
     {
-        CreateMap<NoteModel, NoteResponse>();
+        CreateMap<NoteModel, NoteResponse>()
+            .AfterMap((s, d) => d.StartDateTime = s.StartDateTime.LocalDateTime)
+            .AfterMap((s, d) => d.EndDateTime = s.EndDateTime.LocalDateTime); ;
     }
 }

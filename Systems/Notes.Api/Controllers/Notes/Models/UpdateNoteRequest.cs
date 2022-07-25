@@ -9,8 +9,8 @@ namespace Notes.Api.Controllers.Notes.Models;
 public class UpdateNoteRequest
 {
     public string Name { get; set; } = String.Empty;
-    public DateTime StartDateTime { get; set; }
-    public DateTime EndDateTime { get; set; }
+    public DateTimeOffset StartDateTime { get; set; }
+    public DateTimeOffset EndDateTime { get; set; }
     public string? Description { get; set; } = String.Empty;
     public int TaskTypeId { get; set; }
     public RepeatFrequency RepeatFrequency { get; set; }
@@ -21,7 +21,9 @@ public class UpdateNoteRequestProfile : Profile
 {
     public UpdateNoteRequestProfile()
     {
-        CreateMap<UpdateNoteRequest, UpdateNoteModel>();
+        CreateMap<UpdateNoteRequest, UpdateNoteModel>()
+            .AfterMap((s, d) => d.StartDateTime = s.StartDateTime.UtcDateTime)
+            .AfterMap((s, d) => d.EndDateTime = s.EndDateTime.UtcDateTime);
     }
 }
 

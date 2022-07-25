@@ -12,8 +12,8 @@ using Notes.Context.Context;
 namespace Notes.Context.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    [Migration("20220722145754_Initial")]
-    partial class Initial
+    [Migration("20220725160536_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,8 +35,8 @@ namespace Notes.Context.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndDateTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("EndDateTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,8 +45,8 @@ namespace Notes.Context.Migrations
                     b.Property<int>("RepeatFrequency")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("StartDateTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
