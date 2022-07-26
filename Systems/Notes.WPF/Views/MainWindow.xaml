@@ -13,22 +13,30 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Обновить данные" Command="{Binding RefreshTaskTypesDataCommand}"/>
+            <MenuItem Header="Выход" Margin="10, 0"/>
+        </Menu>
         <TabControl DockPanel.Dock="Top">
             <TabItem Header="Закладка 1"></TabItem>
-            <TabItem Header="Закладка 2">
+            <TabItem Header="Закладка 2" >
+                <TabItem.InputBindings>
+                    <MouseBinding Command="{Binding RefreshTaskTypesDataCommand}" MouseAction="RightClick"/>
+                </TabItem.InputBindings>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"></RowDefinition>
-                        <RowDefinition Height="3*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid Grid.Column="0" Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.Row="0" Content="Загрузить данные" Command="{Binding RefreshTaskTypesDataCommand }"></Button>
+                        <Button Grid.Column="0" Grid.Row="0" Content="Добавить тип."  Command="{Binding RefreshTaskTypesDataCommand }"></Button>
+                        <Button Grid.Column="1" Grid.Row="0" Content="Удалить тип." Command="{Binding DeleteTaskTypeCommand}" CommandParameter="{Binding SelectedType}"></Button>
                     </Grid>
-                    <DataGrid ItemsSource="{Binding TaskTypes}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1">
+                    <DataGrid ItemsSource="{Binding TaskTypes}" SelectedItem="{Binding SelectedType}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1">
                         <DataGrid.ItemTemplate>
                             <DataTemplate DataType="ttmodel:TaskType">
                             </DataTemplate>

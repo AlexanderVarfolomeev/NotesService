@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.TaskTypes;
@@ -11,29 +14,31 @@ public class MainWindowViewModel : ViewModel
 {
     private readonly ITaskTypeService _taskTypeService;
 
-    public MainWindowViewModel(ITaskTypeService taskTypeService)
-    {
-        _taskTypeService = taskTypeService;
-
-        RefreshTaskTypesDataCommand = new LambdaCommand(OnRefreshTaskTypesDataExecuted, CanRefreshTaskTypesDataExecute);
-    }
-
     public MainWindowViewModel()
     {
         _taskTypeService = new TaskTypeService();
 
         RefreshTaskTypesDataCommand = new LambdaCommand(OnRefreshTaskTypesDataExecuted, CanRefreshTaskTypesDataExecute);
+        DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
     }
 
-    private IEnumerable<TaskType> _taskTypes;
 
+    private ObservableCollection<TaskType> _taskTypes;
 
-    public IEnumerable<TaskType> TaskTypes
+    public ObservableCollection<TaskType> TaskTypes
     {
         get => _taskTypes;
         set => Set(ref _taskTypes, value);
     }
 
+
+    private TaskType? _selectedType;
+
+    public TaskType? SelectedType
+    {
+        get => _selectedType;
+        set => Set(ref _selectedType, value);
+    }
 
     #region Commands
 
@@ -44,8 +49,23 @@ public class MainWindowViewModel : ViewModel
     }
     private async void OnRefreshTaskTypesDataExecuted(object p)
     {
-        TaskTypes = await _taskTypeService.GetTaskTypes();
+        TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
     }
 
+
+    public ICommand DeleteTaskTypeCommand { get; }
+    private bool CanDeleteTaskTypeExecute(object p)
+    {
+        return _selectedType != null;
+    }
+    private async void OnDeleteTaskTypeExecuted(object p)
+    {
+        if (p is TaskType taskType)
+        {
+            await _taskTypeService.DeleteTask(taskType.Id);
+            _taskTypes.Remove(taskType);
+        }
+
+    }
     #endregion
 }
