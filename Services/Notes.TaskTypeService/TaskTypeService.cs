@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Notes.Common.Exceptions;
 using Notes.Common.Validator;
 using Notes.Context.Context;
 using Notes.Context.Factories;
@@ -45,7 +46,7 @@ public class TaskTypeService : ITaskTypeService
 
         var type = types
             .FirstOrDefault(x => x.Id == taskId);
-
+        ProcessException.ThrowIf(() => type is null, "The task type with this ID was not found in the database");
         var data = mapper.Map<TaskTypeModel>(type);
         return data;
     }
@@ -65,8 +66,7 @@ public class TaskTypeService : ITaskTypeService
         using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);
-        if (type == null)
-            throw new NotImplementedException();
+        ProcessException.ThrowIf(() => type is null, "The task type with this ID was not found in the database");
         var data = mapper.Map(task, type);
         context.Tasks.Update(data);
         await context.SaveChangesAsync();
@@ -77,8 +77,7 @@ public class TaskTypeService : ITaskTypeService
         using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);
-        if (type == null)
-            throw new NotImplementedException();
+        ProcessException.ThrowIf(() => type is null, "The task type with this ID was not found in the database");
         context.Tasks.Remove(type);
         await context.SaveChangesAsync();
     }

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
+using Notes.Common.Exceptions;
 using Notes.Common.Extensions;
 using Notes.Common.Responses;
-
 namespace Notes.Api.Middlewares
 {
     public class ExceptionsMiddleware
@@ -20,7 +20,11 @@ namespace Notes.Api.Middlewares
             {
                 await next.Invoke(context);
             }
-            catch(Exception e)
+            catch (ProcessException e)
+            {
+                response = e.ToErrorResponse();
+            }
+            catch (Exception e)
             {
                 response = e.ToErrorResponse();
             }

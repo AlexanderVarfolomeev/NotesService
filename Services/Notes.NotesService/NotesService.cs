@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Notes.Common.Exceptions;
 using Notes.Common.Validator;
 using Notes.Context.Context;
 using Notes.Entities;
@@ -43,7 +44,7 @@ public class NotesService : INotesService
                 .AsQueryable();
         var note = notes
             .FirstOrDefault(x => x.Id == id);
-
+        ProcessException.ThrowIf(() => note is null, "The task type with this ID was not found in the database");
         var data = mapper.Map<NoteModel>(note);
         return data;
     }
@@ -62,8 +63,7 @@ public class NotesService : INotesService
         using var context = await contextFactory.CreateDbContextAsync();
         var note = context.Notes
             .FirstOrDefault(x => x.Id == id);
-        if (note == null)
-            throw new NotImplementedException();
+        ProcessException.ThrowIf(() => note is null, "The note with this ID was not found in the database");
         context.Notes.Remove(note);
         await context.SaveChangesAsync();
     }
@@ -74,8 +74,7 @@ public class NotesService : INotesService
         using var context = await contextFactory.CreateDbContextAsync();
         var note = context.Notes
             .FirstOrDefault(x => x.Id == id);
-        if (note == null)
-            throw new NotImplementedException();
+        ProcessException.ThrowIf(() => note is null, "The note with this ID was not found in the database");
         var data = mapper.Map(requestModel, note);
         context.Notes.Update(data);
         await context.SaveChangesAsync();
@@ -117,7 +116,7 @@ public class NotesService : INotesService
 
                 if (note.RepeatFrequency != RepeatFrequency.None)
                 {
-                    var newNote = CreateNextNoteFromRepetition(note);
+                    var newNote = CreateNextNoteFromRepeat(note);
                     newNote.Status = TaskStatus.Waiting;
                     newNote.Id = 0;
                     await context.Notes.AddAsync(newNote);
@@ -127,7 +126,7 @@ public class NotesService : INotesService
         }
     }
 
-    private Note CreateNextNoteFromRepetition(Note note)
+    private Note CreateNextNoteFromRepeat(Note note)
     {
         switch (note.RepeatFrequency)
         {
