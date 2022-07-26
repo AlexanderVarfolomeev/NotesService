@@ -7,6 +7,7 @@ using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.ViewModels.Base;
+using Notes.WPF.Views;
 
 namespace Notes.WPF.ViewModels;
 
@@ -62,6 +63,8 @@ public class MainWindowViewModel : ViewModel
     {
         if (p is TaskType taskType)
         {
+            TaskTypeDetailWindow window = new TaskTypeDetailWindow();
+            window.ShowDialog();
             await _taskTypeService.DeleteTask(taskType.Id);
             _taskTypes.Remove(taskType);
         }

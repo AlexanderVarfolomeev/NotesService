@@ -42,6 +42,7 @@
                             </DataTemplate>
                         </DataGrid.ItemTemplate>
                         <DataGrid.Columns>
+                            
                             <DataGridTextColumn Header="Имя" Binding="{Binding Path=Name}" Width="*"></DataGridTextColumn>
                             <DataGridTextColumn Header="Цвет" Binding="{Binding Path=Color.Name}" Width="1*"></DataGridTextColumn>
                         </DataGrid.Columns>
