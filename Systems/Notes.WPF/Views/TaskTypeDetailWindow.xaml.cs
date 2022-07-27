@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.Services.Colors;
+using Notes.WPF.Services.Colors.Models;
+using ColorRepository = Notes.WPF.Services.Colors.ColorRepository;
 
 namespace Notes.WPF.Views
 {
@@ -24,11 +27,11 @@ namespace Notes.WPF.Views
         public static readonly DependencyProperty ColorsProperty =
             DependencyProperty.Register(
                 nameof(Colors),
-                typeof(ObservableCollection<TypeColor>),
+                typeof(ObservableCollection<ColorResponse>),
                 typeof(TaskTypeDetailWindow),
                 new PropertyMetadata(null));
 
-        public ObservableCollection<TypeColor> Colors { get => (ObservableCollection<TypeColor>)GetValue(ColorsProperty); set => SetValue(ColorsProperty, value); }
+        public ObservableCollection<ColorResponse> Colors { get => (ObservableCollection<ColorResponse>)GetValue(ColorsProperty); set => SetValue(ColorsProperty, value); }
 
         public static readonly DependencyProperty TypeNameProperty =
             DependencyProperty.Register(
@@ -42,27 +45,17 @@ namespace Notes.WPF.Views
         public static readonly DependencyProperty ColorProperty =
             DependencyProperty.Register(
                 nameof(Color),
-                typeof(TypeColor),
+                typeof(ColorResponse),
                 typeof(TaskTypeDetailWindow),
                 new PropertyMetadata(null));
 
-        public TypeColor Color { get => (TypeColor)GetValue(ColorProperty); set => SetValue(ColorProperty, value); }
+        public ColorResponse Color { get => (ColorResponse)GetValue(ColorProperty); set => SetValue(ColorProperty, value); }
+
+
         public TaskTypeDetailWindow()
         {
             InitializeComponent();
-            Colors = new ObservableCollection<TypeColor>()
-            {
-                new TypeColor()
-                {
-                    Code = "#FF0000",
-                    Name = "Red"
-                },
-                new TypeColor()
-                {
-                    Code = "#00FF00",
-                    Name = "Green"
-                }
-            };
+            Colors = new ObservableCollection<ColorResponse>(ColorRepository.Colors);
         }
     }
 }

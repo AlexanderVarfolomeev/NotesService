@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.TaskTypes;
+using Notes.WPF.Services.UserDialog;
 using Notes.WPF.ViewModels.Base;
 using Notes.WPF.Views;
 
@@ -15,14 +17,15 @@ namespace Notes.WPF.ViewModels;
 public class MainWindowViewModel : ViewModel
 {
     private readonly ITaskTypeService _taskTypeService;
-
+    private readonly IUserDialogService _userDialogService;
     public MainWindowViewModel()
     {
         _taskTypeService = new TaskTypeService();
-
+        _userDialogService = new UserDialogService();
         RefreshTaskTypesDataCommand = new LambdaCommand(OnRefreshTaskTypesDataExecuted, CanRefreshTaskTypesDataExecute);
         DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
         AddTaskTypeCommand = new LambdaCommand(OnAddTaskTypeExecuted, CanAddTaskTypeExecute);
+        EditTaskTypeCommand = new LambdaCommand(OnEditTaskTypeExecuted, CanEditTaskTypeExecute);
     }
 
 
@@ -75,11 +78,29 @@ public class MainWindowViewModel : ViewModel
     private bool CanAddTaskTypeExecute(object p) => true;
     private async void OnAddTaskTypeExecuted(object p)
     {
-        TaskTypeDetailWindow window = new TaskTypeDetailWindow();
-        window.ShowDialog();
-        var a = window.TypeName;
-        var asa = window.Color;
-        Console.WriteLine();
+        EditTaskType? type = new EditTaskType();
+        type = await _userDialogService.Add(type) as EditTaskType;
+        if(type is null)
+            return;
+        await _taskTypeService.AddTask(type);
+        OnRefreshTaskTypesDataExecuted(new object());
+    }
+
+
+    public ICommand EditTaskTypeCommand { get; }
+    private bool CanEditTaskTypeExecute(object p) => SelectedType != null;
+    private async void OnEditTaskTypeExecuted(object p)
+    {
+        EditTaskType? type = new EditTaskType()
+        {
+            Name = SelectedType.Name,
+            TypeColorId = SelectedType.TypeColorId
+        };
+        type = await _userDialogService.Edit(type) as EditTaskType;
+        if (type is null)
+            return;
+        await _taskTypeService.UpdateTask(type, SelectedType.Id);
+        OnRefreshTaskTypesDataExecuted(new object());
     }
     #endregion
 }

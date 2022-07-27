@@ -1,44 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
+using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.ViewModels.Base;
 
 namespace Notes.WPF.ViewModels;
 
 public class TaskTypeDetailViewModel : ViewModel
 {
+    private TaskTypeService _taskTypeService;
+
     public TaskTypeDetailViewModel()
     {
-        _typeColors = new ObservableCollection<TypeColor>()
+        _taskTypeService = new TaskTypeService();
+        DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
+    }
+
+    public ICommand DeleteTaskTypeCommand { get; }
+    private bool CanDeleteTaskTypeExecute(object p)
+    {
+        return true;
+    }
+    private async void OnDeleteTaskTypeExecuted(object p)
+    {
+        if (p is EditTaskType taskType)
         {
-            new TypeColor()
-            {
-                Code = "#FF0000",
-                Name = "Red"
-            },
-            new TypeColor()
-            {
-                Code = "#00FF00",
-                Name = "Green"
-            }
-        };
-    }
-
-
-    private TaskType _taskType;
-
-    public TaskType TaskType
-    {
-        get => _taskType;
-        set => Set(ref _taskType, value);
-    }
-
-
-    private ObservableCollection<TypeColor> _typeColors;
-
-    public ObservableCollection<TypeColor> TypeColors
-    {
-        get => _typeColors;
-        set => Set(ref _typeColors, value);
+            var type = (await _taskTypeService.GetTaskTypes())
+                .FirstOrDefault(x => x.Name == taskType.Name && x.TypeColorId == taskType.TypeColorId)
+                ?? throw new ArgumentNullException();
+            await _taskTypeService.DeleteTask(type.Id);
+        }
     }
 }

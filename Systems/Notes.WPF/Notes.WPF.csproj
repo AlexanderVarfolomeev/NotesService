@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Commands\Base\" />
+    <Folder Include="Services\Colors\Models\" />
+    <Folder Include="Services\UserDialog\" />
     <Folder Include="ViewModels\Base\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 

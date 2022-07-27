@@ -26,5 +26,13 @@ namespace Notes.Api.Controllers.Colors
             var result = mapper.Map<IEnumerable<ColorResponse>>(data);
             return result;
         }
+
+        [HttpGet("{id}")]
+        public async Task<ColorResponse> GetTypeById([FromRoute] int id)
+        {
+            var data = await colorService.GetColorById(id);
+            var result = mapper.Map<ColorResponse>(data);
+            return result;
+        }
     }
 }
