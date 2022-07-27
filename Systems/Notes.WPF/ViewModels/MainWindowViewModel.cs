@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ public class MainWindowViewModel : ViewModel
 
         RefreshTaskTypesDataCommand = new LambdaCommand(OnRefreshTaskTypesDataExecuted, CanRefreshTaskTypesDataExecute);
         DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
+        AddTaskTypeCommand = new LambdaCommand(OnAddTaskTypeExecuted, CanAddTaskTypeExecute);
     }
 
 
@@ -63,12 +65,21 @@ public class MainWindowViewModel : ViewModel
     {
         if (p is TaskType taskType)
         {
-            TaskTypeDetailWindow window = new TaskTypeDetailWindow();
-            window.ShowDialog();
             await _taskTypeService.DeleteTask(taskType.Id);
             _taskTypes.Remove(taskType);
         }
+    }
 
+
+    public ICommand AddTaskTypeCommand { get; }
+    private bool CanAddTaskTypeExecute(object p) => true;
+    private async void OnAddTaskTypeExecuted(object p)
+    {
+        TaskTypeDetailWindow window = new TaskTypeDetailWindow();
+        window.ShowDialog();
+        var a = window.TypeName;
+        var asa = window.Color;
+        Console.WriteLine();
     }
     #endregion
 }

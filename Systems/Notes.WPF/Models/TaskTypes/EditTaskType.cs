@@ -1,6 +1,6 @@
 ﻿namespace Notes.WPF.Models.TaskTypes;
 
-public class AddTaskType
+public class EditTaskType
 {
     public string Name { get; set; } = string.Empty;
     public int TypeColorId { get; set; }

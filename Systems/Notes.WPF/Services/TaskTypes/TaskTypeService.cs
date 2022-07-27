@@ -55,7 +55,7 @@ public class TaskTypeService : ITaskTypeService
         return data;
     }
 
-    public async Task AddTask(AddTaskType task)
+    public async Task AddTask(EditTaskType task)
     {
         string url = $"{Settings.ApiRoot}/TaskTypes";
 
@@ -72,7 +72,7 @@ public class TaskTypeService : ITaskTypeService
         }
     }
 
-    public async Task UpdateTask(UpdateTaskType task, int taskId)
+    public async Task UpdateTask(EditTaskType task, int taskId)
     {
         string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
 

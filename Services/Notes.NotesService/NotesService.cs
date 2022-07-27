@@ -44,7 +44,7 @@ public class NotesService : INotesService
                 .AsQueryable();
         var note = notes
             .FirstOrDefault(x => x.Id == id);
-        ProcessException.ThrowIf(() => note is null, "The task type with this ID was not found in the database");
+        ProcessException.ThrowIf(() => note is null, "The note with this ID was not found in the database");
         var data = mapper.Map<NoteModel>(note);
         return data;
     }

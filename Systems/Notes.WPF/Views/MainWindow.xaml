@@ -33,7 +33,7 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.Row="0" Content="Добавить тип."  Command="{Binding RefreshTaskTypesDataCommand }"></Button>
+                        <Button Grid.Column="0" Grid.Row="0" Content="Добавить тип."  Command="{Binding AddTaskTypeCommand }"></Button>
                         <Button Grid.Column="1" Grid.Row="0" Content="Удалить тип." Command="{Binding DeleteTaskTypeCommand}" CommandParameter="{Binding SelectedType}"></Button>
                     </Grid>
                     <DataGrid ItemsSource="{Binding TaskTypes}" SelectedItem="{Binding SelectedType}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1">

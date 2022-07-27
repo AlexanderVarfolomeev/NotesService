@@ -8,7 +8,7 @@ public interface ITaskTypeService
 {
     Task<IEnumerable<TaskType>> GetTaskTypes();
     Task<TaskType> GetTaskById(int taskId);
-    Task AddTask(AddTaskType task);
-    Task UpdateTask(UpdateTaskType task, int taskId);
+    Task AddTask(EditTaskType task);
+    Task UpdateTask(EditTaskType task, int taskId);
     Task DeleteTask(int taskId);
 }

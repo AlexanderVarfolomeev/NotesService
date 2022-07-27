@@ -7,31 +7,39 @@
         xmlns:viewModel ="clr-namespace:Notes.WPF.ViewModels"
         xmlns:taskTypes="clr-namespace:Notes.WPF.Models.TaskTypes"
         mc:Ignorable="d"
-        Title="Task type detail" Height="100" Width="300">
-    <Window.DataContext>
-        <viewModel:TaskTypeDetailViewModel/>
-    </Window.DataContext>
+        xmlns:cmd="clr-namespace:Notes.WPF.Infrastructure.Commands"
+        Title="Task type detail" Height="100" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <!--<Window.DataContext>
+        <DataContext="{Binding RelativeSource={RelativeSource Self}}"></DataContext>
+    </Window.DataContext>-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition  Height="4*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Content="Имя задачи"></Label>
-        <Label Grid.Column="1" Grid.Row="0" Content="Цвет"></Label>
-        <TextBox  Grid.Column="0" Grid.Row="1" Text="Имя" />
-        <ComboBox  Grid.Column="1" Grid.Row="1"  ItemsSource="{Binding TypeColors}" >
+        <TextBox Grid.Column="0" Grid.Row="0" Text="Имя задачи"/>
+        <TextBox Grid.Column="0" Grid.Row="1" Text="Цвет"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TypeName}"/>
+        <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors}" SelectedItem="{Binding Color}">
+            <!--<ComboBox.DataContext>
+                <viewModel:TaskTypeDetailViewModel/>
+            </ComboBox.DataContext>-->
             <ComboBox.Resources>
                 <DataTemplate DataType="{x:Type taskTypes:TypeColor}">
-                    <TextBlock Text="{Binding Name}"/>
+                    <TextBox Text="{Binding Name}"></TextBox>
                 </DataTemplate>
             </ComboBox.Resources>
         </ComboBox>
-        <Button Grid.Column="0" Grid.Row="2" Content="Сохранить"/>
-        <Button Grid.Column="1" Grid.Row="2" Content="Удалить"/>
+        <Button Grid.Column="0" Grid.Row="2" Content="Ok" IsDefault="True" 
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TaskTypeDetailWindow}}">
+            <Button.Command>
+                <cmd:CloseDialogCommand DialogResult="True"/>
+            </Button.Command>
+        </Button>
     </Grid>
 </Window>

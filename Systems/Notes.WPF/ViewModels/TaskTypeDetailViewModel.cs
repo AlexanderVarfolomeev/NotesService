@@ -24,6 +24,16 @@ public class TaskTypeDetailViewModel : ViewModel
         };
     }
 
+
+    private TaskType _taskType;
+
+    public TaskType TaskType
+    {
+        get => _taskType;
+        set => Set(ref _taskType, value);
+    }
+
+
     private ObservableCollection<TypeColor> _typeColors;
 
     public ObservableCollection<TypeColor> TypeColors
