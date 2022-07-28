@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Colors;
@@ -43,7 +46,12 @@ public class MainWindowViewModel : ViewModel
     public TaskType? SelectedType
     {
         get => _selectedType;
-        set => Set(ref _selectedType, value);
+        set
+        {
+            Set(ref _selectedType, value);
+            if(value != null)
+                OnEditTaskTypeExecuted(value);
+        }
     }
 
     #region Commands
@@ -103,4 +111,5 @@ public class MainWindowViewModel : ViewModel
         OnRefreshTaskTypesDataExecuted(new object());
     }
     #endregion
+
 }

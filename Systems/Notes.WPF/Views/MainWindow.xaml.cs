@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Notes.WPF.Services.UserDialog;
+using Notes.WPF.ViewModels;
 
 namespace Notes.WPF
 {

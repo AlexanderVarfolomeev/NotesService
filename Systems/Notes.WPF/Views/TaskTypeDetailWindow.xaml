@@ -9,7 +9,7 @@
         xmlns:colors="clr-namespace:Notes.WPF.Services.Colors.Models"
         mc:Ignorable="d"
         xmlns:cmd="clr-namespace:Notes.WPF.Infrastructure.Commands"
-        Title="Task type detail" Height="100" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Title="Task type detail" Height="120" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

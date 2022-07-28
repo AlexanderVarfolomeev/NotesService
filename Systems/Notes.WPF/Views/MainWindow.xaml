@@ -40,7 +40,7 @@
                         <Button Grid.Column="2" Grid.Row="0" Content="Редактировать тип." Command="{Binding EditTaskTypeCommand}" CommandParameter="{Binding SelectedType}"/>
                     </Grid>
                     <DataGrid ItemsSource="{Binding TaskTypes}" SelectedItem="{Binding SelectedType}"
-                              AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1" GridLinesVisibility="Vertical" CanUserAddRows="False">
+                              AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1" GridLinesVisibility="Vertical" CanUserAddRows="False" SelectedValue="0">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderBrush" Value="Black"/>
