@@ -18,9 +18,9 @@ public class NoteRequest : INoteRequest
     public TaskStatus Status { get; set; }
 }
 
-public class AddNoteRequestProfile : Profile
+public class NoteRequestProfile : Profile
 {
-    public AddNoteRequestProfile()
+    public NoteRequestProfile()
     {
         CreateMap<NoteRequest, NoteRequestModel>()
            .AfterMap((s, d) => d.StartDateTime = s.StartDateTime.UtcDateTime)
@@ -28,9 +28,9 @@ public class AddNoteRequestProfile : Profile
     }
 }
 
-public class AddNoteRequestValidator : AbstractValidator<NoteRequest>
+public class NoteRequestValidator : AbstractValidator<NoteRequest>
 {
-    public AddNoteRequestValidator()
+    public NoteRequestValidator()
     {
         Include(new INoteRequestValidator());
     }

@@ -17,17 +17,17 @@ public class NoteRequestModel : INoteRequest
     public TaskStatus Status { get; set; }
 }
 
-public class AddNoteModelProfile : Profile
+public class NoteRequestModelProfile : Profile
 {
-    public AddNoteModelProfile()
+    public NoteRequestModelProfile()
     {
         CreateMap<NoteRequestModel, Note>();
     }
 }
 
-public class AddNoteModelValidator : AbstractValidator<NoteRequestModel>
+public class NoteRequestModelValidator : AbstractValidator<NoteRequestModel>
 {
-    public AddNoteModelValidator()
+    public NoteRequestModelValidator()
     {
         Include(new INoteRequestValidator());
     }

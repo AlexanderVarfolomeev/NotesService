@@ -13,18 +13,15 @@ public class TaskTypeService : ITaskTypeService
 {
     private readonly IMapper mapper;
     private readonly IDbContextFactory<MainDbContext> contextFactory;
-    private readonly IModelValidator<TaskTypeAddModel> addModelValidator;
-    private readonly IModelValidator<TaskTypeUpdateModel> updateModelValidator;
+    private readonly IModelValidator<TaskTypeRequestModel> typeModelValidator;
 
     public TaskTypeService(IMapper mapper,
         IDbContextFactory<MainDbContext> contextFactory,
-        IModelValidator<TaskTypeAddModel> addModelValidator,
-        IModelValidator<TaskTypeUpdateModel> updateModelValidator)
+        IModelValidator<TaskTypeRequestModel> typeModelValidator)
     {
         this.mapper = mapper;
         this.contextFactory = contextFactory;
-        this.addModelValidator = addModelValidator;
-        this.updateModelValidator = updateModelValidator;
+        this.typeModelValidator = typeModelValidator;
     }
 
     public async Task<IEnumerable<TaskTypeModel>> GetTaskTypes()
@@ -51,18 +48,18 @@ public class TaskTypeService : ITaskTypeService
         return data;
     }
 
-    public async Task AddTask(TaskTypeAddModel task)
+    public async Task AddTask(TaskTypeRequestModel task)
     {
-        addModelValidator.Check(task);
+        typeModelValidator.Check(task);
         using var context = await contextFactory.CreateDbContextAsync();
         var type = mapper.Map<TaskType>(task);
         await context.Tasks.AddAsync(type);
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateTask(TaskTypeUpdateModel task, int taskId)
+    public async Task UpdateTask(TaskTypeRequestModel task, int taskId)
     {
-        updateModelValidator.Check(task);
+        typeModelValidator.Check(task);
         using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);

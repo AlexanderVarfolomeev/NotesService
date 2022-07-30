@@ -16,6 +16,5 @@ public class TaskTypeModelProfile : Profile
     public TaskTypeModelProfile()
     {
         CreateMap<TaskType, TaskTypeModel>();
-         //   .ForPath(n => n.Color, opt => opt.MapFrom(src => src.Color.Name)); ;
     }
 }

@@ -38,17 +38,17 @@ namespace Notes.Api.Controllers.TaskTypes
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> AddType([FromBody] TaskTypeAddRequest type)
+        public async Task<IActionResult> AddType([FromBody] TaskTypeRequest type)
         {
-            var data = mapper.Map<TaskTypeAddModel>(type);
+            var data = mapper.Map<TaskTypeRequestModel>(type);
             await typesService.AddTask(data);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateType([FromRoute] int id, [FromBody] TaskTypeUpdateRequest type)
+        public async Task<IActionResult> UpdateType([FromRoute] int id, [FromBody] TaskTypeRequest type)
         {
-            var data = mapper.Map<TaskTypeUpdateModel>(type);
+            var data = mapper.Map<TaskTypeRequestModel>(type);
             await typesService.UpdateTask(data, id);
             return Ok();
         }

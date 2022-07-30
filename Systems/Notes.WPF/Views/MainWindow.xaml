@@ -41,6 +41,9 @@
                     </Grid>
                     <DataGrid ItemsSource="{Binding TaskTypes}" SelectedItem="{Binding SelectedType}"
                               AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1" GridLinesVisibility="Vertical" CanUserAddRows="False" SelectedValue="0">
+                        <DataGrid.CurrentCell>
+                            <DataGridCellInfo></DataGridCellInfo>
+                        </DataGrid.CurrentCell>
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderBrush" Value="Black"/>
