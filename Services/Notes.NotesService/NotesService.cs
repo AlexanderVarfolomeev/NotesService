@@ -15,7 +15,7 @@ public class NotesService : INotesService
     private readonly IDbContextFactory<MainDbContext> contextFactory;
     private readonly IMapper mapper;
     private readonly IModelValidator<NoteRequestModel> modelValidator;
-  
+
 
     public NotesService(IDbContextFactory<MainDbContext> contextFactory,
         IMapper mapper,
@@ -24,7 +24,7 @@ public class NotesService : INotesService
         this.contextFactory = contextFactory;
         this.mapper = mapper;
         this.modelValidator = modelValidator;
-       
+
     }
     public async Task<IEnumerable<NoteModel>> GetNotes()
     {
@@ -79,16 +79,35 @@ public class NotesService : INotesService
         context.Notes.Update(data);
         await context.SaveChangesAsync();
     }
-
-    public async Task<IEnumerable<NoteModel>> GetCompletedTaskForLastFourWeeks()
+    public async Task<Dictionary<string, IEnumerable<NoteModel>>> GetCompletedTaskForLastFourWeeksDictionary()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
             .Include(x => x.Type)
             .AsQueryable();
         var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
-        var result = data.Select(x => x).Where(x =>IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done).ToList();
-        return result;
+        var result = data.Select(x => x)
+            .Where(x => IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done).ToList();
+
+        Dictionary<string, IEnumerable<NoteModel>> resultDictionary = new Dictionary<string, IEnumerable<NoteModel>>();
+
+        var dateTimeNow = DateTimeOffset.Now;
+
+        var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
+
+        for (int i = 0; i < 4; i++)
+        {
+            var start = startDate.AddDays(7 * i);
+            var end = i == 3 ? dateTimeNow : startDate.AddDays(7 * (i + 1));
+
+            var startStr = start.Day + "." + start.Month + "." + start.Year;
+            var endStr = end.Day + "." + end.Month + "." + end.Year;
+
+            resultDictionary.Add(startStr + " - " + endStr,
+                result.Where(x => IncludeIn(start, end, x.StartDateTime)));
+        }
+
+        return resultDictionary;
     }
 
     /// <summary>
@@ -161,5 +180,10 @@ public class NotesService : INotesService
         var today = dateTimeNow.DayOfWeek;
         var startDate = dateTimeNow.AddDays(-21 - (int)today);
         return date >= startDate && date <= dateTimeNow;
+    }
+
+    private bool IncludeIn(DateTimeOffset startDate, DateTimeOffset endDate, DateTimeOffset current)
+    {
+        return current.Date >= startDate.Date && current.Date <= endDate.Date;
     }
 }
