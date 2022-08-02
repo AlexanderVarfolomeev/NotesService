@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Commands\Base\" />
-    <Folder Include="Services\Colors\Models\" />
+    <Folder Include="Models\Colors\" />
+    <Folder Include="Services\Notes\" />
     <Folder Include="Services\UserDialog\" />
     <Folder Include="ViewModels\Base\" />
   </ItemGroup>

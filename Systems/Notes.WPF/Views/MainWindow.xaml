@@ -6,6 +6,7 @@
         xmlns:com="clr-namespace:Notes.WPF.Infrastructure.Commands"
         xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         xmlns:ttmodel="clr-namespace:Notes.WPF.Models.TaskTypes"
+        xmlns:notemodel="clr-namespace:Notes.WPF.Models.Notes"
         xmlns:local="clr-namespace:Notes.WPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="800">
@@ -18,12 +19,9 @@
             <MenuItem Header="Выход" Margin="10, 0"/>
         </Menu>
         <TabControl DockPanel.Dock="Top">
-            <TabItem Header="Типы задач тест">
+            <TabItem Header="Заметки">
             </TabItem>
             <TabItem Header="Типы задач" >
-                <TabItem.InputBindings>
-                    <MouseBinding Command="{Binding RefreshTaskTypesDataCommand}" MouseAction="RightClick"/>
-                </TabItem.InputBindings>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"></RowDefinition>
@@ -61,7 +59,9 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Закладка 3"></TabItem>
+            <TabItem Header="Активность">
+
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>
