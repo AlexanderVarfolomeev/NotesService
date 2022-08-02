@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Notes.Settings\Notes.Settings.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>

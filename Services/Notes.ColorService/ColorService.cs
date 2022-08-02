@@ -21,7 +21,7 @@ public class ColorService : IColorService
     }
     public async Task<IEnumerable<ColorModel>> GetColors()
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var colors = context.Colors
             .AsQueryable();
         var data = (await colors.ToListAsync()).Select(x => mapper.Map<ColorModel>(x));
@@ -30,7 +30,7 @@ public class ColorService : IColorService
 
     public async Task<ColorModel> GetColorById(int id)
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var colors = context.Colors
             .AsQueryable();
         var data = (await colors.ToListAsync()).Select(x => mapper.Map<ColorModel>(x))

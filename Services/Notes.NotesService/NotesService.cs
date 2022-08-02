@@ -28,7 +28,7 @@ public class NotesService : INotesService
     }
     public async Task<IEnumerable<NoteModel>> GetNotes()
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
             .Include(x => x.Type)
             .AsQueryable();
@@ -38,7 +38,7 @@ public class NotesService : INotesService
 
     public async Task<NoteModel> GetNoteById(int id)
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
                 .Include(x => x.Type)
                 .AsQueryable();
@@ -52,7 +52,7 @@ public class NotesService : INotesService
     public async Task AddNote(NoteRequestModel requestModel)
     {
         modelValidator.Check(requestModel);
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var note = mapper.Map<Note>(requestModel);
         await context.Notes.AddAsync(note);
         await context.SaveChangesAsync();
@@ -60,7 +60,7 @@ public class NotesService : INotesService
 
     public async Task DeleteNote(int id)
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var note = context.Notes
             .FirstOrDefault(x => x.Id == id);
         ProcessException.ThrowIf(() => note is null, "The note with this ID was not found in the database");
@@ -71,7 +71,7 @@ public class NotesService : INotesService
     public async Task UpdateNote(int id, NoteRequestModel requestModel)
     {
         modelValidator.Check(requestModel);
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var note = context.Notes
             .FirstOrDefault(x => x.Id == id);
         ProcessException.ThrowIf(() => note is null, "The note with this ID was not found in the database");
@@ -82,7 +82,7 @@ public class NotesService : INotesService
 
     public async Task<IEnumerable<NoteModel>> GetCompletedTaskForLastFourWeeks()
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
             .Include(x => x.Type)
             .AsQueryable();
@@ -97,7 +97,7 @@ public class NotesService : INotesService
     /// <returns></returns>
     public async Task UpdateNoteStatus()
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
             .Include(x => x.Type)
             .AsQueryable()
@@ -105,7 +105,7 @@ public class NotesService : INotesService
 
         foreach (var note in notes)
         {
-            if (note.EndDateTime < DateTime.Now && note.Status != TaskStatus.Failed)
+            if (note.EndDateTime < DateTimeOffset.Now && note.Status != TaskStatus.Failed)
             {
                 if (note.Status != TaskStatus.Done)
                 {
@@ -147,7 +147,6 @@ public class NotesService : INotesService
                 note.EndDateTime = note.EndDateTime.AddYears(1);
                 break;
         }
-
         return note;
     }
 
@@ -156,10 +155,11 @@ public class NotesService : INotesService
     /// </summary>
     /// <param name="date"></param>
     /// <returns></returns>
-    private bool IncludeInLastFourWeek(DateTime date)
+    private bool IncludeInLastFourWeek(DateTimeOffset date)
     {
-        var today = DateTime.Now.DayOfWeek;
-        var startDate = DateTime.Now.AddDays(-21 - (int)today);
-        return date >= startDate && date <= DateTime.Now;
+        var dateTimeNow = DateTimeOffset.Now;
+        var today = dateTimeNow.DayOfWeek;
+        var startDate = dateTimeNow.AddDays(-21 - (int)today);
+        return date >= startDate && date <= dateTimeNow;
     }
 }

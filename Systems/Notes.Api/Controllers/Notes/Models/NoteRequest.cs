@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using Notes.Common.Interfaces;
 using Notes.Entities;
+using Notes.NotesService.Interfaces;
 using Notes.NotesService.Models;
+using Notes.NotesService.Validators;
 using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.Api.Controllers.Notes.Models;
@@ -32,6 +33,6 @@ public class NoteRequestValidator : AbstractValidator<NoteRequest>
 {
     public NoteRequestValidator()
     {
-        Include(new INoteRequestValidator());
+        Include(new NoteValidator());
     }
 }

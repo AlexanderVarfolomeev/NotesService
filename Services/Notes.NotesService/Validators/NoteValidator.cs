@@ -1,23 +1,11 @@
-﻿using Notes.Entities;
-using FluentValidation;
-using TaskStatus = Notes.Entities.TaskStatus;
+﻿using FluentValidation;
+using Notes.NotesService.Interfaces;
 
-namespace Notes.Common.Interfaces;
+namespace Notes.NotesService.Validators;
 
-public interface INoteRequest
+public class NoteValidator : AbstractValidator<INoteRequest>
 {
-    public string Name { get; set; }
-    public DateTimeOffset StartDateTime { get; set; }
-    public DateTimeOffset EndDateTime { get; set; }
-    public string? Description { get; set; }
-    public int TaskTypeId { get; set; }
-    public RepeatFrequency RepeatFrequency { get; set; }
-    public TaskStatus Status { get; set; }
-}
-
-public class INoteRequestValidator : AbstractValidator<INoteRequest>
-{
-    public INoteRequestValidator()
+    public NoteValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()

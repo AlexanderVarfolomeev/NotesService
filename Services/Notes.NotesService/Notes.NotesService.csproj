@@ -20,4 +20,8 @@
     <ProjectReference Include="..\..\Shared\Notes.Common\Notes.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>

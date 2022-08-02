@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using Notes.Common.Interfaces;
 using Notes.Entities;
+using Notes.TaskTypeService.Interfaces;
+using Notes.TaskTypeService.Validators;
 
 namespace Notes.TaskTypeService.Models;
 
@@ -23,7 +24,7 @@ public class TaskTypeRequestModelValidator : AbstractValidator<TaskTypeRequestMo
 {
     public TaskTypeRequestModelValidator()
     {
-       Include(new ITaskTypeRequestValidator());
+       Include(new TaskTypeValidator());
 
     }
 }

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Notes.Common.Interfaces;
 
 namespace Notes.Common.Helpers;
 

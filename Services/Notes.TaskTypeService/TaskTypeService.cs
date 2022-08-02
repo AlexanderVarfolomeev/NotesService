@@ -26,7 +26,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task<IEnumerable<TaskTypeModel>> GetTaskTypes()
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var types = context.Tasks
             .Include(x => x.Color)
             .AsQueryable();
@@ -36,7 +36,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task<TaskTypeModel> GetTaskById(int taskId)
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var types = context.Tasks
             .Include(x => x.Color)
             .AsQueryable();
@@ -51,7 +51,7 @@ public class TaskTypeService : ITaskTypeService
     public async Task AddTask(TaskTypeRequestModel task)
     {
         typeModelValidator.Check(task);
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var type = mapper.Map<TaskType>(task);
         await context.Tasks.AddAsync(type);
         await context.SaveChangesAsync();
@@ -60,7 +60,7 @@ public class TaskTypeService : ITaskTypeService
     public async Task UpdateTask(TaskTypeRequestModel task, int taskId)
     {
         typeModelValidator.Check(task);
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);
         ProcessException.ThrowIf(() => type is null, "The task type with this ID was not found in the database");
@@ -71,7 +71,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task DeleteTask(int taskId)
     {
-        using var context = await contextFactory.CreateDbContextAsync();
+        await using var context = await contextFactory.CreateDbContextAsync();
         var type = context.Tasks
             .FirstOrDefault(x => x.Id == taskId);
         ProcessException.ThrowIf(() => type is null, "The task type with this ID was not found in the database");
