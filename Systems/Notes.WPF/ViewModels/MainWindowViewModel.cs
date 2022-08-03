@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.Services.UserDialog;
+using SkiaSharp;
 
 namespace Notes.WPF.ViewModels;
 
@@ -128,12 +131,23 @@ public partial class MainWindowViewModel : ObservableObject
         i = 0;
         foreach (var pair in dictionary)
         {
+            var rgb = GetColorCodeFromName(pair.Key);
             Series[i] = new ColumnSeries<double>()
             {
                 Name = pair.Key,
                 Values = pair.Value,
+                Fill = new SolidColorPaint(new SKColor(rgb.Item1, rgb.Item2, rgb.Item3))
             };
             i++;
         }
+    }
+
+    private (byte, byte, byte) GetColorCodeFromName(string name)
+    {
+        var type = TaskTypes.FirstOrDefault(x => x.Name == name);
+        var color = type.Color.Code.Substring(1);
+        return (Convert.ToByte(color.Substring(0, 2), 16),
+            Convert.ToByte(color.Substring(2, 2), 16),
+            Convert.ToByte(color.Substring(4,2), 16));
     }
 }
