@@ -11,5 +11,5 @@ public interface INotesService
     Task AddNote(NoteRequest requestModel);
     Task DeleteNote(int id);
     Task UpdateNote(int id, NoteRequest requestModel);
-    Task<Dictionary<string, IEnumerable<Note>>> GetCompletedTaskForLastFourWeeks();
+    Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks();
 }

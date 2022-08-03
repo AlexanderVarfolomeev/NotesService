@@ -100,36 +100,34 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private Axis[] _xAxes;
 
     [ObservableProperty]
-    private Dictionary<string, IEnumerable<Note>> _notesLastWeeks;
+    private Dictionary<string, double[]> _notesLastWeeks;
 
     [ICommand]
     private async Task RefreshLastFourWeeksNotes()
     {
-        NotesLastWeeks = new Dictionary<string, IEnumerable<Note>>(await _notesService.GetCompletedTaskForLastFourWeeks());
+        var dates = new string[4];
+        var dateTimeNow = DateTimeOffset.Now;
+        var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
+        for (int j = 0; j < 4; j++)
+        {
+            var start = startDate.AddDays(7 * j);
+            var end = j == 3 ? dateTimeNow : startDate.AddDays(7 * (j + 1));
+            var startStr = start.Day + "." + start.Month;
+            var endStr = end.Day + "." + end.Month;
+            dates[j] = startStr + " - " + endStr;
+        }
+
+        NotesLastWeeks = new Dictionary<string, double[]>(await _notesService.GetCompletedTaskForLastFourWeeks());
         XAxes = new Axis[]
         {
             new Axis(){
-                Labels = NotesLastWeeks.Select(x => x.Key).ToArray(),
+                Labels = dates.Select(x => x).ToArray(),
             }
         };
-
-        Dictionary<string, double[]> dictionary = new Dictionary<string, double[]>();
+       
+        Series = new ColumnSeries<double>[NotesLastWeeks.Count];
         int i = 0;
-        foreach (var week in NotesLastWeeks)
-        {
-            foreach (var note in week.Value)
-            {
-                if (!dictionary.ContainsKey(note.Type))
-                    dictionary.Add(note.Type, new double[4] { 0, 0, 0, 0 });
-                var hours = (note.EndDateTime - note.StartDateTime).TotalHours;
-                dictionary[note.Type][i] += hours;
-            }
-
-            i++;
-        }
-        Series = new ColumnSeries<double>[dictionary.Count];
-        i = 0;
-        foreach (var pair in dictionary)
+        foreach (var pair in NotesLastWeeks)
         {
             var rgb = GetColorCodeFromName(pair.Key);
             Series[i] = new ColumnSeries<double>()

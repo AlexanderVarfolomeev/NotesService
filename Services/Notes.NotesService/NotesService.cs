@@ -79,7 +79,7 @@ public class NotesService : INotesService
         context.Notes.Update(data);
         await context.SaveChangesAsync();
     }
-    public async Task<Dictionary<string, IEnumerable<NoteModel>>> GetCompletedTaskForLastFourWeeksDictionary()
+    public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeksDictionary()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
@@ -92,7 +92,6 @@ public class NotesService : INotesService
         Dictionary<string, IEnumerable<NoteModel>> resultDictionary = new Dictionary<string, IEnumerable<NoteModel>>();
 
         var dateTimeNow = DateTimeOffset.Now;
-
         var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
 
         for (int i = 0; i < 4; i++)
@@ -107,7 +106,22 @@ public class NotesService : INotesService
                 result.Where(x => IncludeIn(start, end, x.StartDateTime)));
         }
 
-        return resultDictionary;
+        Dictionary<string, double[]> dictionary = new Dictionary<string, double[]>();
+        int j = 0;
+        foreach (var week in resultDictionary)
+        {
+            foreach (var note in week.Value)
+            {
+                if (!dictionary.ContainsKey(note.Type))
+                    dictionary.Add(note.Type, new double[4] { 0, 0, 0, 0 });
+                var hours = (note.EndDateTime - note.StartDateTime).TotalHours;
+                dictionary[note.Type][j] += hours;
+            }
+
+            j++;
+        }
+
+        return dictionary;
     }
 
     /// <summary>

@@ -32,16 +32,11 @@ namespace Notes.Api.Controllers.Notes
         }
 
         [HttpGet("get-last-four-weeks-completed")]
-        public async Task<Dictionary<string, IEnumerable<NoteResponse>>> GetCompletedTaskForLastFourWeeks()
+        public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks()
         {
             await notesService.UpdateNoteStatus();
             var data = await notesService.GetCompletedTaskForLastFourWeeksDictionary();
-            var result = new Dictionary<string, IEnumerable<NoteResponse>>();
-            foreach (var p in data)
-            {
-                result.Add(p.Key, mapper.Map<IEnumerable<NoteResponse>>(p.Value));
-            }
-            return result;
+            return data;
         }
 
 
