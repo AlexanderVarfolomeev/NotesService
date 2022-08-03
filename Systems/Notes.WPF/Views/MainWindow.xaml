@@ -61,6 +61,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Активность">
+                <lvc:CartesianChart Series="{Binding Series}" XAxes="{Binding XAxes}"/>
             </TabItem>
         </TabControl>
     </DockPanel>
