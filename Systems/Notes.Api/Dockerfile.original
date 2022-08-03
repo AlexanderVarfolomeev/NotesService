@@ -13,7 +13,6 @@ COPY ["Data/Notes.Entities/Notes.Entities.csproj", "Data/Notes.Entities/"]
 COPY ["Services/Notes.Settings/Notes.Settings.csproj", "Services/Notes.Settings/"]
 COPY ["Shared/Notes.Common/Notes.Common.csproj", "Shared/Notes.Common/"]
 COPY ["Services/Notes.NotesService/Notes.NotesService.csproj", "Services/Notes.NotesService/"]
-COPY ["Services/Notes.ColorService/Notes.ColorService.csproj", "Services/Notes.ColorService/"]
 RUN dotnet restore "Systems/Notes.Api/Notes.Api.csproj"
 COPY . .
 WORKDIR "/src/Systems/Notes.Api"

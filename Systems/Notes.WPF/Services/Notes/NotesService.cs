@@ -101,9 +101,9 @@ public class NotesService : INotesService
         }
     }
 
-    public async Task<IEnumerable<Note>> GetCompletedTaskForLastFourWeeks()
+    public async Task<Dictionary<string, IEnumerable<Note>>> GetCompletedTaskForLastFourWeeks()
     {
-        string url = $"{Settings.ApiRoot}/get-last-four-weeks-completed";
+        string url = $"{Settings.ApiRoot}/Notes/get-last-four-weeks-completed";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
@@ -113,9 +113,9 @@ public class NotesService : INotesService
             throw new Exception(content);
         }
 
-        var data = JsonSerializer.Deserialize<IEnumerable<Note>>
+        var data = JsonSerializer.Deserialize<Dictionary<string, IEnumerable<Note>>>
                        (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                   ?? new List<Note>();
+                   ?? new Dictionary<string, IEnumerable<Note>>();
 
         return data;
     }

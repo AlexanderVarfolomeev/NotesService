@@ -8,6 +8,7 @@
         xmlns:ttmodel="clr-namespace:Notes.WPF.Models.TaskTypes"
         xmlns:notemodel="clr-namespace:Notes.WPF.Models.Notes"
         xmlns:local="clr-namespace:Notes.WPF"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="800">
     <Window.DataContext>
@@ -15,7 +16,7 @@
     </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Обновить данные" Command="{Binding RefreshTaskTypesDataCommand}"/>
+            <MenuItem Header="Обновить данные" Command="{Binding RefreshDataCommand}"/>
             <MenuItem Header="Выход" Margin="10, 0"/>
         </Menu>
         <TabControl DockPanel.Dock="Top">
@@ -60,7 +61,6 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Активность">
-
             </TabItem>
         </TabControl>
     </DockPanel>
