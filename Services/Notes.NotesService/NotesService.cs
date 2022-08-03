@@ -100,8 +100,8 @@ public class NotesService : INotesService
             var start = startDate.AddDays(7 * i);
             var end = i == 3 ? dateTimeNow : startDate.AddDays(7 * (i + 1));
 
-            var startStr = start.Day + "." + start.Month + "." + start.Year;
-            var endStr = end.Day + "." + end.Month + "." + end.Year;
+            var startStr = start.Day + "." + start.Month;
+            var endStr = end.Day + "." + end.Month;
 
             resultDictionary.Add(startStr + " - " + endStr,
                 result.Where(x => IncludeIn(start, end, x.StartDateTime)));
