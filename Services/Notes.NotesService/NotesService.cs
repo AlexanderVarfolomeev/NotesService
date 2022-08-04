@@ -31,6 +31,7 @@ public class NotesService : INotesService
         await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
             .Include(x => x.Type)
+            .Include(x => x.Type.Color)
             .AsQueryable();
         var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
         return data;
@@ -41,6 +42,7 @@ public class NotesService : INotesService
         await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
                 .Include(x => x.Type)
+                .Include(x => x.Type.Color)
                 .AsQueryable();
         var note = notes
             .FirstOrDefault(x => x.Id == id);
@@ -84,6 +86,7 @@ public class NotesService : INotesService
         await using var context = await contextFactory.CreateDbContextAsync();
         var notes = context.Notes
             .Include(x => x.Type)
+            .Include(x => x.Type.Color)
             .AsQueryable();
         var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
         var result = data.Select(x => x)
@@ -121,6 +124,13 @@ public class NotesService : INotesService
             j++;
         }
 
+        foreach (var p in dictionary)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                p.Value[i] = Math.Round(p.Value[i], 1);
+            }
+        }
         return dictionary;
     }
 

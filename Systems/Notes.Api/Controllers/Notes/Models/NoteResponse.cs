@@ -16,6 +16,7 @@ public class NoteResponse
     public int TaskTypeId { get; set; }
     public RepeatFrequency RepeatFrequency { get; set; }
     public TaskStatus Status { get; set; }
+    public string TaskTypeColor { get; set; } = string.Empty;
 }
 
 public class NoteResponseProfile : Profile

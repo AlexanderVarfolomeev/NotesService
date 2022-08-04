@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
@@ -102,9 +105,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Dictionary<string, double[]> _notesLastWeeks;
 
-    [ICommand]
     private async Task RefreshLastFourWeeksNotes()
     {
+        Notes = new ObservableCollection<Note>(await _notesService.GetNotes());
         var dates = new string[4];
         var dateTimeNow = DateTimeOffset.Now;
         var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
@@ -125,12 +128,12 @@ public partial class MainWindowViewModel : ObservableObject
             }
         };
        
-        Series = new ColumnSeries<double>[NotesLastWeeks.Count];
+        Series = new ISeries[NotesLastWeeks.Count];
         int i = 0;
         foreach (var pair in NotesLastWeeks)
         {
-            var rgb = GetColorCodeFromName(pair.Key);
-            Series[i] = new ColumnSeries<double>()
+            var rgb = GetRGBCodeFromTaskTypeName(pair.Key);
+            Series[i] = new ColumnSeries<double>
             {
                 Name = pair.Key,
                 Values = pair.Value,
@@ -140,7 +143,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private (byte, byte, byte) GetColorCodeFromName(string name)
+    private (byte, byte, byte) GetRGBCodeFromTaskTypeName(string name)
     {
         var type = TaskTypes.FirstOrDefault(x => x.Name == name);
         var color = type.Color.Code.Substring(1);
@@ -148,4 +151,5 @@ public partial class MainWindowViewModel : ObservableObject
             Convert.ToByte(color.Substring(2, 2), 16),
             Convert.ToByte(color.Substring(4,2), 16));
     }
+
 }

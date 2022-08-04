@@ -10,7 +10,7 @@
         xmlns:local="clr-namespace:Notes.WPF"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="800">
+        Title="MainWindow" Height="400" Width="1600">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -20,7 +20,179 @@
             <MenuItem Header="Выход" Margin="10, 0"/>
         </Menu>
         <TabControl DockPanel.Dock="Top">
-            <TabItem Header="Заметки">
+            <TabItem Header="Календарь">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="11*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Предыдущаяя неделя"/>
+                        <Button Grid.Column="1" Content="Следующая неделя"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Grid.Column="0" Header="Понедельник">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="1" Header="Вторник">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="2" Header="Среда">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="3" Header="Четверг">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="4" Header="Пятница">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="5" Header="Суббота">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="6" Header="Воскресенье">
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding Notes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <TextBlock Text="{Binding Path=Status}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
+                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
             </TabItem>
             <TabItem Header="Типы задач" >
                 <Grid>
@@ -61,7 +233,8 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Активность">
-                <lvc:CartesianChart Series="{Binding Series}" XAxes="{Binding XAxes}" LegendPosition="Right"/>
+                <lvc:CartesianChart Series="{Binding Series}" XAxes="{Binding XAxes}" LegendPosition="Right">
+                </lvc:CartesianChart>
             </TabItem>
         </TabControl>
     </DockPanel>
