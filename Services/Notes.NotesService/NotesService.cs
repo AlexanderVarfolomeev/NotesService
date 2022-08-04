@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Notes.Common.Exceptions;
 using Notes.Common.Validator;
@@ -132,6 +133,45 @@ public class NotesService : INotesService
             }
         }
         return dictionary;
+    }
+
+    public async Task<IEnumerable<NoteModel>> GetCurrentWeek()
+    {
+        await using var context = await contextFactory.CreateDbContextAsync();
+        var monday = GetDateOfMondayOnThisWeek();
+        var sunday = monday.AddDays(6);
+        var notes = context.Notes
+            .Include(x => x.Type)
+            .Include(x => x.Type.Color)
+            .AsQueryable();
+
+        var result = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
+        var data = result.Where(x => IncludeIn(monday, sunday, x.StartDateTime));
+
+        return data;
+    }
+
+    private DateTimeOffset GetDateOfMondayOnThisWeek()
+    {
+        var today = DateTime.Today;
+        switch (today.DayOfWeek)
+        {
+            default:
+                return today;
+            case DayOfWeek.Tuesday:
+                return today.AddDays(-1);
+            case DayOfWeek.Wednesday:
+                return today.AddDays(-2);
+            case DayOfWeek.Thursday:
+                return today.AddDays(-3);
+            case DayOfWeek.Friday:
+                return today.AddDays(-4);
+            case DayOfWeek.Saturday:
+                return today.AddDays(-5);
+            case DayOfWeek.Sunday:
+                return today.AddDays(-6);
+
+        }
     }
 
     /// <summary>
