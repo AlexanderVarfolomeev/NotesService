@@ -107,7 +107,7 @@ public class NotesService : INotesService
             var endStr = end.Day + "." + end.Month;
 
             resultDictionary.Add(startStr + " - " + endStr,
-                result.Where(x => IncludeIn(start, end, x.StartDateTime)));
+                result.Where(x => IncludeInInterval(start, end, x.StartDateTime)));
         }
 
         Dictionary<string, double[]> dictionary = new Dictionary<string, double[]>();
@@ -146,7 +146,20 @@ public class NotesService : INotesService
             .AsQueryable();
 
         var result = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
-        var data = result.Where(x => IncludeIn(monday, sunday, x.StartDateTime));
+        var data = result.Where(x => IncludeInInterval(monday, sunday, x.StartDateTime));
+
+        return data;
+    }
+
+    public async Task<IEnumerable<NoteModel>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end)
+    {
+        await using var context = await contextFactory.CreateDbContextAsync();
+        var notes = context.Notes
+            .Include(x => x.Type)
+            .Include(x => x.Type.Color)
+            .AsQueryable();
+        var result = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
+        var data = result.Where(x => IncludeInInterval(start, end, x.StartDateTime));
 
         return data;
     }
@@ -246,7 +259,7 @@ public class NotesService : INotesService
         return date >= startDate && date <= dateTimeNow;
     }
 
-    private bool IncludeIn(DateTimeOffset startDate, DateTimeOffset endDate, DateTimeOffset current)
+    private bool IncludeInInterval(DateTimeOffset startDate, DateTimeOffset endDate, DateTimeOffset current)
     {
         return current.Date >= startDate.Date && current.Date <= endDate.Date;
     }

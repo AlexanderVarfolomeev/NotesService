@@ -48,6 +48,15 @@ namespace Notes.Api.Controllers.Notes
             return data;
         }
 
+        [HttpGet("get-in-interval-{start}-{end}")]
+        public async Task<IEnumerable<NoteResponse>> GetNotesInInterval([FromRoute]DateTimeOffset start, [FromRoute]DateTimeOffset end)
+        {
+            await notesService.UpdateNoteStatus();
+            var data = await notesService.GetNotesInInterval(start, end);
+            var result = mapper.Map<IEnumerable<NoteResponse>>(data);
+            return result;
+        }
+
 
         [HttpGet("{id}")]
         public async Task<NoteResponse> GetNoteById([FromRoute] int id)

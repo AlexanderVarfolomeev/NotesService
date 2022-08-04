@@ -46,7 +46,7 @@
                         </Grid.ColumnDefinitions>
                         <GroupBox Grid.Column="0" Header="Понедельник">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -67,7 +67,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="1" Header="Вторник">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -88,7 +88,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="2" Header="Среда">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -109,7 +109,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="3" Header="Четверг">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -130,7 +130,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="4" Header="Пятница">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -151,7 +151,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="5" Header="Суббота">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -172,7 +172,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="6" Header="Воскресенье">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding Notes}">
+                                <ListBox ItemsSource="{Binding Notes}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
