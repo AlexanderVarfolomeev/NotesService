@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:cmd="clr-namespace:Notes.WPF.Infrastructure.Commands"
-        Title="Task type detail" Height="120" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Title="Task type detail" FontSize="16" Height="120" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
     </Window.Resources>
@@ -25,9 +25,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"
-                 Text="Имя задачи"  FontWeight="Bold"/>
+                 Text="Имя задачи:"  FontWeight="Bold"/>
         <TextBlock Grid.Column="0" Grid.Row="1" FontSize="16"
-                   Text="Цвет"  HorizontalAlignment="Center" FontWeight="Bold"/>
+                   Text="Цвет:"  HorizontalAlignment="Center" FontWeight="Bold"/>
         <TextBox Grid.Column="1" Grid.Row="0" FontSize="16" Text="{Binding EditType.Name, Source={StaticResource Container}}"/>
         <ComboBox Grid.Column="1" Grid.Row="1" FontSize="16" ItemsSource="{Binding Colors, Source={StaticResource Container}}"
                   SelectedItem="{Binding SelectedColor, Source={StaticResource Container}}">

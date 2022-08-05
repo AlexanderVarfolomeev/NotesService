@@ -25,7 +25,6 @@ using SkiaSharp;
 using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
 namespace Notes.WPF.ViewModels;
-//TODO добавить поддержку Dependency injection
 //TODO вряди ли тут должно находится так много логики, мб перенести
 //TODO добавить логику при удалении типа
 public partial class MainWindowViewModel : ObservableObject
@@ -34,6 +33,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IColorService _colorService;
     private readonly INotesService _notesService;
     private readonly IUserDialogService _userDialogService;
+
+    //TODO добавить поддержку Dependency injection
     public MainWindowViewModel()
     {
         _colorService = new ColorService();
@@ -47,25 +48,7 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<TaskType> _taskTypes;
-
-    [ObservableProperty]
-    private ObservableCollection<ColorResponse> _colors;
-
-    [ObservableProperty] private ColorResponse? _selectedColor;
-
-    [ObservableProperty]
-    private TaskType? _selectedType;
-
-    [ObservableProperty] private EditTaskType? _editType;
-
-    [ObservableProperty]
-    private ObservableCollection<Note> _currentWeekNotes;
-
-    [ObservableProperty]
     private Note? _selectedNote;
-
-    [ObservableProperty] private bool _isEditType;
 
     [RelayCommand]
     private async void RefreshData(object p)
@@ -80,6 +63,17 @@ public partial class MainWindowViewModel : ObservableObject
         await RefreshLastFourWeeksNotes();
         RefreshNotes();
     }
+
+    #region TaskType
+
+    [ObservableProperty]
+    private ObservableCollection<TaskType> _taskTypes;
+
+    [ObservableProperty]
+    private ObservableCollection<ColorResponse> _colors;
+
+    [ObservableProperty] private ColorResponse? _selectedColor;
+
 
     #region Delete Task Type 
 
@@ -111,7 +105,12 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     #region Edit task type
+    [ObservableProperty] private bool _isEditType;
 
+    [ObservableProperty]
+    private TaskType? _selectedType;
+
+    [ObservableProperty] private EditTaskType? _editType;
     private bool CanEditTaskTypeExecute() => SelectedType != null;
     [RelayCommand(CanExecute = nameof(CanEditTaskTypeExecute))]
     private async void EditTaskType(object p)
@@ -135,6 +134,7 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
 
+    #endregion
     #endregion
 
     #region Activity chart
@@ -182,9 +182,6 @@ public partial class MainWindowViewModel : ObservableObject
             i++;
         }
     }
-
-
-    #endregion
     private (byte, byte, byte) GetRGBCodeFromTaskTypeName(string name)
     {
         var type = TaskTypes.FirstOrDefault(x => x.Name == name);
@@ -193,6 +190,11 @@ public partial class MainWindowViewModel : ObservableObject
             Convert.ToByte(color.Substring(2, 2), 16),
             Convert.ToByte(color.Substring(4, 2), 16));
     }
+    #endregion
+
+    #region This week
+    [ObservableProperty]
+    private ObservableCollection<Note> _currentWeekNotes;
     private DateTimeOffset GetDateOfMondayOnThisWeek()
     {
         var today = DateTime.Today;
@@ -236,7 +238,7 @@ public partial class MainWindowViewModel : ObservableObject
         RefreshNotes();
     }
 
-    #region This week
+    
     private DateTimeOffset currentMonday;
 
     [ObservableProperty] private Note _selectedNoteWeek;
