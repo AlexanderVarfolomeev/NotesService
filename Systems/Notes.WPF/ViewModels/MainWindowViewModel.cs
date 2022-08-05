@@ -11,11 +11,13 @@ using System.Xml.Serialization;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Notes.WPF.Infrastructure.Commands;
 using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.Services.Colors;
+using Notes.WPF.Services.Colors.Models;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.Services.UserDialog;
@@ -23,14 +25,17 @@ using SkiaSharp;
 using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
 namespace Notes.WPF.ViewModels;
+//TODO добавить поддержку Dependency injection
 //TODO вряди ли тут должно находится так много логики, мб перенести
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly ITaskTypeService _taskTypeService;
+    private readonly IColorService _colorService;
     private readonly INotesService _notesService;
     private readonly IUserDialogService _userDialogService;
     public MainWindowViewModel()
     {
+        _colorService = new ColorService();
         _notesService = new NotesService();
         _taskTypeService = new TaskTypeService();
         _userDialogService = new UserDialogService();
@@ -38,25 +43,34 @@ public partial class MainWindowViewModel : ObservableObject
         currentMonday = GetDateOfMondayOnThisWeek();
 
         DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
-        EditTaskTypeCommand = new LambdaCommand(OnEditTaskTypeExecuted, CanEditTaskTypeExecute);
     }
 
     [ObservableProperty]
     private ObservableCollection<TaskType> _taskTypes;
 
     [ObservableProperty]
+    private ObservableCollection<ColorResponse> _colors;
+
+    [ObservableProperty] private ColorResponse? _selectedColor;
+
+    [ObservableProperty]
     private TaskType? _selectedType;
+
+    [ObservableProperty] private EditTaskType? _editType;
 
     [ObservableProperty]
     private ObservableCollection<Note> _currentWeekNotes;
+
     [ObservableProperty]
     private Note? _selectedNote;
 
-    [ICommand]
+    [ObservableProperty] private bool _isEditType;
+
+    [RelayCommand]
     private async void RefreshData(object p)
     {
         await RepetitionNotesInit();
-        var a = currentMonday.AddDays(6);
+        Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
         //TODO убрать отсюда
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
@@ -81,35 +95,42 @@ public partial class MainWindowViewModel : ObservableObject
 
     #endregion
 
-    [ICommand]
+    [RelayCommand]
     private async void AddTaskType(object p)
     {
-        EditTaskType? type = new EditTaskType();
-        type = await _userDialogService.Add(type) as EditTaskType;
-        if (type is null)
-            return;
-        await _taskTypeService.AddTask(type);
-        RefreshData(new object());
+        IsEditType = false;
+        EditType = new EditTaskType();
+        SelectedColor = null;
+        if (await _userDialogService.Edit(EditType))
+        {
+            EditType.TypeColorId = SelectedColor.Id;
+            await _taskTypeService.AddTask(EditType);
+            RefreshData(new object());
+        }
     }
 
     #region Edit task type
 
-    public ICommand EditTaskTypeCommand { get; }
-    private bool CanEditTaskTypeExecute(object p) => SelectedType != null;
-    private async void OnEditTaskTypeExecuted(object p)
+     private bool CanEditTaskTypeExecute() => SelectedType != null;
+    [RelayCommand(CanExecute = nameof(CanEditTaskTypeExecute))]
+    private async void EditTaskType(object p)
     {
         if (p is TaskType taskType)
         {
-            EditTaskType? type = new EditTaskType()
+            IsEditType = true;
+            EditType = new EditTaskType()
             {
-                Name = taskType.Name,
-                TypeColorId = taskType.TypeColorId
+                Name = SelectedType.Name,
+                TypeColorId = SelectedType.TypeColorId
             };
-            type = await _userDialogService.Edit(type) as EditTaskType;
-            if (type is null)
-                return;
-            await _taskTypeService.UpdateTask(type, taskType.Id);
-            RefreshData(new object());
+            SelectedColor = Colors.FirstOrDefault(x => x.Id == SelectedType.TypeColorId) ?? throw new ArgumentNullException();
+            if (await _userDialogService.Edit(EditType))
+            {
+                EditType.TypeColorId = SelectedColor.Id;
+                await _taskTypeService.UpdateTask(EditType, taskType.Id);
+                RefreshData(new object());
+            }
+
         }
     }
 
@@ -195,7 +216,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task GetNextWeek()
     {
         currentMonday = currentMonday.AddDays(7);
@@ -205,7 +226,7 @@ public partial class MainWindowViewModel : ObservableObject
         RefreshNotes();
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task GetPreviousWeek()
     {
         currentMonday = currentMonday.AddDays(-7);
@@ -292,7 +313,7 @@ public partial class MainWindowViewModel : ObservableObject
         //TODO придумать как оптимизировать!!!!!
         foreach (var everyDayNote in _everyDayNotes)
         {
-            if(currentMonday.Date > today.Date)
+            if (currentMonday.Date > today.Date)
                 MondayNotes.Add(everyDayNote);
 
             if (currentMonday.AddDays(1).Date > today.Date)
@@ -305,7 +326,7 @@ public partial class MainWindowViewModel : ObservableObject
                 ThursdayNotes.Add(everyDayNote);
 
             if (currentMonday.AddDays(4).Date > today.Date)
-                FridayNotes.Add(everyDayNote); 
+                FridayNotes.Add(everyDayNote);
 
             if (currentMonday.AddDays(5).Date > today.Date)
                 SaturdayNotes.Add(everyDayNote);
@@ -318,7 +339,7 @@ public partial class MainWindowViewModel : ObservableObject
             switch (everyWeekNote.StartDateTime.DayOfWeek)
             {
                 case DayOfWeek.Monday:
-                    if(currentMonday.Date >= today.Date)
+                    if (currentMonday.Date >= today.Date)
                         MondayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Tuesday:
@@ -374,7 +395,7 @@ public partial class MainWindowViewModel : ObservableObject
         foreach (var everyYearNote in _everyYearNotes)
         {
             var date = everyYearNote.StartDateTime;
-            if(currentMonday.Day == date.Day && currentMonday.Month == date.Month && currentMonday.Date >= today.Date)
+            if (currentMonday.Day == date.Day && currentMonday.Month == date.Month && currentMonday.Date >= today.Date)
                 MondayNotes.Add(everyYearNote);
 
             var nextDay = currentMonday.AddDays(1);

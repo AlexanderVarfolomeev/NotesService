@@ -8,8 +8,12 @@
         xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         xmlns:colors="clr-namespace:Notes.WPF.Services.Colors.Models"
         mc:Ignorable="d"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:cmd="clr-namespace:Notes.WPF.Infrastructure.Commands"
         Title="Task type detail" Height="120" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,8 +26,9 @@
         </Grid.RowDefinitions>
         <TextBox Grid.Column="0" Grid.Row="0" Text="Имя задачи" IsEnabled="False" FontWeight="Bold"/>
         <TextBox Grid.Column="0" Grid.Row="1" Text="Цвет" IsEnabled="False" FontWeight="Bold"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding TypeName}"/>
-        <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors}" SelectedItem="{Binding Color}">
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding EditType.Name, Source={StaticResource Container}}"/>
+        <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors, Source={StaticResource Container}}"
+                  SelectedItem="{Binding SelectedColor, Source={StaticResource Container}}">
             <ComboBox.Resources>
                 <DataTemplate DataType="{x:Type colors:ColorResponse}">
                     <TextBox Text="{Binding Name}" Background="{Binding Code}"></TextBox>
@@ -36,10 +41,16 @@
                 <cmd:CloseDialogCommand DialogResult="True"/>
             </Button.Command>
         </Button>
-        <Button Grid.Column="1" Grid.Row="2" Content="Отмена" IsDefault="True" 
+        <Button Grid.Column="1" Grid.Row="2" Content="Удалить" IsDefault="True" IsEnabled="{Binding IsEditType, Source={StaticResource Container}}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:TaskTypeDetailWindow}}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction CommandParameter="{Binding SelectedType, Source={StaticResource Container}}"
+                                           Command="{Binding DeleteTaskTypeCommand, Source={StaticResource Container}}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <Button.Command>
-                <cmd:CloseDialogCommand DialogResult="False"/>
+                    <cmd:CloseDialogCommand DialogResult="false"/>
             </Button.Command>
         </Button>
     </Grid>

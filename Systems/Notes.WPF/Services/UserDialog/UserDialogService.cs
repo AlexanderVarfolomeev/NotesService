@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.Colors.Models;
+using Notes.WPF.ViewModels;
 using Notes.WPF.Views;
 
 namespace Notes.WPF.Services.UserDialog;
 //TODO доработать сервис до конца
 public class UserDialogService : IUserDialogService
 {
-    public async Task<object> Edit(object item)
+    public async Task<bool> Edit(object item)
     {
         if (item is null) throw new ArgumentNullException(nameof(item));
 
@@ -18,11 +19,11 @@ public class UserDialogService : IUserDialogService
         {
             default: throw new NotSupportedException($"Редактирование объекта типа {item.GetType().Name} не поддерживается");
             case EditTaskType type:
-                return await EditTaskType(type);
+                 return await EditTaskType();
         }
     }
 
-    public async Task<object> Add(object item)
+    public async Task<bool> Add(object item)
     {
         switch (item)
         {
@@ -52,37 +53,15 @@ public class UserDialogService : IUserDialogService
         throw new NotImplementedException();
     }
 
-    private static async Task<EditTaskType?> EditTaskType(EditTaskType type)
+    private static async Task<bool> EditTaskType()
     {
-        await ColorRepository.GetColors();
         var dialog = new TaskTypeDetailWindow();
-        dialog.TypeName = type.Name;
-        dialog.Color = ColorRepository.Colors.FirstOrDefault(x => x.Id == type.TypeColorId) ?? new ColorResponse();
-        if (dialog.ShowDialog() == true)
-        {
-            type = new EditTaskType
-            {
-                Name = dialog.TypeName,
-                TypeColorId = dialog.Color.Id
-            };
-            return type;
-        }
-        return null;
+        return dialog.ShowDialog() ?? throw new NullReferenceException();
     }
 
-    private static async Task<EditTaskType?> AddTaskType(EditTaskType type)
+    private static async Task<bool> AddTaskType(EditTaskType type)
     {
-        await ColorRepository.GetColors();
         var dialog = new TaskTypeDetailWindow();
-        if (dialog.ShowDialog() == true)
-        {
-            type = new EditTaskType
-            {
-                Name = dialog.TypeName,
-                TypeColorId = dialog.Color.Id
-            };
-            return type;
-        }
-        return null;
+        return dialog.ShowDialog() ?? throw new NullReferenceException();
     }
 }

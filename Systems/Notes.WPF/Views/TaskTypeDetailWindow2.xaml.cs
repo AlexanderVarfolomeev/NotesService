@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,18 +11,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Notes.WPF.Models.TaskTypes;
-using Notes.WPF.Services.Colors;
-using Notes.WPF.Services.Colors.Models;
 
 namespace Notes.WPF.Views
 {
     /// <summary>
-    /// Interaction logic for TaskTypeDetailWindow.xaml
+    /// Interaction logic for TaskTypeDetailWindow2.xaml
     /// </summary>
-    public partial class TaskTypeDetailWindow : Window
+    public partial class TaskTypeDetailWindow2 : Window
     {
-        public TaskTypeDetailWindow()
+        public TaskTypeDetailWindow2()
         {
             InitializeComponent();
         }
