@@ -82,6 +82,13 @@ namespace Notes.Api.Controllers.Notes
             return Ok();
         }
 
+        [HttpPut("do-task-{id}")]
+        public async Task<IActionResult> DoTask([FromRoute] int id)
+        {
+            await notesService.DoTask(id);
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNote([FromRoute] int id)
         {

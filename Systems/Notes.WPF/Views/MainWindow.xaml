@@ -33,7 +33,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Content="Предыдущаяя неделя" Command="{Binding GetPreviousWeekCommand}"/>
-                        <Button Grid.Column="1" Content="Добавить заметку"/>
+                        <TextBox Grid.Column="1" Text="{Binding SelectedNoteWeek.Name}"/>
                         <Button Grid.Column="2" Content="Следующая неделя" Command="{Binding GetNextWeekCommand}"/>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -48,7 +48,7 @@
                         </Grid.ColumnDefinitions>
                         <GroupBox Grid.Column="0" Header="Понедельник">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding MondayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding MondayNotes}" SelectedItem="{Binding SelectedNoteWeek}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -69,7 +69,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="1" Header="Вторник">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding TuesdayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding TuesdayNotes}" SelectedItem="{Binding SelectedNoteWeek}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>

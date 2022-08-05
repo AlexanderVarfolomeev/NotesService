@@ -164,6 +164,25 @@ public class NotesService : INotesService
         return data;
     }
 
+    public async Task DoTask(int id)
+    {
+        await using var context = await contextFactory.CreateDbContextAsync();
+        var note = context.Notes
+            .FirstOrDefault(x => x.Id == id);
+        ProcessException.ThrowIf(() => note is null, "The note with this ID was not found in the database");
+        var data = note;
+        data.Status = TaskStatus.Done;
+        context.Notes.Update(data);
+        await context.SaveChangesAsync();
+
+        var newNote = CreateNextNoteFromRepeat(note);
+        newNote.Status = TaskStatus.Waiting;
+        newNote.Id = 0;
+        await context.Notes.AddAsync(newNote);
+
+        await context.SaveChangesAsync();
+    }
+
     private DateTimeOffset GetDateOfMondayOnThisWeek()
     {
         var today = DateTime.Today;
@@ -201,14 +220,11 @@ public class NotesService : INotesService
 
         foreach (var note in notes)
         {
-            if (note.EndDateTime < DateTimeOffset.Now && note.Status != TaskStatus.Failed)
+            if (note.EndDateTime < DateTimeOffset.Now && note.Status == TaskStatus.Waiting)
             {
-                if (note.Status != TaskStatus.Done)
-                {
-                    note.Status = TaskStatus.Failed;
-                    context.Entry(note).State = EntityState.Modified;
-                    await context.SaveChangesAsync();
-                }
+                note.Status = TaskStatus.Failed;
+                context.Entry(note).State = EntityState.Modified;
+                await context.SaveChangesAsync();
 
                 if (note.RepeatFrequency != RepeatFrequency.None)
                 {

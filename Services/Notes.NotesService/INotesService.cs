@@ -13,4 +13,5 @@ public interface INotesService
     Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeksDictionary();
     Task<IEnumerable<NoteModel>> GetCurrentWeek();
     Task<IEnumerable<NoteModel>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end);
+    Task DoTask(int id);
 }

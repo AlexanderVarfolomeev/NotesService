@@ -58,6 +58,7 @@ public partial class MainWindowViewModel : ObservableObject
         await RepetitionNotesInit();
         var a = currentMonday.AddDays(6);
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
+        //TODO убрать отсюда
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
                 .GetNotesInInterval(DateTimeOffset.Now.Date, currentMonday.AddDays(6)))
             .OrderBy(x => x.StartDateTime.Hour));
@@ -217,6 +218,7 @@ public partial class MainWindowViewModel : ObservableObject
     #region This week
     private DateTimeOffset currentMonday;
 
+    [ObservableProperty] private Note _selectedNoteWeek;
 
     [ObservableProperty] private ObservableCollection<Note> _mondayNotes;
     [ObservableProperty] private ObservableCollection<Note> _tuesdayNotes;
