@@ -52,7 +52,7 @@ namespace Notes.Api.Controllers.Notes
         public async Task<IEnumerable<NoteResponse>> GetNotesInInterval([FromRoute]DateTimeOffset start, [FromRoute]DateTimeOffset end)
         {
             await notesService.UpdateNoteStatus();
-            var data = await notesService.GetNotesInInterval(start, end);
+            var data = await notesService.GetNotesInInterval(start.ToUniversalTime(), end.ToUniversalTime());
             var result = mapper.Map<IEnumerable<NoteResponse>>(data);
             return result;
         }
