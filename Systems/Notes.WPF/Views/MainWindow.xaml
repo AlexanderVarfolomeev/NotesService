@@ -215,7 +215,8 @@
                         <Button Grid.Column="0" Grid.Row="0" Content="Добавить тип."  Command="{Binding AddTaskTypeCommand, Source={StaticResource Container}}"/>
                     </Grid>
                     <DataGrid ItemsSource="{Binding TaskTypes, Source={StaticResource Container}}" SelectedItem="{Binding SelectedType, Source={StaticResource Container}}"
-                              AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1" GridLinesVisibility="Vertical" CanUserAddRows="False" SelectedValue="0">
+                              AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1" GridLinesVisibility="Vertical" CanUserAddRows="False" SelectedValue="0"
+                              IsSynchronizedWithCurrentItem="True">
                        <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftClick" Command="{Binding EditTaskTypeCommand, Source={StaticResource Container}}"
                                           CommandParameter="{Binding SelectedType, Source={StaticResource Container}}"/>

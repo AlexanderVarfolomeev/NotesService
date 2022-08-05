@@ -27,6 +27,7 @@ using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 namespace Notes.WPF.ViewModels;
 //TODO добавить поддержку Dependency injection
 //TODO вряди ли тут должно находится так много логики, мб перенести
+//TODO добавить логику при удалении типа
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly ITaskTypeService _taskTypeService;
@@ -111,7 +112,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     #region Edit task type
 
-     private bool CanEditTaskTypeExecute() => SelectedType != null;
+    private bool CanEditTaskTypeExecute() => SelectedType != null;
     [RelayCommand(CanExecute = nameof(CanEditTaskTypeExecute))]
     private async void EditTaskType(object p)
     {
@@ -130,7 +131,6 @@ public partial class MainWindowViewModel : ObservableObject
                 await _taskTypeService.UpdateTask(EditType, taskType.Id);
                 RefreshData(new object());
             }
-
         }
     }
 

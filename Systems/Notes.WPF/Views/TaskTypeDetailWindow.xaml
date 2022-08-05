@@ -24,14 +24,16 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Column="0" Grid.Row="0" Text="Имя задачи" IsEnabled="False" FontWeight="Bold"/>
-        <TextBox Grid.Column="0" Grid.Row="1" Text="Цвет" IsEnabled="False" FontWeight="Bold"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding EditType.Name, Source={StaticResource Container}}"/>
-        <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors, Source={StaticResource Container}}"
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"
+                 Text="Имя задачи"  FontWeight="Bold"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" FontSize="16"
+                   Text="Цвет"  HorizontalAlignment="Center" FontWeight="Bold"/>
+        <TextBox Grid.Column="1" Grid.Row="0" FontSize="16" Text="{Binding EditType.Name, Source={StaticResource Container}}"/>
+        <ComboBox Grid.Column="1" Grid.Row="1" FontSize="16" ItemsSource="{Binding Colors, Source={StaticResource Container}}"
                   SelectedItem="{Binding SelectedColor, Source={StaticResource Container}}">
             <ComboBox.Resources>
                 <DataTemplate DataType="{x:Type colors:ColorResponse}">
-                    <TextBox Text="{Binding Name}" Background="{Binding Code}"></TextBox>
+                    <TextBox FontSize="16" Text="{Binding Name}" Background="{Binding Code}"></TextBox>
                 </DataTemplate>
             </ComboBox.Resources>
         </ComboBox>

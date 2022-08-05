@@ -29,7 +29,7 @@ public class UserDialogService : IUserDialogService
         {
             default: throw new NotSupportedException($"Добавление объекта типа {item.GetType().Name} не поддерживается");
             case EditTaskType type:
-                return await AddTaskType(type);
+                return await AddTaskType();
         }
     }
 
@@ -59,7 +59,7 @@ public class UserDialogService : IUserDialogService
         return dialog.ShowDialog() ?? throw new NullReferenceException();
     }
 
-    private static async Task<bool> AddTaskType(EditTaskType type)
+    private static async Task<bool> AddTaskType()
     {
         var dialog = new TaskTypeDetailWindow();
         return dialog.ShowDialog() ?? throw new NullReferenceException();
