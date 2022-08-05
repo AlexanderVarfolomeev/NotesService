@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -19,6 +20,7 @@ using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.Services.UserDialog;
 using SkiaSharp;
+using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
 namespace Notes.WPF.ViewModels;
 
@@ -33,6 +35,8 @@ public partial class MainWindowViewModel : ObservableObject
         _taskTypeService = new TaskTypeService();
         _userDialogService = new UserDialogService();
 
+        currentMonday = GetDateOfMondayOnThisWeek();
+
         DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
         EditTaskTypeCommand = new LambdaCommand(OnEditTaskTypeExecuted, CanEditTaskTypeExecute);
     }
@@ -44,17 +48,23 @@ public partial class MainWindowViewModel : ObservableObject
     private TaskType? _selectedType;
 
     [ObservableProperty]
-    private ObservableCollection<Note> _notes;
+    private ObservableCollection<Note> _currentWeekNotes;
     [ObservableProperty]
     private Note? _selectedNote;
 
     [ICommand]
     private async void RefreshData(object p)
     {
+        await RepetitionNotesInit();
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
-        Notes = new ObservableCollection<Note>(await _notesService.GetNotes());
+        CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
+                .GetNotesInInterval(currentMonday, currentMonday.AddDays(7)))
+            .OrderBy(x => x.StartDateTime.Hour));
         await RefreshLastFourWeeksNotes();
+        RefreshNotes();
     }
+
+    #region Delete Task Type 
 
     public ICommand DeleteTaskTypeCommand { get; }
     private bool CanDeleteTaskTypeExecute(object p) => SelectedType != null;
@@ -67,6 +77,8 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    #endregion
+
     [ICommand]
     private async void AddTaskType(object p)
     {
@@ -77,6 +89,8 @@ public partial class MainWindowViewModel : ObservableObject
         await _taskTypeService.AddTask(type);
         RefreshData(new object());
     }
+
+    #region Edit task type
 
     public ICommand EditTaskTypeCommand { get; }
     private bool CanEditTaskTypeExecute(object p) => SelectedType != null;
@@ -98,16 +112,19 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
 
+    #endregion
+
+    #region Activity chart
+
+    [ObservableProperty]
+    private Dictionary<string, double[]> _completedNotesLastFourWeeks;
+
     [ObservableProperty] private ISeries[] _series;
 
     [ObservableProperty] private Axis[] _xAxes;
-
-    [ObservableProperty]
-    private Dictionary<string, double[]> _notesLastWeeks;
-
+    //TODO не добавлять задачи на которые потрачено 0 минут
     private async Task RefreshLastFourWeeksNotes()
     {
-        Notes = new ObservableCollection<Note>(await _notesService.GetNotes());
         var dates = new string[4];
         var dateTimeNow = DateTimeOffset.Now;
         var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
@@ -120,17 +137,17 @@ public partial class MainWindowViewModel : ObservableObject
             dates[j] = startStr + " - " + endStr;
         }
 
-        NotesLastWeeks = new Dictionary<string, double[]>(await _notesService.GetCompletedTaskForLastFourWeeks());
+        CompletedNotesLastFourWeeks = new Dictionary<string, double[]>(await _notesService.GetCompletedTaskForLastFourWeeks());
         XAxes = new Axis[]
         {
             new Axis(){
                 Labels = dates.Select(x => x).ToArray(),
             }
         };
-       
-        Series = new ISeries[NotesLastWeeks.Count];
+
+        Series = new ISeries[CompletedNotesLastFourWeeks.Count];
         int i = 0;
-        foreach (var pair in NotesLastWeeks)
+        foreach (var pair in CompletedNotesLastFourWeeks)
         {
             var rgb = GetRGBCodeFromTaskTypeName(pair.Key);
             Series[i] = new ColumnSeries<double>
@@ -143,13 +160,198 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+
+    #endregion
     private (byte, byte, byte) GetRGBCodeFromTaskTypeName(string name)
     {
         var type = TaskTypes.FirstOrDefault(x => x.Name == name);
         var color = type.Color.Code.Substring(1);
         return (Convert.ToByte(color.Substring(0, 2), 16),
             Convert.ToByte(color.Substring(2, 2), 16),
-            Convert.ToByte(color.Substring(4,2), 16));
+            Convert.ToByte(color.Substring(4, 2), 16));
+    }
+    private DateTimeOffset GetDateOfMondayOnThisWeek()
+    {
+        var today = DateTime.Today;
+        switch (today.DayOfWeek)
+        {
+            default:
+                return today;
+            case DayOfWeek.Tuesday:
+                return today.AddDays(-1);
+            case DayOfWeek.Wednesday:
+                return today.AddDays(-2);
+            case DayOfWeek.Thursday:
+                return today.AddDays(-3);
+            case DayOfWeek.Friday:
+                return today.AddDays(-4);
+            case DayOfWeek.Saturday:
+                return today.AddDays(-5);
+            case DayOfWeek.Sunday:
+                return today.AddDays(-6);
+
+        }
     }
 
+    [ICommand]
+    private async Task GetNextWeekCommand()
+    {
+        currentMonday = currentMonday.AddDays(7);
+        CurrentWeekNotes =
+            new ObservableCollection<Note>(
+                await _notesService.GetNotesInInterval(currentMonday, currentMonday.AddDays(6)));
+        RefreshNotes();
+    }
+
+    #region This week
+    private DateTimeOffset currentMonday;
+
+
+    [ObservableProperty] private ObservableCollection<Note> _mondayNotes;
+    [ObservableProperty] private ObservableCollection<Note> _tuesdayNotes;
+    [ObservableProperty] private ObservableCollection<Note> _wednesdayNotes;
+    [ObservableProperty] private ObservableCollection<Note> _thursdayNotes;
+    [ObservableProperty] private ObservableCollection<Note> _fridayNotes;
+    [ObservableProperty] private ObservableCollection<Note> _saturdayNotes;
+    [ObservableProperty] private ObservableCollection<Note> _sundayNotes;
+
+    private List<Note> _everyDayNotes;
+    private List<Note> _everyWeekNotes;
+    private List<Note> _everyMonthNotes;
+    private List<Note> _everyYearNotes;
+
+    private async Task RepetitionNotesInit()
+    {
+        _everyDayNotes = new List<Note>();
+        _everyMonthNotes = new List<Note>();
+        _everyWeekNotes = new List<Note>();
+        _everyYearNotes = new List<Note>();
+
+        var notes = (await _notesService.GetNotes()).Where(x => x.Status == TaskStatus.Waiting);
+        foreach (var note in notes)
+        {
+            switch (note.RepeatFrequency)
+            {
+                case RepeatFrequency.Daily:
+                    _everyDayNotes.Add(note);
+                    break;
+                case RepeatFrequency.Weekly:
+                    _everyWeekNotes.Add(note);
+                    break;
+                case RepeatFrequency.Monthly:
+                    _everyMonthNotes.Add(note);
+                    break;
+                case RepeatFrequency.Annually:
+                    _everyYearNotes.Add(note);
+                    break;
+            }
+        }
+    }
+
+    //TODO оптимизировать, занести каждый день в массив и работать с ним, разнести по методам
+    private void RefreshNotes()
+    {
+        MondayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Monday && x.RepeatFrequency == RepeatFrequency.None));
+        TuesdayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Tuesday && x.RepeatFrequency == RepeatFrequency.None));
+        WednesdayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Wednesday && x.RepeatFrequency == RepeatFrequency.None));
+        ThursdayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Thursday && x.RepeatFrequency == RepeatFrequency.None));
+        FridayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Friday && x.RepeatFrequency == RepeatFrequency.None));
+        SaturdayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Saturday && x.RepeatFrequency == RepeatFrequency.None));
+        SundayNotes = new ObservableCollection<Note>(CurrentWeekNotes.Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Sunday && x.RepeatFrequency == RepeatFrequency.None));
+
+        foreach (var everyDayNote in _everyDayNotes)
+        {
+            MondayNotes.Add(everyDayNote);
+            TuesdayNotes.Add(everyDayNote);
+            WednesdayNotes.Add(everyDayNote);
+            ThursdayNotes.Add(everyDayNote);
+            FridayNotes.Add(everyDayNote);
+            SaturdayNotes.Add(everyDayNote);
+            SundayNotes.Add(everyDayNote);
+        }
+        foreach (var everyWeekNote in _everyWeekNotes)
+        {
+            switch (everyWeekNote.StartDateTime.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    MondayNotes.Add(everyWeekNote);
+                    break;
+                case DayOfWeek.Tuesday:
+                    TuesdayNotes.Add(everyWeekNote);
+                    break;
+                case DayOfWeek.Wednesday:
+                    WednesdayNotes.Add(everyWeekNote);
+                    break;
+                case DayOfWeek.Thursday:
+                    ThursdayNotes.Add(everyWeekNote);
+                    break;
+                case DayOfWeek.Friday:
+                    FridayNotes.Add(everyWeekNote);
+                    break;
+                case DayOfWeek.Saturday:
+                    SaturdayNotes.Add(everyWeekNote);
+                    break;
+                case DayOfWeek.Sunday:
+                    SundayNotes.Add(everyWeekNote);
+                    break;
+            }
+        }
+        foreach (var everyMonthNote in _everyMonthNotes)
+        {
+            var dateDay = everyMonthNote.StartDateTime.Day;
+            if (currentMonday.Day == dateDay)
+                MondayNotes.Add(everyMonthNote);
+            if (currentMonday.Day + 1 == dateDay)
+                TuesdayNotes.Add(everyMonthNote);
+            if (currentMonday.Day + 2 == dateDay)
+                WednesdayNotes.Add(everyMonthNote);
+            if (currentMonday.Day + 3 == dateDay)
+                ThursdayNotes.Add(everyMonthNote);
+            if (currentMonday.Day + 4 == dateDay)
+                FridayNotes.Add(everyMonthNote);
+            if (currentMonday.Day + 5 == dateDay)
+                SaturdayNotes.Add(everyMonthNote);
+            if (currentMonday.Day + 6 == dateDay)
+                SundayNotes.Add(everyMonthNote);
+        }
+        foreach (var everyYearNote in _everyYearNotes)
+        {
+            var date = everyYearNote.StartDateTime;
+            if(currentMonday.Day == date.Day && currentMonday.Month == date.Month)
+                MondayNotes.Add(everyYearNote);
+
+            var nextDay = currentMonday.AddDays(1);
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month)
+                TuesdayNotes.Add(everyYearNote);
+
+            nextDay = nextDay.AddDays(1);
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month)
+                WednesdayNotes.Add(everyYearNote);
+
+            nextDay = nextDay.AddDays(1);
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month)
+                ThursdayNotes.Add(everyYearNote);
+
+            nextDay = nextDay.AddDays(1);
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month)
+                FridayNotes.Add(everyYearNote);
+
+            nextDay = nextDay.AddDays(1);
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month)
+                SaturdayNotes.Add(everyYearNote);
+
+            nextDay = nextDay.AddDays(1);
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month)
+                SundayNotes.Add(everyYearNote);
+        }
+
+        MondayNotes = new ObservableCollection<Note>(MondayNotes.OrderBy(x => x.StartDateTime));
+        TuesdayNotes = new ObservableCollection<Note>(TuesdayNotes.OrderBy(x => x.StartDateTime));
+        WednesdayNotes = new ObservableCollection<Note>(WednesdayNotes.OrderBy(x => x.StartDateTime));
+        ThursdayNotes = new ObservableCollection<Note>(ThursdayNotes.OrderBy(x => x.StartDateTime));
+        FridayNotes = new ObservableCollection<Note>(FridayNotes.OrderBy(x => x.StartDateTime));
+        SaturdayNotes = new ObservableCollection<Note>(SaturdayNotes.OrderBy(x => x.StartDateTime));
+        SundayNotes = new ObservableCollection<Note>(SundayNotes.OrderBy(x => x.StartDateTime));
+    }
+    #endregion
 }

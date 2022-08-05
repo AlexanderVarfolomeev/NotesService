@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Notes.WPF.Models.Notes;
 
@@ -12,4 +13,5 @@ public interface INotesService
     Task DeleteNote(int id);
     Task UpdateNote(int id, NoteRequest requestModel);
     Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks();
+    Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end);
 }

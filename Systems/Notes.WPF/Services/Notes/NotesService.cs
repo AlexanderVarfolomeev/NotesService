@@ -119,4 +119,23 @@ public class NotesService : INotesService
 
         return data;
     }
+
+    public async Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end)
+    {
+        string url = $"{Settings.ApiRoot}/Notes/get-in-interval-{start.ToString("MM/dd/yyyy")}-{end.ToString("MM/dd/yyyy")}";
+
+        var response = await client.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        var data = JsonSerializer.Deserialize<IEnumerable<Note>>
+                       (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                   ?? new List<Note>();
+
+        return data;
+    }
 }

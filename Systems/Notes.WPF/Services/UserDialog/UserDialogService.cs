@@ -7,7 +7,7 @@ using Notes.WPF.Services.Colors.Models;
 using Notes.WPF.Views;
 
 namespace Notes.WPF.Services.UserDialog;
-
+//TODO доработать сервис до конца
 public class UserDialogService : IUserDialogService
 {
     public async Task<object> Edit(object item)
