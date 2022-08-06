@@ -55,7 +55,7 @@ public class NotesService : INotesService
         return data;
     }
 
-    public async Task AddNote(NoteRequest requestModel)
+    public async Task AddNote(EditNote requestModel)
     {
         string url = $"{Settings.ApiRoot}/Notes";
 
@@ -84,7 +84,7 @@ public class NotesService : INotesService
         }
     }
 
-    public async Task UpdateNote(int id, NoteRequest requestModel)
+    public async Task UpdateNote(int id, EditNote requestModel)
     {
         string url = $"{Settings.ApiRoot}/Notes/{id}";
 
@@ -122,7 +122,7 @@ public class NotesService : INotesService
 
     public async Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end)
     {
-        string url = $"{Settings.ApiRoot}/Notes/get-in-interval-{start.ToString("MM/dd/yyyy")}-{end.ToString("MM/dd/yyyy")}";
+        string url = $"{Settings.ApiRoot}/Notes/get-in-interval-{start.ToString("MM/dd/yyyyZ")}-{end.ToString("MM/dd/yyyyZ")}";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();

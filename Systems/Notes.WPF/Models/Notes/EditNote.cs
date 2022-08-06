@@ -2,7 +2,7 @@
 
 namespace Notes.WPF.Models.Notes;
 
-public class NoteRequest
+public class EditNote
 {
     public string Name { get; set; } = String.Empty;
     public DateTimeOffset StartDateTime { get; set; }

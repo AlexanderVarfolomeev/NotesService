@@ -4,8 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notes.WPF.Views"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         mc:Ignorable="d"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:types="clr-namespace:Notes.WPF.Models.TaskTypes"
+        xmlns:notes="clr-namespace:Notes.WPF.Models.Notes"
+        xmlns:commands="clr-namespace:Notes.WPF.Infrastructure.Commands"
         Title="Note Detail Window" Height="450" Width="350">
+    <Window.Resources>
+        <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
+        <ObjectDataProvider x:Key="EnumRepeat" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="notes:RepeatFrequency"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="8*"/>
@@ -17,10 +32,11 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -30,14 +46,38 @@
             </Grid.RowDefinitions>  
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя задачи:" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Тип задачи:" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата и время начала:" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Дата и время окончания:" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Описание:" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="Частота повторения:" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="name" FontSize="18"/>
-            <ComboBox Grid.Row="1" Grid.Column="1" Text="name" FontSize="18"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата:" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Время начала:" FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Время окончания:" FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Описание:" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Частота повторения:" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18"/>
+
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedNote.Name, Source={StaticResource Container}}" FontSize="18"/>
+            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TaskTypes, Source={StaticResource Container}}" FontSize="18"
+                      SelectedItem="{Binding SelectedTaskType, Source={StaticResource Container}}">
+                <ComboBox.Resources>
+                    <DataTemplate DataType="{x:Type types:TaskType}">
+                        <TextBox FontSize="16" Text="{Binding Name}" Background="{Binding Color.Code}"></TextBox>
+                    </DataTemplate>
+                </ComboBox.Resources>
+            </ComboBox>
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SelectedNote.Description, Source={StaticResource Container}}" FontSize="18"/>
+            <ComboBox Grid.Row="6" Grid.Column="1" FontSize="18" ItemsSource="{Binding Source={StaticResource EnumRepeat}}" SelectedItem="{Binding SelectedNote.RepeatFrequency, Source={StaticResource Container} }">
+            </ComboBox>
+
+                <DatePicker Grid.Row="2" Grid.Column="1"
+                        SelectedDate="{Binding DayDateNote, Source={StaticResource Container}}" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
+            <xctk:TimePicker Grid.Row="3" Grid.Column="1" Value="{Binding StartTimeNote, Source={StaticResource Container}}" 
+                             FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18"/>
+            <xctk:TimePicker Grid.Row="4" Grid.Column="1"  
+                             FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18" Value="{Binding EndTimeNote, Source={StaticResource Container}}"/>
         </Grid>
-        <Button Grid.Row="1" Grid.Column="0" Content="Сохранить" FontWeight="Bold" FontSize="16"/>
+        <Button Grid.Row="1" Grid.Column="0" Content="Сохранить" FontWeight="Bold" FontSize="16"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:NoteDetailWindow}}">
+            <Button.Command>
+                <commands:CloseDialogCommand DialogResult="True"/>
+            </Button.Command>
+        </Button>
         <Button Grid.Row="1" Grid.Column="1" Content="Удалить" FontWeight="Bold" FontSize="16"/>
     </Grid>
 </Window>

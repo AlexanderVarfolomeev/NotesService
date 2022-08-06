@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.Colors.Models;
@@ -11,7 +12,7 @@ namespace Notes.WPF.Services.UserDialog;
 //TODO доработать сервис до конца
 public class UserDialogService : IUserDialogService
 {
-    public async Task<bool> Edit(object item)
+    public bool Edit(object item)
     {
         if (item is null) throw new ArgumentNullException(nameof(item));
 
@@ -19,7 +20,9 @@ public class UserDialogService : IUserDialogService
         {
             default: throw new NotSupportedException($"Редактирование объекта типа {item.GetType().Name} не поддерживается");
             case EditTaskType type:
-                 return await EditTaskType();
+                 return EditTaskType();
+            case EditNote note:
+                return  EditNote();
         }
     }
 
@@ -29,7 +32,7 @@ public class UserDialogService : IUserDialogService
         {
             default: throw new NotSupportedException($"Добавление объекта типа {item.GetType().Name} не поддерживается");
             case EditTaskType type:
-                return await AddTaskType();
+                return  AddTaskType();
         }
     }
 
@@ -53,13 +56,19 @@ public class UserDialogService : IUserDialogService
         throw new NotImplementedException();
     }
 
-    private static async Task<bool> EditTaskType()
+    private static bool EditNote()
+    {
+        var dialog = new NoteDetailWindow();
+        return dialog.ShowDialog() ?? throw new NullReferenceException();
+    }
+
+    private static bool EditTaskType()
     {
         var dialog = new TaskTypeDetailWindow();
         return dialog.ShowDialog() ?? throw new NullReferenceException();
     }
 
-    private static async Task<bool> AddTaskType()
+    private static bool AddTaskType()
     {
         var dialog = new TaskTypeDetailWindow();
         return dialog.ShowDialog() ?? throw new NullReferenceException();

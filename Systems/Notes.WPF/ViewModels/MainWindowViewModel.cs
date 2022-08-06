@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -58,9 +59,10 @@ public partial class MainWindowViewModel : ObservableObject
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
         //TODO убрать отсюда
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
-                .GetNotesInInterval(DateTimeOffset.Now.Date, currentMonday.AddDays(6)))
+                .GetNotesInInterval(currentMonday, currentMonday.AddDays(6)))
             .OrderBy(x => x.StartDateTime.Hour));
         await RefreshLastFourWeeksNotes();
+        RefreshDaysLabels();
         RefreshNotes();
     }
 
@@ -76,7 +78,7 @@ public partial class MainWindowViewModel : ObservableObject
 
 
     #region Delete Task Type 
-
+    //TODO сделать relay command
     public ICommand DeleteTaskTypeCommand { get; }
     private bool CanDeleteTaskTypeExecute(object p) => SelectedType != null;
     private async void OnDeleteTaskTypeExecuted(object p)
@@ -96,7 +98,7 @@ public partial class MainWindowViewModel : ObservableObject
         IsEditType = false;
         EditType = new EditTaskType();
         SelectedColor = null;
-        if (await _userDialogService.Edit(EditType))
+        if ( _userDialogService.Edit(EditType))
         {
             EditType.TypeColorId = SelectedColor.Id;
             await _taskTypeService.AddTask(EditType);
@@ -124,7 +126,7 @@ public partial class MainWindowViewModel : ObservableObject
                 TypeColorId = SelectedType.TypeColorId
             };
             SelectedColor = Colors.FirstOrDefault(x => x.Id == SelectedType.TypeColorId) ?? throw new ArgumentNullException();
-            if (await _userDialogService.Edit(EditType))
+            if (_userDialogService.Edit(EditType))
             {
                 EditType.TypeColorId = SelectedColor.Id;
                 await _taskTypeService.UpdateTask(EditType, taskType.Id);
@@ -177,7 +179,7 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 Name = pair.Key,
                 Values = pair.Value,
-                Fill = new SolidColorPaint(new SKColor(rgb.Item1, rgb.Item2, rgb.Item3))
+                Fill = new SolidColorPaint(new SKColor(rgb.Item1, rgb.Item2, rgb.Item3)),
             };
             i++;
         }
@@ -225,6 +227,7 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentWeekNotes =
             new ObservableCollection<Note>(
                 await _notesService.GetNotesInInterval(currentMonday, currentMonday.AddDays(6)));
+        RefreshDaysLabels();
         RefreshNotes();
     }
 
@@ -235,6 +238,7 @@ public partial class MainWindowViewModel : ObservableObject
         CurrentWeekNotes =
             new ObservableCollection<Note>(
                 await _notesService.GetNotesInInterval(currentMonday, currentMonday.AddDays(6)));
+        RefreshDaysLabels();
         RefreshNotes();
     }
 
@@ -291,25 +295,25 @@ public partial class MainWindowViewModel : ObservableObject
     {
         var today = DateTimeOffset.Now;
         MondayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Monday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Monday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
         TuesdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Tuesday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Tuesday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
         WednesdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Wednesday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Wednesday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
         ThursdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Thursday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Thursday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
         FridayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Friday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Friday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
         SaturdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Saturday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Saturday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
         SundayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Sunday &&
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Sunday && 
                         (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
 
         //TODO придумать как оптимизировать!!!!!
@@ -439,5 +443,65 @@ public partial class MainWindowViewModel : ObservableObject
     {
         return date.Date >= currentMonday && date.Date <= currentMonday;
     }
+    #endregion
+
+    #region Notes
+
+    private void RefreshDaysLabels()
+    {
+        MondayLabel = currentMonday.ToString("dd/MM");
+        TuesdayLabel = currentMonday.AddDays(1).ToString("dd/MM");
+        WednesdayLabel = currentMonday.AddDays(2).ToString("dd/MM");
+        ThursdayLabel = currentMonday.AddDays(3).ToString("dd/MM");
+        FridayLabel = currentMonday.AddDays(4).ToString("dd/MM");
+        SaturdayLabel = currentMonday.AddDays(5).ToString("dd/MM");
+        SundayLabel = currentMonday.AddDays(6).ToString("dd/MM");
+    }
+    [ObservableProperty] private string _mondayLabel;
+    [ObservableProperty] private string _tuesdayLabel;
+    [ObservableProperty] private string _wednesdayLabel;
+    [ObservableProperty] private string _thursdayLabel;
+    [ObservableProperty] private string _fridayLabel;
+    [ObservableProperty] private string _saturdayLabel;
+    [ObservableProperty] private string _sundayLabel;
+
+    [ObservableProperty] private int _taskTypeIdNote;
+    [ObservableProperty] private DateTime _dayDateNote;
+    [ObservableProperty] private DateTime _startTimeNote;
+    [ObservableProperty] private DateTime _endTimeNote;
+    [ObservableProperty] private RepeatFrequency _repeatFrequencyNote;
+
+    [ObservableProperty] private TaskType _selectedTaskType;
+    private bool IsEditNote;
+    [RelayCommand]
+    private void DoEditNote(object p)
+    {
+        if (p is Note note)
+        {
+            IsEditNote = true;
+            EditNote editNote = new EditNote()
+            {
+                Name = SelectedNote.Name,
+                Description = SelectedNote.Description,
+                TaskTypeId = SelectedNote.TaskTypeId,
+                EndDateTime = SelectedNote.EndDateTime,
+                StartDateTime = SelectedNote.StartDateTime,
+                RepeatFrequency = SelectedNote.RepeatFrequency,
+                Status = SelectedNote.Status
+            };
+            SelectedTaskType = TaskTypes.FirstOrDefault(x => x.Id == SelectedNote.TaskTypeId) ?? throw new ArgumentNullException();
+            DayDateNote = SelectedNote.StartDateTime.DateTime;
+            StartTimeNote = SelectedNote.StartDateTime.LocalDateTime;
+            EndTimeNote = SelectedNote.EndDateTime.LocalDateTime;
+
+
+            if (_userDialogService.Edit(editNote))
+            {
+                editNote.TaskTypeId = SelectedTaskType.Id;
+                RefreshData(new object());
+            }
+        }
+    }
+
     #endregion
 }

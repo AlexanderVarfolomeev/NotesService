@@ -4,7 +4,7 @@ namespace Notes.WPF.Services.UserDialog;
 
 public interface IUserDialogService
 {
-    Task<bool> Edit(object item);
+    bool Edit(object item);
     Task<bool> Add(object item);
     void ShowInformation(string Information, string Caption);
 

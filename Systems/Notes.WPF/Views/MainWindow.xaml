@@ -9,6 +9,7 @@
         xmlns:notemodel="clr-namespace:Notes.WPF.Models.Notes"
         xmlns:local="clr-namespace:Notes.WPF"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="1600">
     <Window.Resources>
@@ -33,7 +34,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Content="Предыдущаяя неделя" Command="{Binding GetPreviousWeekCommand, Source={StaticResource Container}}"/>
-                        <Button Grid.Column="1" Content="Добавить заметку"/>
+                        <Button Grid.Column="1" Content="Добавить заметку" CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
                         <Button Grid.Column="2" Content="Следующая неделя" Command="{Binding GetNextWeekCommand, Source={StaticResource Container}}"/>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -46,9 +48,18 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <GroupBox Grid.Column="0" Header="Понедельник">
+                        <GroupBox Grid.Column="0">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock HorizontalAlignment="Center" Text="Понедельник"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding MondayLabel, Source={StaticResource Container}}"/>
+                                </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding MondayNotes}" SelectedItem="{Binding SelectedNoteWeek}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding MondayNotes, Source={StaticResource Container}}"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -75,7 +86,8 @@
                         </GroupBox>
                         <GroupBox Grid.Column="1" Header="Вторник">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding TuesdayNotes}" SelectedItem="{Binding SelectedNoteWeek}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding TuesdayNotes, Source={StaticResource Container}}"
+                                         SelectedItem="{Binding SelectedNoteWeek, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -96,7 +108,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="2" Header="Среда">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding WednesdayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding WednesdayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -117,7 +129,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="3" Header="Четверг">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding ThursdayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding ThursdayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -138,7 +150,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="4" Header="Пятница">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding FridayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding FridayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -159,7 +171,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="5" Header="Суббота">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding SaturdayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding SaturdayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
@@ -180,7 +192,7 @@
                         </GroupBox>
                         <GroupBox Grid.Column="6" Header="Воскресенье">
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding SundayNotes}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding SundayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>

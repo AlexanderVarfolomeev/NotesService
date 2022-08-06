@@ -159,7 +159,7 @@ public class NotesService : INotesService
             .Include(x => x.Type.Color)
             .AsQueryable();
         var result = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
-        var data = result.Where(x => IncludeInInterval(start, end, x.StartDateTime));
+        var data = result.Where(x => IncludeInInterval(start, end, x.StartDateTime.LocalDateTime));
 
         return data;
     }

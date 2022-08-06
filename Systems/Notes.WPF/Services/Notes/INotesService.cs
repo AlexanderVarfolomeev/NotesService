@@ -9,9 +9,9 @@ public interface INotesService
 {
     Task<IEnumerable<Note>> GetNotes();
     Task<Note> GetNoteById(int id);
-    Task AddNote(NoteRequest requestModel);
+    Task AddNote(EditNote requestModel);
     Task DeleteNote(int id);
-    Task UpdateNote(int id, NoteRequest requestModel);
+    Task UpdateNote(int id, EditNote requestModel);
     Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks();
     Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end);
 }
