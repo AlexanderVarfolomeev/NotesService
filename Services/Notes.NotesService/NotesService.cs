@@ -175,12 +175,14 @@ public class NotesService : INotesService
         context.Notes.Update(data);
         await context.SaveChangesAsync();
 
-        var newNote = CreateNextNoteFromRepeat(note);
-        newNote.Status = TaskStatus.Waiting;
-        newNote.Id = 0;
-        await context.Notes.AddAsync(newNote);
-
-        await context.SaveChangesAsync();
+        if (note.RepeatFrequency != RepeatFrequency.None)
+        {
+            var newNote = CreateNextNoteFromRepeat(note);
+            newNote.Status = TaskStatus.Waiting;
+            newNote.Id = 0;
+            await context.Notes.AddAsync(newNote);
+            await context.SaveChangesAsync();
+        }
     }
 
     private DateTimeOffset GetDateOfMondayOnThisWeek()

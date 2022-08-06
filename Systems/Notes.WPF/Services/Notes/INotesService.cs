@@ -14,4 +14,5 @@ public interface INotesService
     Task UpdateNote(int id, EditNote requestModel);
     Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks();
     Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end);
+    Task DoTask(int id);
 }

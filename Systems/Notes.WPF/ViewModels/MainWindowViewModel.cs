@@ -86,7 +86,7 @@ public partial class MainWindowViewModel : ObservableObject
         if (p is TaskType taskType)
         {
             await _taskTypeService.DeleteTask(taskType.Id);
-            _taskTypes.Remove(taskType);
+            RefreshData(new object());
         }
     }
 
@@ -98,7 +98,7 @@ public partial class MainWindowViewModel : ObservableObject
         IsEditType = false;
         EditType = new EditTaskType();
         SelectedColor = null;
-        if ( _userDialogService.Edit(EditType))
+        if ( _userDialogService.Add(EditType))
         {
             EditType.TypeColorId = SelectedColor.Id;
             await _taskTypeService.AddTask(EditType);
@@ -319,25 +319,25 @@ public partial class MainWindowViewModel : ObservableObject
         //TODO придумать как оптимизировать!!!!!
         foreach (var everyDayNote in _everyDayNotes)
         {
-            if (currentMonday.Date > today.Date)
+            if (currentMonday.Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.Date)
                 MondayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(1).Date > today.Date)
+            if (currentMonday.AddDays(1).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(1).Date)
                 TuesdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(2).Date > today.Date)
+            if (currentMonday.AddDays(2).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(2).Date)
                 WednesdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(3).Date > today.Date)
+            if (currentMonday.AddDays(3).Date > today.Date && everyDayNote.StartDateTime.Date <=currentMonday.AddDays(3).Date)
                 ThursdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(4).Date > today.Date)
+            if (currentMonday.AddDays(4).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(4).Date)
                 FridayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(5).Date > today.Date)
+            if (currentMonday.AddDays(5).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(5).Date)
                 SaturdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(6).Date > today.Date)
+            if (currentMonday.AddDays(6).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(6).Date)
                 SundayNotes.Add(everyDayNote);
         }
         foreach (var everyWeekNote in _everyWeekNotes)
@@ -345,31 +345,31 @@ public partial class MainWindowViewModel : ObservableObject
             switch (everyWeekNote.StartDateTime.DayOfWeek)
             {
                 case DayOfWeek.Monday:
-                    if (currentMonday.Date >= today.Date)
+                    if (currentMonday.Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.Date)
                         MondayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Tuesday:
-                    if (currentMonday.AddDays(1).Date >= today.Date)
+                    if (currentMonday.AddDays(1).Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.AddDays(1).Date)
                         TuesdayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Wednesday:
-                    if (currentMonday.AddDays(2).Date >= today.Date)
+                    if (currentMonday.AddDays(2).Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.AddDays(2).Date)
                         WednesdayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Thursday:
-                    if (currentMonday.AddDays(3).Date >= today.Date)
+                    if (currentMonday.AddDays(3).Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.AddDays(3).Date)
                         ThursdayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Friday:
-                    if (currentMonday.AddDays(4).Date >= today.Date)
+                    if (currentMonday.AddDays(4).Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.AddDays(4).Date)
                         FridayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Saturday:
-                    if (currentMonday.AddDays(5).Date >= today.Date)
+                    if (currentMonday.AddDays(5).Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.AddDays(5).Date)
                         SaturdayNotes.Add(everyWeekNote);
                     break;
                 case DayOfWeek.Sunday:
-                    if (currentMonday.AddDays(6).Date >= today.Date)
+                    if (currentMonday.AddDays(6).Date >= today.Date && everyWeekNote.StartDateTime.Date <= currentMonday.AddDays(6).Date)
                         SundayNotes.Add(everyWeekNote);
                     break;
             }
@@ -438,11 +438,6 @@ public partial class MainWindowViewModel : ObservableObject
         SundayNotes = new ObservableCollection<Note>(SundayNotes.OrderBy(x => x.StartDateTime));
 
     }
-
-    private bool IsDayInCurrentWeek(DateTimeOffset date)
-    {
-        return date.Date >= currentMonday && date.Date <= currentMonday;
-    }
     #endregion
 
     #region Notes
@@ -472,14 +467,16 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private RepeatFrequency _repeatFrequencyNote;
 
     [ObservableProperty] private TaskType _selectedTaskType;
-    private bool IsEditNote;
+    [ObservableProperty] private EditNote? _editNote;
+    [ObservableProperty] private bool _isEditNote;
+
     [RelayCommand]
-    private void DoEditNote(object p)
+    private async Task DoEditNote(object p)
     {
         if (p is Note note)
         {
             IsEditNote = true;
-            EditNote editNote = new EditNote()
+            EditNote = new EditNote()
             {
                 Name = SelectedNote.Name,
                 Description = SelectedNote.Description,
@@ -489,17 +486,59 @@ public partial class MainWindowViewModel : ObservableObject
                 RepeatFrequency = SelectedNote.RepeatFrequency,
                 Status = SelectedNote.Status
             };
+
             SelectedTaskType = TaskTypes.FirstOrDefault(x => x.Id == SelectedNote.TaskTypeId) ?? throw new ArgumentNullException();
             DayDateNote = SelectedNote.StartDateTime.DateTime;
             StartTimeNote = SelectedNote.StartDateTime.LocalDateTime;
             EndTimeNote = SelectedNote.EndDateTime.LocalDateTime;
 
 
-            if (_userDialogService.Edit(editNote))
+            if (_userDialogService.Edit(EditNote))
             {
-                editNote.TaskTypeId = SelectedTaskType.Id;
+                EditNote.TaskTypeId = SelectedTaskType.Id;
+                EditNote.EndDateTime = new DateTimeOffset(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, EndTimeNote.Hour, EndTimeNote.Minute, 0, new TimeSpan(0));
+                EditNote.StartDateTime = new DateTimeOffset(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0, new TimeSpan(0));
+
+                await _notesService.UpdateNote(SelectedNote.Id, EditNote);
                 RefreshData(new object());
             }
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteNote(object p)
+    {
+        if (p is Note note)
+        {
+            await _notesService.DeleteNote(note.Id);
+            RefreshData(new object());
+        }
+    }
+
+    [RelayCommand]
+    private async Task DoTask(object p)
+    {
+        if (p is Note note)
+        {
+            await _notesService.DoTask(SelectedNote.Id);
+            RefreshData(new object());
+        }
+    }
+
+    [RelayCommand]
+    private async Task AddNote()
+    {
+        IsEditNote = false;
+        EditNote = new EditNote();
+        SelectedTaskType = null;
+        if (_userDialogService.Add(EditNote))
+        {
+            EditNote.TaskTypeId = SelectedTaskType.Id;
+            EditNote.EndDateTime = new DateTimeOffset(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, EndTimeNote.Hour, EndTimeNote.Minute, 0, new TimeSpan(0));
+            EditNote.StartDateTime = new DateTimeOffset(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0, new TimeSpan(0));
+            EditNote.Status = TaskStatus.Waiting;
+            await _notesService.AddNote(EditNote);
+            RefreshData(new object());
         }
     }
 

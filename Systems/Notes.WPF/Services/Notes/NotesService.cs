@@ -36,6 +36,22 @@ public class NotesService : INotesService
         return data;
     }
 
+    public async Task DoTask(int id)
+    {
+        string url = $"{Settings.ApiRoot}/Notes/do-task-{id}";
+
+        var body = "";
+        var request = new StringContent(body, Encoding.UTF8, "application/json");
+
+        var response = await client.PutAsync(url, request);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+    }
     public async Task<Note> GetNoteById(int id)
     {
         string url = $"{Settings.ApiRoot}/Notes/{id}";

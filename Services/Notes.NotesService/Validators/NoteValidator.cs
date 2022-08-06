@@ -5,6 +5,7 @@ namespace Notes.NotesService.Validators;
 
 public class NoteValidator : AbstractValidator<INoteRequest>
 {
+    //TODO нельзя добавлять на дату раньше чем сейчас
     public NoteValidator()
     {
         RuleFor(x => x.Name)

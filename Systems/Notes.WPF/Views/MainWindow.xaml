@@ -10,6 +10,7 @@
         xmlns:local="clr-namespace:Notes.WPF"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="1600">
     <Window.Resources>
@@ -34,8 +35,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Content="Предыдущаяя неделя" Command="{Binding GetPreviousWeekCommand, Source={StaticResource Container}}"/>
-                        <Button Grid.Column="1" Content="Добавить заметку" CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
-                                Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                        <Button Grid.Column="1" Content="Добавить заметку"
+                                Command="{Binding AddNoteCommand, Source={StaticResource Container}}"/>
                         <Button Grid.Column="2" Content="Следующая неделя" Command="{Binding GetNextWeekCommand, Source={StaticResource Container}}"/>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -67,18 +68,24 @@
                                     </ListBox.ItemContainerStyle>
                                     <ListBox.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Выполнить"/>
-                                            <MenuItem Header="Удалить"/>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
+                                        
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock Text="{Binding Path=Name, StringFormat=Имя: {0}}"/>
+                                                <TextBlock Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock Text="{Binding StartDateTime,StringFormat=hh:mm}"/>
+                                                <TextBlock Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                               
                                             </StackPanel>
+                                            
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>

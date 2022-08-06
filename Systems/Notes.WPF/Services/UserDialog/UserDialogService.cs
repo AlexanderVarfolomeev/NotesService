@@ -26,13 +26,15 @@ public class UserDialogService : IUserDialogService
         }
     }
 
-    public async Task<bool> Add(object item)
+    public bool Add(object item)
     {
         switch (item)
         {
             default: throw new NotSupportedException($"Добавление объекта типа {item.GetType().Name} не поддерживается");
             case EditTaskType type:
                 return  AddTaskType();
+            case EditNote note:
+                return AddNote();
         }
     }
 
@@ -57,6 +59,12 @@ public class UserDialogService : IUserDialogService
     }
 
     private static bool EditNote()
+    {
+        var dialog = new NoteDetailWindow();
+        return dialog.ShowDialog() ?? throw new NullReferenceException();
+    }
+
+    private static bool AddNote()
     {
         var dialog = new NoteDetailWindow();
         return dialog.ShowDialog() ?? throw new NullReferenceException();

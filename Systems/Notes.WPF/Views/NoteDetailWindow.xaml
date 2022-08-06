@@ -7,10 +7,13 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         mc:Ignorable="d"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:types="clr-namespace:Notes.WPF.Models.TaskTypes"
         xmlns:notes="clr-namespace:Notes.WPF.Models.Notes"
         xmlns:commands="clr-namespace:Notes.WPF.Infrastructure.Commands"
+        xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         Title="Note Detail Window" Height="450" Width="350">
     <Window.Resources>
         <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
@@ -43,7 +46,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-            </Grid.RowDefinitions>  
+            </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя задачи:" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Тип задачи:" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата:" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
@@ -52,7 +55,7 @@
             <TextBlock Grid.Row="5" Grid.Column="0" Text="Описание:" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Частота повторения:" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="18"/>
 
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedNote.Name, Source={StaticResource Container}}" FontSize="18"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding EditNote.Name, Source={StaticResource Container}}" FontSize="18"/>
             <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TaskTypes, Source={StaticResource Container}}" FontSize="18"
                       SelectedItem="{Binding SelectedTaskType, Source={StaticResource Container}}">
                 <ComboBox.Resources>
@@ -61,11 +64,12 @@
                     </DataTemplate>
                 </ComboBox.Resources>
             </ComboBox>
-                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SelectedNote.Description, Source={StaticResource Container}}" FontSize="18"/>
-            <ComboBox Grid.Row="6" Grid.Column="1" FontSize="18" ItemsSource="{Binding Source={StaticResource EnumRepeat}}" SelectedItem="{Binding SelectedNote.RepeatFrequency, Source={StaticResource Container} }">
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding EditNote.Description, Source={StaticResource Container}}" FontSize="18"/>
+            <ComboBox Grid.Row="6" Grid.Column="1" FontSize="18" ItemsSource="{Binding Source={StaticResource EnumRepeat}}"
+                      SelectedItem="{Binding EditNote.RepeatFrequency, Source={StaticResource Container} }">
             </ComboBox>
 
-                <DatePicker Grid.Row="2" Grid.Column="1"
+            <DatePicker Grid.Row="2" Grid.Column="1"
                         SelectedDate="{Binding DayDateNote, Source={StaticResource Container}}" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
             <xctk:TimePicker Grid.Row="3" Grid.Column="1" Value="{Binding StartTimeNote, Source={StaticResource Container}}" 
                              FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18"/>
@@ -78,6 +82,18 @@
                 <commands:CloseDialogCommand DialogResult="True"/>
             </Button.Command>
         </Button>
-        <Button Grid.Row="1" Grid.Column="1" Content="Удалить" FontWeight="Bold" FontSize="16"/>
+
+        <Button Grid.Column="1" Grid.Row="1" Content="Удалить" IsDefault="True" IsEnabled="{Binding IsEditNote, Source={StaticResource Container}}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:NoteDetailWindow}}">
+            <i:Interaction.Triggers>
+                <b:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                           Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}" />
+                </b:EventTrigger>
+            </i:Interaction.Triggers>
+            <Button.Command>
+                <commands:CloseDialogCommand DialogResult="false"/>
+            </Button.Command>
+        </Button>
     </Grid>
 </Window>
