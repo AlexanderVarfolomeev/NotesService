@@ -13,7 +13,6 @@
     <Folder Include="Services\Notes\" />
     <Folder Include="Services\UserDialog\" />
     <Folder Include="Validators\TaskTypes\" />
-    <Folder Include="Validators\Notes\" />
   </ItemGroup>
 	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
 		<ItemGroup>

@@ -22,6 +22,7 @@ using Notes.WPF.Services.Colors.Models;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.Services.UserDialog;
+using Notes.WPF.Validators.Notes;
 using Notes.WPF.Validators.TaskTypes;
 using SkiaSharp;
 using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
@@ -88,22 +89,34 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<ColorResponse> _colors;
 
-    [ObservableProperty] private ColorResponse? _selectedColor;
+    [ObservableProperty]
+    private ColorResponse? _selectedColor;
 
+    [ObservableProperty]
+    private bool _isEditType;
 
-    #region Delete Task Type 
+    [ObservableProperty]
+    private TaskType? _selectedType;
+
+    [ObservableProperty] 
+    private EditTaskType? _editType;
+
+    #region Commands
+
     private bool CanDeleteTaskTypeExecute(object p) => SelectedType != null && SelectedType.Name != "Empty";
+
     [RelayCommand(CanExecute = nameof(CanDeleteTaskTypeExecute))]
     private async void DeleteTaskType(object p)
     {
         if (p is TaskType taskType)
         {
-            await _taskTypeService.DeleteTask(taskType.Id);
-            await RefreshData();
+            if (_userDialogService.Confirm("Вы действительно хотите удалить тип задачи?", "Предупреждение"))
+            {
+                await _taskTypeService.DeleteTask(taskType.Id);
+                await RefreshData();
+            }
         }
     }
-
-    #endregion
 
     [RelayCommand]
     private async void AddTaskType(object p)
@@ -122,14 +135,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    #region Edit task type
-    [ObservableProperty] private bool _isEditType;
-
-    [ObservableProperty]
-    private TaskType? _selectedType;
-
-    [ObservableProperty] private EditTaskType? _editType;
-    private bool CanEditTaskTypeExecute() => SelectedType != null;
+    private bool CanEditTaskTypeExecute() => SelectedType != null && SelectedType.Name != "Empty";
     [RelayCommand(CanExecute = nameof(CanEditTaskTypeExecute))]
     private async void EditTaskType(object p)
     {
@@ -153,9 +159,9 @@ public partial class MainWindowViewModel : ObservableObject
             }
         }
     }
-
-
     #endregion
+
+
     #endregion
 
     #region Activity chart
@@ -163,10 +169,13 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Dictionary<string, double[]> _completedNotesLastFourWeeks;
 
-    [ObservableProperty] private ISeries[] _series;
+    [ObservableProperty] 
+    private ISeries[] _series;
 
-    [ObservableProperty] private Axis[] _xAxes;
-    //TODO не добавлять задачи на которые потрачено 0 минут
+    [ObservableProperty]
+    private Axis[] _xAxes;
+
+    //TODO подправить код
     private async Task RefreshLastFourWeeksNotes()
     {
         var dates = new string[4];
@@ -182,7 +191,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
 
         CompletedNotesLastFourWeeks = new Dictionary<string, double[]>(await _notesService.GetCompletedTaskForLastFourWeeks());
-        XAxes = new Axis[]
+        XAxes = new[]
         {
             new Axis(){
                 Labels = dates.Select(x => x).ToArray(),
@@ -521,9 +530,11 @@ public partial class MainWindowViewModel : ObservableObject
                 EditNote.TaskTypeId = SelectedTaskType.Id;
                 EditNote.EndDateTime = new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, EndTimeNote.Hour, EndTimeNote.Minute, 0);
                 EditNote.StartDateTime = new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0);
-
-                await _notesService.UpdateNote(SelectedNote.Id, EditNote);
-                await RefreshData();
+                if (EditNoteValidator.Check(EditNote))
+                {
+                    await _notesService.UpdateNote(SelectedNote.Id, EditNote);
+                    await RefreshData();
+                }
             }
         }
     }
@@ -533,8 +544,11 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (p is Note note)
         {
-            await _notesService.DeleteNote(note.Id);
-            await RefreshData();
+            if (_userDialogService.Confirm("Вы действительно хотите удалить задачу?", "Предупреждение"))
+            {
+                await _notesService.DeleteNote(note.Id);
+                await RefreshData();
+            }
         }
     }
 
@@ -551,19 +565,24 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task AddNote()
     {
+        DayDateNote = DateTime.Now;
         IsEditNote = false;
         EditNote = new EditNote();
         SelectedTaskType = null;
         if (_userDialogService.Add(EditNote))
         {
-            EditNote.TaskTypeId = SelectedTaskType.Id;
+            EditNote.TaskTypeId = SelectedTaskType?.Id ?? 0;
             EditNote.EndDateTime =
                 new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, EndTimeNote.Hour, EndTimeNote.Minute, 0);
             EditNote.StartDateTime =
                 new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0);
             EditNote.Status = TaskStatus.Waiting;
-            await _notesService.AddNote(EditNote);
-            await RefreshData();
+
+            if (EditNoteValidator.Check(EditNote))
+            {
+                await _notesService.AddNote(EditNote);
+                await RefreshData();
+            }
         }
     }
 

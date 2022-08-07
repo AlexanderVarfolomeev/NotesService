@@ -69,7 +69,7 @@
                       SelectedItem="{Binding EditNote.RepeatFrequency, Source={StaticResource Container} }">
             </ComboBox>
 
-            <DatePicker Grid.Row="2" Grid.Column="1"
+            <DatePicker Grid.Row="2" Grid.Column="1" 
                         SelectedDate="{Binding DayDateNote, Source={StaticResource Container}}" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
             <xctk:TimePicker Grid.Row="3" Grid.Column="1" Value="{Binding StartTimeNote, Source={StaticResource Container}}" 
                              FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18"/>
