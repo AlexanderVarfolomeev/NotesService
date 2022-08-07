@@ -5,16 +5,18 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Notes.WPF.Models.Notes;
+using Notes.WPF.Services.UserDialog;
 
 namespace Notes.WPF.Services.Notes;
 
 public class NotesService : INotesService
 {
     private readonly HttpClient client;
-
+    private readonly IUserDialogService userDialogService;
     public NotesService()
     {
         client = new HttpClient();
+        userDialogService = new UserDialogService();
     }
 
     public async Task<IEnumerable<Note>> GetNotes()
@@ -26,7 +28,7 @@ public class NotesService : INotesService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+           userDialogService.ShowError("Ошибка при получени списка задач.", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<IEnumerable<Note>>
@@ -45,11 +47,9 @@ public class NotesService : INotesService
 
         var response = await client.PutAsync(url, request);
 
-        var content = await response.Content.ReadAsStringAsync();
-
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при выполнии задачи.", "Ошибка!");
         }
     }
     public async Task<Note> GetNoteById(int id)
@@ -61,7 +61,7 @@ public class NotesService : INotesService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при получени задачи.", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<Note>
@@ -80,11 +80,10 @@ public class NotesService : INotesService
         var request = new StringContent(body, Encoding.UTF8, "application/json");
         var response = await client.PostAsync(url, request);
 
-        var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при добавлении задачи.", "Ошибка!");
         }
     }
 
@@ -93,11 +92,10 @@ public class NotesService : INotesService
         string url = $"{Settings.ApiRoot}/Notes/{id}";
 
         var response = await client.DeleteAsync(url);
-        var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при удалении задачи.", "Ошибка!");
         }
     }
 
@@ -114,7 +112,7 @@ public class NotesService : INotesService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при обновлении задачи.", "Ошибка!");
         }
     }
 
@@ -127,7 +125,7 @@ public class NotesService : INotesService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при получении типов задач.", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<Dictionary<string, double[]>>
@@ -146,7 +144,7 @@ public class NotesService : INotesService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при получении типов задач.", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<IEnumerable<Note>>

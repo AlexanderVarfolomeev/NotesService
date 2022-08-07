@@ -5,16 +5,18 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.Services.UserDialog;
 
 namespace Notes.WPF.Services.TaskTypes;
 
 public class TaskTypeService : ITaskTypeService
 {
     private readonly HttpClient client;
-
+    private readonly IUserDialogService userDialogService;
     public TaskTypeService()
     {
         client = new HttpClient();
+        userDialogService = new UserDialogService();
     }
 
     public async Task<IEnumerable<TaskType>> GetTaskTypes()
@@ -26,7 +28,7 @@ public class TaskTypeService : ITaskTypeService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при получении типов задач", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<IEnumerable<TaskType>>
@@ -45,7 +47,7 @@ public class TaskTypeService : ITaskTypeService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при получении типа задачи", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<TaskType>
@@ -64,11 +66,9 @@ public class TaskTypeService : ITaskTypeService
         var request = new StringContent(body, Encoding.UTF8, "application/json");
         var response = await client.PostAsync(url, request);
 
-        var content = await response.Content.ReadAsStringAsync();
-
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при добавлении типа задачи", "Ошибка!");
         }
     }
 
@@ -81,11 +81,9 @@ public class TaskTypeService : ITaskTypeService
 
         var response = await client.PutAsync(url, request);
 
-        var content = await response.Content.ReadAsStringAsync();
-
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при обновлении типа задачи", "Ошибка!");
         }
     }
 
@@ -94,11 +92,10 @@ public class TaskTypeService : ITaskTypeService
         string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
 
         var response = await client.DeleteAsync(url);
-        var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(content);
+            userDialogService.ShowError("Ошибка при удалении типа задачи", "Ошибка!");
         }
     }
 }
