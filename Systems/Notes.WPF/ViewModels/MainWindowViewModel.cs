@@ -315,7 +315,6 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     //TODO ужасный код, оптимизировать, мб занести каждый день в массив и работать с ним, разнести по методам
-    //TODO исправить логику опредления заметки на следующий месяц
     private void RefreshNotes()
     {
         var today = DateTimeOffset.Now;
@@ -432,31 +431,38 @@ public partial class MainWindowViewModel : ObservableObject
         foreach (var everyYearNote in _everyYearNotes)
         {
             var date = everyYearNote.StartDateTime;
-            if (currentMonday.Day == date.Day && currentMonday.Month == date.Month && currentMonday.Date >= today.Date)
+            if (currentMonday.Day == date.Day && currentMonday.Month == date.Month && currentMonday.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.Date)
                 MondayNotes.Add(everyYearNote);
 
             var nextDay = currentMonday.AddDays(1);
-            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date)
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.AddDays(1).Date)
                 TuesdayNotes.Add(everyYearNote);
 
             nextDay = nextDay.AddDays(1);
-            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date)
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.AddDays(2).Date)
                 WednesdayNotes.Add(everyYearNote);
 
             nextDay = nextDay.AddDays(1);
-            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date)
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.AddDays(3).Date)
                 ThursdayNotes.Add(everyYearNote);
 
             nextDay = nextDay.AddDays(1);
-            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date)
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.AddDays(4).Date)
                 FridayNotes.Add(everyYearNote);
 
             nextDay = nextDay.AddDays(1);
-            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date)
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.AddDays(5).Date)
                 SaturdayNotes.Add(everyYearNote);
 
             nextDay = nextDay.AddDays(1);
-            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date)
+            if (nextDay.Day == date.Day && nextDay.Month == date.Month && nextDay.Date >= today.Date
+                && everyYearNote.StartDateTime.Date <= currentMonday.AddDays(6).Date)
                 SundayNotes.Add(everyYearNote);
         }
 
