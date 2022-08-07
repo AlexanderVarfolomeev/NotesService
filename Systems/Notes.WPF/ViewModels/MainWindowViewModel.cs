@@ -29,7 +29,6 @@ using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
 namespace Notes.WPF.ViewModels;
 //TODO вряди ли тут должно находится так много логики, мб перенести
-//TODO добавить логику при удалении типа
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly ITaskTypeService _taskTypeService;
@@ -72,7 +71,6 @@ public partial class MainWindowViewModel : ObservableObject
     {
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
         await RepetitionNotesRefresh();
-        //TODO убрать отсюда
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
                 .GetNotesInInterval(currentMonday, currentMonday.AddDays(6)))
             .OrderBy(x => x.StartDateTime.Hour));

@@ -10,7 +10,6 @@ using Notes.WPF.ViewModels;
 using Notes.WPF.Views;
 
 namespace Notes.WPF.Services.UserDialog;
-//TODO доработать сервис до конца
 public class UserDialogService : IUserDialogService
 {
     public void OpenMainWindow()

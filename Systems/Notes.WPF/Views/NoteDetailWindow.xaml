@@ -70,11 +70,11 @@
             </ComboBox>
 
             <DatePicker Grid.Row="2" Grid.Column="1" 
-                        SelectedDate="{Binding DayDateNote, Source={StaticResource Container}}" FontWeight="Bold" HorizontalAlignment="Left" FontSize="18"/>
-            <xctk:TimePicker Grid.Row="3" Grid.Column="1" Value="{Binding StartTimeNote, Source={StaticResource Container}}" 
-                             FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18"/>
-            <xctk:TimePicker Grid.Row="4" Grid.Column="1"  
-                             FontWeight="Bold"  HorizontalAlignment="Left" FontSize="18" Value="{Binding EndTimeNote, Source={StaticResource Container}}"/>
+                        SelectedDate="{Binding DayDateNote, Source={StaticResource Container}}" FontWeight="Bold" FontSize="18"/>
+            <xctk:TimePicker Grid.Row="3" Grid.Column="1" Value="{Binding StartTimeNote, Source={StaticResource Container}}"  
+                             FontWeight="Bold" FontSize="18" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type TextBlock}}, Path=ActualWidth}"/>
+            <xctk:TimePicker Grid.Row="4" Grid.Column="1"   Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type TextBlock}}, Path=ActualWidth}"
+                             FontWeight="Bold" FontSize="18" Value="{Binding EndTimeNote, Source={StaticResource Container}}"/>
         </Grid>
         <Button Grid.Row="1" Grid.Column="0" Content="Сохранить" FontWeight="Bold" FontSize="16"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:NoteDetailWindow}}">
@@ -84,7 +84,7 @@
         </Button>
 
         <Button Grid.Column="1" Grid.Row="1" Content="Удалить" IsDefault="True" IsEnabled="{Binding IsEditNote, Source={StaticResource Container}}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:NoteDetailWindow}}">
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:NoteDetailWindow}}" FontWeight="Bold" FontSize="16">
             <i:Interaction.Triggers>
                 <b:EventTrigger EventName="Click">
                     <i:InvokeCommandAction CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"

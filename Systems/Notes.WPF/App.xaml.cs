@@ -36,11 +36,6 @@ namespace Notes.WPF
             services.AddSingleton<MainWindow>();
 
         }
-
-        private void OnStartup(object sender, StartupEventArgs e)
-        {
-            var mainWindow = serviceProvider.GetService<MainWindow>();
-            mainWindow.Show();
-        }
+     
     }
 }
