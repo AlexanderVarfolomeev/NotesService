@@ -12,7 +12,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="1600">
+        Title="Ежедневник" Height="400" Width="1600">
     <Window.Resources>
         <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
     </Window.Resources>
@@ -41,7 +41,7 @@
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="1*"/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
@@ -52,14 +52,16 @@
                         <GroupBox Grid.Column="0">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="Понедельник"></TextBlock>
-                                    <TextBlock HorizontalAlignment="Center" Text="{Binding MondayLabel, Source={StaticResource Container}}"/>
-                                </StackPanel>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Понедельник"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding MondayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding MondayNotes, Source={StaticResource Container}}"
+                                <ListBox ItemsSource="{Binding MondayNotes, Source={StaticResource Container}}" Background="Azure"
                                          SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
@@ -68,7 +70,8 @@
                                     </ListBox.ItemContainerStyle>
                                     <ListBox.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
                                             <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
                                                       CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
                                             <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
@@ -76,142 +79,278 @@
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
-                                        
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name, StringFormat=Имя: {0}}"/>
-                                                <TextBlock Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
-                                                <TextBlock Text="{Binding StartDateTime,StringFormat=hh:mm}"/>
-                                                <TextBlock Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
-                                               
-                                            </StackPanel>
-                                            
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </DockPanel>
-                        </GroupBox>
-                        <GroupBox Grid.Column="1" Header="Вторник">
-                            <DockPanel>
-                                <ListBox ItemsSource="{Binding TuesdayNotes, Source={StaticResource Container}}"
-                                         SelectedItem="{Binding SelectedNoteWeek, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="ListBoxItem">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate DataType="notemodel:Note">
-                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </DockPanel>
                         </GroupBox>
-                        <GroupBox Grid.Column="2" Header="Среда">
+                        <GroupBox Grid.Column="1">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Вторник"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding TuesdayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding WednesdayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding TuesdayNotes, Source={StaticResource Container}}" Background="Azure"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </DockPanel>
                         </GroupBox>
-                        <GroupBox Grid.Column="3" Header="Четверг">
+                        <GroupBox Grid.Column="2">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Среда"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding WednesdayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding ThursdayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding WednesdayNotes, Source={StaticResource Container}}" Background="Azure"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </DockPanel>
                         </GroupBox>
-                        <GroupBox Grid.Column="4" Header="Пятница">
+                        <GroupBox Grid.Column="3">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Четверг"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding ThursdayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding FridayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding ThursdayNotes, Source={StaticResource Container}}" Background="Azure"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </DockPanel>
                         </GroupBox>
-                        <GroupBox Grid.Column="5" Header="Суббота">
+                        <GroupBox Grid.Column="4">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Пятница"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding FridayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding SaturdayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding FridayNotes, Source={StaticResource Container}}" Background="Azure"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </DockPanel>
                         </GroupBox>
-                        <GroupBox Grid.Column="6" Header="Воскресенье">
+                        <GroupBox Grid.Column="5">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Суббота"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding SaturdayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
                             <DockPanel>
-                                <ListBox ItemsSource="{Binding SundayNotes, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding SaturdayNotes, Source={StaticResource Container}}" Background="Azure"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="notemodel:Note">
                                             <StackPanel Background="{Binding Path=TaskTypeColor}" >
-                                                <TextBlock Text="{Binding Path=Name}"/>
-                                                <TextBlock Text="{Binding Path=Status}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding StartDateTime, StringFormat=hh:mm}"/>
-                                                <TextBox IsEnabled="False" Text="{Binding EndDateTime, StringFormat=hh:mm}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Grid.Column="6">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Path=ActualWidth}"
+                                                HorizontalAlignment="Center" Background="AliceBlue">
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"  Text="Воскресенье"/>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" Text="{Binding SundayLabel, Source={StaticResource Container}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
+                            <DockPanel>
+                                <ListBox ItemsSource="{Binding SundayNotes, Source={StaticResource Container}}" Background="Azure"
+                                         SelectedItem="{Binding SelectedNote, Source={StaticResource Container}}" HorizontalContentAlignment="Stretch">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Выполнить" Command="{Binding DoTaskCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Удалить" Command="{Binding DeleteNoteCommand, Source={StaticResource Container}}"
+                                                      CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"/>
+                                            <MenuItem Header="Редактировать"  CommandParameter="{Binding SelectedNote, Source={StaticResource Container}}"
+                                                      Command="{Binding DoEditNoteCommand, Source={StaticResource Container}}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="notemodel:Note">
+                                            <StackPanel Background="{Binding Path=TaskTypeColor}" >
+                                                <TextBlock FontSize="14" Text="{Binding Path=Name, StringFormat=Название: {0}}"/>
+                                                <TextBlock FontSize="14" Text="{Binding Path=Status, StringFormat=Статус: {0}}"/>
+                                                <TextBlock FontSize="14" Text="Начало:"/>
+                                                <TextBlock FontSize="14" Text="{Binding StartDateTime,StringFormat=HH:mm}"/>
+                                                <TextBlock FontSize="14" Text="Конец:"/>
+                                                <TextBlock FontSize="14" Text="{Binding EndDateTime, StringFormat=HH:mm}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -236,10 +375,10 @@
                     <DataGrid ItemsSource="{Binding TaskTypes, Source={StaticResource Container}}" SelectedItem="{Binding SelectedType, Source={StaticResource Container}}"
                               AutoGenerateColumns="False" Grid.Column="0" Grid.Row="1" GridLinesVisibility="Vertical" CanUserAddRows="False" SelectedValue="0"
                               IsSynchronizedWithCurrentItem="True">
-                       <DataGrid.InputBindings>
+                        <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftClick" Command="{Binding EditTaskTypeCommand, Source={StaticResource Container}}"
                                           CommandParameter="{Binding SelectedType, Source={StaticResource Container}}"/>
-                       </DataGrid.InputBindings>
+                        </DataGrid.InputBindings>
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="BorderBrush" Value="Black"/>

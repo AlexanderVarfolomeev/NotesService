@@ -48,7 +48,8 @@
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <i:InvokeCommandAction CommandParameter="{Binding SelectedType, Source={StaticResource Container}}"
-                                           Command="{Binding DeleteTaskTypeCommand, Source={StaticResource Container}}" />
+                                           Command="{Binding DeleteTaskTypeCommand, Source={StaticResource Container}}"
+                                          />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <Button.Command>

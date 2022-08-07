@@ -15,6 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
     <ProjectReference Include="..\..\Shared\Notes.Common\Notes.Common.csproj" />
+    <ProjectReference Include="..\Notes.ColorService\Notes.ColorService.csproj" />
+    <ProjectReference Include="..\Notes.NotesService\Notes.NotesService.csproj" />
     <ProjectReference Include="..\Notes.Settings\Notes.Settings.csproj" />
   </ItemGroup>
 

@@ -75,6 +75,7 @@ public class NotesService : INotesService
     {
         string url = $"{Settings.ApiRoot}/Notes";
 
+
         var body = JsonSerializer.Serialize(requestModel);
         var request = new StringContent(body, Encoding.UTF8, "application/json");
         var response = await client.PostAsync(url, request);
