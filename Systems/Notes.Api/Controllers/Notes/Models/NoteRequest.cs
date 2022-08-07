@@ -23,9 +23,8 @@ public class NoteRequestProfile : Profile
 {
     public NoteRequestProfile()
     {
-        CreateMap<NoteRequest, NoteRequestModel>()
-           .AfterMap((s, d) => d.StartDateTime = s.StartDateTime.UtcDateTime)
-           .AfterMap((s, d) => d.EndDateTime = s.EndDateTime.UtcDateTime);
+        CreateMap<NoteRequest, NoteRequestModel>();
+
     }
 }
 

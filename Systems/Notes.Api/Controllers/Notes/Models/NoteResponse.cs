@@ -25,6 +25,6 @@ public class NoteResponseProfile : Profile
     {
         CreateMap<NoteModel, NoteResponse>()
             .AfterMap((s, d) => d.StartDateTime = s.StartDateTime.LocalDateTime)
-            .AfterMap((s, d) => d.EndDateTime = s.EndDateTime.LocalDateTime); ;
+            .AfterMap((s, d) => d.EndDateTime = s.EndDateTime.LocalDateTime);
     }
 }

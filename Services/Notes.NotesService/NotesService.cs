@@ -82,6 +82,8 @@ public class NotesService : INotesService
         context.Notes.Update(data);
         await context.SaveChangesAsync();
     }
+
+    //TODO разбить на методы?
     public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeksDictionary()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
@@ -90,6 +92,7 @@ public class NotesService : INotesService
             .Include(x => x.Type.Color)
             .AsQueryable();
         var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
+
         var result = data.Select(x => x)
             .Where(x => IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done).ToList();
 
@@ -160,36 +163,20 @@ public class NotesService : INotesService
         context.Notes.Update(data);
         await context.SaveChangesAsync();
 
+        await AddNextNote(note);
+    }
+
+    private async Task AddNextNote(Note note)
+    {
+        await using var context = await contextFactory.CreateDbContextAsync();
         if (note.RepeatFrequency != RepeatFrequency.None)
         {
             var newNote = CreateNextNoteFromRepeat(note);
             newNote.Status = TaskStatus.Waiting;
             newNote.Id = 0;
+            newNote.Type = null;
             await context.Notes.AddAsync(newNote);
             await context.SaveChangesAsync();
-        }
-    }
-
-    private DateTimeOffset GetDateOfMondayOnThisWeek()
-    {
-        var today = DateTime.Today;
-        switch (today.DayOfWeek)
-        {
-            default:
-                return today;
-            case DayOfWeek.Tuesday:
-                return today.AddDays(-1);
-            case DayOfWeek.Wednesday:
-                return today.AddDays(-2);
-            case DayOfWeek.Thursday:
-                return today.AddDays(-3);
-            case DayOfWeek.Friday:
-                return today.AddDays(-4);
-            case DayOfWeek.Saturday:
-                return today.AddDays(-5);
-            case DayOfWeek.Sunday:
-                return today.AddDays(-6);
-
         }
     }
 
@@ -213,14 +200,7 @@ public class NotesService : INotesService
                 context.Entry(note).State = EntityState.Modified;
                 await context.SaveChangesAsync();
 
-                if (note.RepeatFrequency != RepeatFrequency.None)
-                {
-                    var newNote = CreateNextNoteFromRepeat(note);
-                    newNote.Status = TaskStatus.Waiting;
-                    newNote.Id = 0;
-                    await context.Notes.AddAsync(newNote);
-                }
-                await context.SaveChangesAsync();
+                await AddNextNote(note);
             }
         }
     }
