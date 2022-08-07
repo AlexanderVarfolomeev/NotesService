@@ -99,7 +99,7 @@ public class NotesService : INotesService
         Dictionary<string, IEnumerable<NoteModel>> resultDictionary = new Dictionary<string, IEnumerable<NoteModel>>();
 
         var dateTimeNow = DateTimeOffset.Now;
-        var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
+        var startDate = dateTimeNow.AddDays(-21 - ((int)dateTimeNow.DayOfWeek == 0 ? 7 : (int)dateTimeNow.DayOfWeek) + 1);
 
         for (int i = 0; i < 4; i++)
         {
@@ -238,7 +238,7 @@ public class NotesService : INotesService
     {
         var dateTimeNow = DateTimeOffset.Now;
         var today = dateTimeNow.DayOfWeek;
-        var startDate = dateTimeNow.AddDays(-21 - (int)today);
+        var startDate = dateTimeNow.AddDays(-21 - ((int)today == 0 ? 7 : (int)today) + 1);
         return date >= startDate && date <= dateTimeNow;
     }
 

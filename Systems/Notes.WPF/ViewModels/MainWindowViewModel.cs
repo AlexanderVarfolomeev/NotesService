@@ -178,11 +178,11 @@ public partial class MainWindowViewModel : ObservableObject
     {
         var dates = new string[4];
         var dateTimeNow = DateTimeOffset.Now;
-        var startDate = dateTimeNow.AddDays(-21 - (int)dateTimeNow.DayOfWeek);
+        var startDate = dateTimeNow.AddDays(-21 - ((int)dateTimeNow.DayOfWeek == 0 ? 7 : (int)dateTimeNow.DayOfWeek) + 1);
         for (int j = 0; j < 4; j++)
         {
             var start = startDate.AddDays(7 * j);
-            var end = j == 3 ? dateTimeNow : startDate.AddDays(7 * (j + 1));
+            var end = j == 3 ? dateTimeNow : startDate.AddDays(6 * (j + 1));
             var startStr = start.Day + "." + start.Month;
             var endStr = end.Day + "." + end.Month;
             dates[j] = startStr + " - " + endStr;
