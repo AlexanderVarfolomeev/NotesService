@@ -12,6 +12,12 @@ namespace Notes.WPF.Services.UserDialog;
 //TODO доработать сервис до конца
 public class UserDialogService : IUserDialogService
 {
+    public void OpenMainWindow()
+    {
+        var dialog = new MainWindow();
+        dialog.ShowDialog();
+    }
+
     public bool Edit(object item)
     {
         if (item is null) throw new ArgumentNullException(nameof(item));

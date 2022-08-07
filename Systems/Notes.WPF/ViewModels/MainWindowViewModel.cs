@@ -52,10 +52,25 @@ public partial class MainWindowViewModel : ObservableObject
     private Note? _selectedNote;
 
     [RelayCommand]
-    private async void RefreshData()
+    private async Task InitData()
     {
-        await RepetitionNotesInit();
-        Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
+        //TODO авторизация
+        if (true)
+        {
+            await RepetitionNotesInit();
+            Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
+            await RefreshData();
+            _userDialogService.OpenMainWindow();
+        }
+        else
+        {
+            //TODO _userDialogService.ShowWarning
+        }
+    }
+
+    [RelayCommand]
+    private async Task RefreshData()
+    {
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
         //TODO убрать отсюда
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
@@ -113,7 +128,7 @@ public partial class MainWindowViewModel : ObservableObject
     private TaskType? _selectedType;
 
     [ObservableProperty] private EditTaskType? _editType;
-    private bool CanEditTaskTypeExecute() => SelectedType != null ;
+    private bool CanEditTaskTypeExecute() => SelectedType != null;
     [RelayCommand(CanExecute = nameof(CanEditTaskTypeExecute))]
     private async void EditTaskType(object p)
     {
@@ -380,27 +395,27 @@ public partial class MainWindowViewModel : ObservableObject
             if (currentMonday.Day == dateDay && currentMonday.Date >= today.Date && everyMonthNote.StartDateTime.Date <= currentMonday.Date)
                 MondayNotes.Add(everyMonthNote);
 
-            if (currentMonday.Day + 1 == dateDay && currentMonday.AddDays(1).Date >= today.Date 
+            if (currentMonday.Day + 1 == dateDay && currentMonday.AddDays(1).Date >= today.Date
                                                  && everyMonthNote.StartDateTime.Date <= currentMonday.AddDays(1).Date)
                 TuesdayNotes.Add(everyMonthNote);
 
-            if (currentMonday.Day + 2 == dateDay && currentMonday.AddDays(2).Date >= today.Date 
+            if (currentMonday.Day + 2 == dateDay && currentMonday.AddDays(2).Date >= today.Date
                                                  && everyMonthNote.StartDateTime.Date <= currentMonday.AddDays(2).Date)
                 WednesdayNotes.Add(everyMonthNote);
 
-            if (currentMonday.Day + 3 == dateDay && currentMonday.AddDays(3).Date >= today.Date 
+            if (currentMonday.Day + 3 == dateDay && currentMonday.AddDays(3).Date >= today.Date
                                                  && everyMonthNote.StartDateTime.Date <= currentMonday.AddDays(3).Date)
                 ThursdayNotes.Add(everyMonthNote);
 
-            if (currentMonday.Day + 4 == dateDay && currentMonday.AddDays(4).Date >= today.Date 
+            if (currentMonday.Day + 4 == dateDay && currentMonday.AddDays(4).Date >= today.Date
                                                  && everyMonthNote.StartDateTime.Date <= currentMonday.AddDays(4).Date)
                 FridayNotes.Add(everyMonthNote);
 
-            if (currentMonday.Day + 5 == dateDay && currentMonday.AddDays(5).Date >= today.Date 
+            if (currentMonday.Day + 5 == dateDay && currentMonday.AddDays(5).Date >= today.Date
                                                  && everyMonthNote.StartDateTime.Date <= currentMonday.AddDays(5).Date)
                 SaturdayNotes.Add(everyMonthNote);
 
-            if (currentMonday.Day + 6 == dateDay && currentMonday.AddDays(6).Date >= today.Date 
+            if (currentMonday.Day + 6 == dateDay && currentMonday.AddDays(6).Date >= today.Date
                                                  && everyMonthNote.StartDateTime.Date <= currentMonday.AddDays(6).Date)
                 SundayNotes.Add(everyMonthNote);
         }
@@ -504,7 +519,7 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 EditNote.TaskTypeId = SelectedTaskType.Id;
                 EditNote.EndDateTime = new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, EndTimeNote.Hour, EndTimeNote.Minute, 0);
-                EditNote.StartDateTime = new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute,0);
+                EditNote.StartDateTime = new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0);
 
                 await _notesService.UpdateNote(SelectedNote.Id, EditNote);
                 RefreshData();
