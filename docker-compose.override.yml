@@ -20,8 +20,8 @@ services:
       - "21433:1433"
     networks:
       - shared-note
-    volumes:      
-      - sqlserver-data:/var/opt/mssql
+    #volumes:      
+    #  - sqlserver-data:/var/opt/mssql
 
 volumes:
   sqlserver-data:

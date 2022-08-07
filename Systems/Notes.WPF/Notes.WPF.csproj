@@ -12,10 +12,12 @@
     <Folder Include="Models\Colors\" />
     <Folder Include="Services\Notes\" />
     <Folder Include="Services\UserDialog\" />
+    <Folder Include="Validators\TaskTypes\" />
+    <Folder Include="Validators\Notes\" />
   </ItemGroup>
 	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
 		<ItemGroup>
-			<FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+			<FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
 			<Analyzer Remove="@(Analyzer)" />
 			<Analyzer Include="@(FilteredAnalyzer)" />
 		</ItemGroup>

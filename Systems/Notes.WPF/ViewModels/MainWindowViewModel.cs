@@ -22,6 +22,7 @@ using Notes.WPF.Services.Colors.Models;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.Services.UserDialog;
+using Notes.WPF.Validators.TaskTypes;
 using SkiaSharp;
 using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
@@ -61,7 +62,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
         else
         {
-            //_userDialogService.ShowWarning
+            //_userDialogService.ShowError
         }
     }
 
@@ -112,9 +113,12 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedColor = null;
         if (_userDialogService.Add(EditType))
         {
-            EditType.TypeColorId = SelectedColor.Id;
-            await _taskTypeService.AddTask(EditType);
-            await RefreshData();
+            EditType.TypeColorId = SelectedColor?.Id ?? 0;
+            if (EditTaskTypeValidator.Check(EditType))
+            {
+                await _taskTypeService.AddTask(EditType);
+                await RefreshData();
+            }
         }
     }
 
@@ -137,12 +141,15 @@ public partial class MainWindowViewModel : ObservableObject
                 Name = SelectedType.Name,
                 TypeColorId = SelectedType.TypeColorId
             };
-            SelectedColor = Colors.FirstOrDefault(x => x.Id == SelectedType.TypeColorId) ?? throw new ArgumentNullException();
+            SelectedColor = Colors.FirstOrDefault(x => x.Id == SelectedType.TypeColorId);
             if (_userDialogService.Edit(EditType))
             {
-                EditType.TypeColorId = SelectedColor.Id;
-                await _taskTypeService.UpdateTask(EditType, taskType.Id);
-                await RefreshData();
+                EditType.TypeColorId = SelectedColor?.Id ?? 0;
+                if (EditTaskTypeValidator.Check(EditType))
+                {
+                    await _taskTypeService.UpdateTask(EditType, taskType.Id);
+                    await RefreshData();
+                }
             }
         }
     }
