@@ -182,7 +182,7 @@ public partial class MainWindowViewModel : ObservableObject
         for (int j = 0; j < 4; j++)
         {
             var start = startDate.AddDays(7 * j);
-            var end = j == 3 ? dateTimeNow : startDate.AddDays(6 * (j + 1));
+            var end = j == 3 ? dateTimeNow : start.AddDays(6);
             var startStr = start.Day + "." + start.Month;
             var endStr = end.Day + "." + end.Month;
             dates[j] = startStr + " - " + endStr;
