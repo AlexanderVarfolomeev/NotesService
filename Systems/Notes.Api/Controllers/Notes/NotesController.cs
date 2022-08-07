@@ -31,15 +31,6 @@ namespace Notes.Api.Controllers.Notes
             return result;
         }
 
-        [HttpGet("get-current-week")]
-        public async Task<IEnumerable<NoteResponse>> GetNotesCurrentWeek()
-        {
-            await notesService.UpdateNoteStatus();
-            var data = await notesService.GetCurrentWeek();
-            var result = mapper.Map<IEnumerable<NoteResponse>>(data);
-            return result;
-        }
-
         [HttpGet("get-last-four-weeks-completed")]
         public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks()
         {

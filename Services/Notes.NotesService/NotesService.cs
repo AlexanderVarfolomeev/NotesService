@@ -135,21 +135,6 @@ public class NotesService : INotesService
         return dictionary;
     }
 
-    public async Task<IEnumerable<NoteModel>> GetCurrentWeek()
-    {
-        await using var context = await contextFactory.CreateDbContextAsync();
-        var monday = GetDateOfMondayOnThisWeek();
-        var sunday = monday.AddDays(6);
-        var notes = context.Notes
-            .Include(x => x.Type)
-            .Include(x => x.Type.Color)
-            .AsQueryable();
-
-        var result = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
-        var data = result.Where(x => IncludeInInterval(monday, sunday, x.StartDateTime));
-
-        return data;
-    }
 
     public async Task<IEnumerable<NoteModel>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end)
     {
