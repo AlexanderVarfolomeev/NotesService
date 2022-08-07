@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Colors;
@@ -44,25 +45,19 @@ public class UserDialogService : IUserDialogService
         }
     }
 
-    public void ShowInformation(string Information, string Caption)
-    {
-        throw new NotImplementedException();
-    }
+    public void ShowInformation(string Information, string Caption) => MessageBox.Show(Information, Caption, MessageBoxButton.OK, MessageBoxImage.Information);
 
-    public void ShowWarning(string Message, string Caption)
-    {
-        throw new NotImplementedException();
-    }
+    public void ShowWarning(string Message, string Caption) => MessageBox.Show(Message, Caption, MessageBoxButton.OK, MessageBoxImage.Warning);
 
-    public void ShowError(string Message, string Caption)
-    {
-        throw new NotImplementedException();
-    }
+    public void ShowError(string Message, string Caption) => MessageBox.Show(Message, Caption, MessageBoxButton.OK, MessageBoxImage.Error);
 
-    public bool Confirm(string Message, string Caption, bool Exclamation = false)
-    {
-        throw new NotImplementedException();
-    }
+    public bool Confirm(string Message, string Caption, bool Exclamation = false) =>
+        MessageBox.Show(
+            Message,
+            Caption,
+            MessageBoxButton.YesNo,
+            Exclamation ? MessageBoxImage.Exclamation : MessageBoxImage.Question)
+        == MessageBoxResult.Yes;
 
     private static bool EditNote()
     {
