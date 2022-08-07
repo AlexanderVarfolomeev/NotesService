@@ -8,11 +8,11 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Systems/Notes.Api/Notes.Api.csproj", "Systems/Notes.Api/"]
 COPY ["Services/Notes.TaskTypeService/Notes.TaskTypeService.csproj", "Services/Notes.TaskTypeService/"]
+COPY ["Services/Notes.NotesService/Notes.NotesService.csproj", "Services/Notes.NotesService/"]
 COPY ["Data/Notes.Context/Notes.Context.csproj", "Data/Notes.Context/"]
 COPY ["Data/Notes.Entities/Notes.Entities.csproj", "Data/Notes.Entities/"]
-COPY ["Services/Notes.Settings/Notes.Settings.csproj", "Services/Notes.Settings/"]
 COPY ["Shared/Notes.Common/Notes.Common.csproj", "Shared/Notes.Common/"]
-COPY ["Services/Notes.NotesService/Notes.NotesService.csproj", "Services/Notes.NotesService/"]
+COPY ["Services/Notes.Settings/Notes.Settings.csproj", "Services/Notes.Settings/"]
 COPY ["Services/Notes.ColorService/Notes.ColorService.csproj", "Services/Notes.ColorService/"]
 RUN dotnet restore "Systems/Notes.Api/Notes.Api.csproj"
 COPY . .

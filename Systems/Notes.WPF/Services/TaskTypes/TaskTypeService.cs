@@ -65,7 +65,7 @@ public class TaskTypeService : ITaskTypeService
         var body = JsonSerializer.Serialize(task);
         var request = new StringContent(body, Encoding.UTF8, "application/json");
         var response = await client.PostAsync(url, request);
-
+        var content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
             userDialogService.ShowError("Ошибка при добавлении типа задачи", "Ошибка!");

@@ -52,7 +52,6 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task InitData()
     {
-        await RepetitionNotesInit();
         Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
         await RefreshData();
         //TODO авторизация
@@ -70,6 +69,7 @@ public partial class MainWindowViewModel : ObservableObject
     private async Task RefreshData()
     {
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
+        await RepetitionNotesRefresh();
         //TODO убрать отсюда
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
                 .GetNotesInInterval(currentMonday, currentMonday.AddDays(6)))
@@ -273,13 +273,12 @@ public partial class MainWindowViewModel : ObservableObject
     private List<Note> _everyMonthNotes;
     private List<Note> _everyYearNotes;
 
-    private async Task RepetitionNotesInit()
+    private async Task RepetitionNotesRefresh()
     {
         _everyDayNotes = new List<Note>();
         _everyMonthNotes = new List<Note>();
         _everyWeekNotes = new List<Note>();
         _everyYearNotes = new List<Note>();
-
         var notes = (await _notesService.GetNotes()).Where(x => x.Status == TaskStatus.Waiting);
         foreach (var note in notes)
         {

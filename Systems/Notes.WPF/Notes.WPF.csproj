@@ -13,7 +13,13 @@
     <Folder Include="Services\Notes\" />
     <Folder Include="Services\UserDialog\" />
   </ItemGroup>
-
+	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+			<Analyzer Remove="@(Analyzer)" />
+			<Analyzer Include="@(FilteredAnalyzer)" />
+		</ItemGroup>
+	</Target>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />

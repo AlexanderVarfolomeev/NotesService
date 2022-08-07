@@ -5,15 +5,17 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Colors.Models;
+using Notes.WPF.Services.UserDialog;
 
 namespace Notes.WPF.Services.Colors;
 
 public class ColorService : IColorService
 {
     private readonly HttpClient client;
-
+    private readonly UserDialogService userDialogService;
     public ColorService()
     {
+        this.userDialogService = new UserDialogService();
         client = new HttpClient();
     }
     public  async Task<IEnumerable<ColorResponse>> GetColors()
