@@ -44,8 +44,6 @@ public partial class MainWindowViewModel : ObservableObject
         _userDialogService = new UserDialogService();
 
         currentMonday = GetDateOfMondayOnThisWeek();
-
-        DeleteTaskTypeCommand = new LambdaCommand(OnDeleteTaskTypeExecuted, CanDeleteTaskTypeExecute);
     }
 
     [ObservableProperty]
@@ -54,17 +52,17 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task InitData()
     {
+        await RepetitionNotesInit();
+        Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
+        await RefreshData();
         //TODO авторизация
         if (true)
         {
-            await RepetitionNotesInit();
-            Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
-            await RefreshData();
             _userDialogService.OpenMainWindow();
         }
         else
         {
-            //TODO _userDialogService.ShowWarning
+            //_userDialogService.ShowWarning
         }
     }
 
@@ -93,15 +91,14 @@ public partial class MainWindowViewModel : ObservableObject
 
 
     #region Delete Task Type 
-    //TODO сделать relay command
-    public ICommand DeleteTaskTypeCommand { get; }
     private bool CanDeleteTaskTypeExecute(object p) => SelectedType != null && SelectedType.Name != "Empty";
-    private async void OnDeleteTaskTypeExecuted(object p)
+    [RelayCommand(CanExecute = nameof(CanDeleteTaskTypeExecute))]
+    private async void DeleteTaskType(object p)
     {
         if (p is TaskType taskType)
         {
             await _taskTypeService.DeleteTask(taskType.Id);
-            RefreshData();
+            await RefreshData();
         }
     }
 
@@ -117,7 +114,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             EditType.TypeColorId = SelectedColor.Id;
             await _taskTypeService.AddTask(EditType);
-            RefreshData();
+            await RefreshData();
         }
     }
 
@@ -145,7 +142,7 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 EditType.TypeColorId = SelectedColor.Id;
                 await _taskTypeService.UpdateTask(EditType, taskType.Id);
-                RefreshData();
+                await RefreshData();
             }
         }
     }
@@ -334,25 +331,25 @@ public partial class MainWindowViewModel : ObservableObject
         //TODO придумать как оптимизировать!!!!!
         foreach (var everyDayNote in _everyDayNotes)
         {
-            if (currentMonday.Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.Date)
+            if (currentMonday.Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.Date)
                 MondayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(1).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(1).Date)
+            if (currentMonday.AddDays(1).Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(1).Date)
                 TuesdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(2).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(2).Date)
+            if (currentMonday.AddDays(2).Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(2).Date)
                 WednesdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(3).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(3).Date)
+            if (currentMonday.AddDays(3).Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(3).Date)
                 ThursdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(4).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(4).Date)
+            if (currentMonday.AddDays(4).Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(4).Date)
                 FridayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(5).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(5).Date)
+            if (currentMonday.AddDays(5).Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(5).Date)
                 SaturdayNotes.Add(everyDayNote);
 
-            if (currentMonday.AddDays(6).Date > today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(6).Date)
+            if (currentMonday.AddDays(6).Date >= today.Date && everyDayNote.StartDateTime.Date <= currentMonday.AddDays(6).Date)
                 SundayNotes.Add(everyDayNote);
         }
         foreach (var everyWeekNote in _everyWeekNotes)
@@ -457,8 +454,6 @@ public partial class MainWindowViewModel : ObservableObject
         FridayNotes = new ObservableCollection<Note>(FridayNotes.OrderBy(x => x.StartDateTime.TimeOfDay));
         SaturdayNotes = new ObservableCollection<Note>(SaturdayNotes.OrderBy(x => x.StartDateTime.TimeOfDay));
         SundayNotes = new ObservableCollection<Note>(SundayNotes.OrderBy(x => x.StartDateTime.TimeOfDay));
-        Console.WriteLine();
-
     }
     #endregion
 
@@ -522,7 +517,7 @@ public partial class MainWindowViewModel : ObservableObject
                 EditNote.StartDateTime = new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0);
 
                 await _notesService.UpdateNote(SelectedNote.Id, EditNote);
-                RefreshData();
+                await RefreshData();
             }
         }
     }
@@ -533,7 +528,7 @@ public partial class MainWindowViewModel : ObservableObject
         if (p is Note note)
         {
             await _notesService.DeleteNote(note.Id);
-            RefreshData();
+            await RefreshData();
         }
     }
 
@@ -543,7 +538,7 @@ public partial class MainWindowViewModel : ObservableObject
         if (p is Note note)
         {
             await _notesService.DoTask(SelectedNote.Id);
-            RefreshData();
+            await RefreshData();
         }
     }
 
@@ -562,7 +557,7 @@ public partial class MainWindowViewModel : ObservableObject
                 new DateTime(DayDateNote.Year, DayDateNote.Month, DayDateNote.Day, StartTimeNote.Hour, StartTimeNote.Minute, 0);
             EditNote.Status = TaskStatus.Waiting;
             await _notesService.AddNote(EditNote);
-            RefreshData();
+            await RefreshData();
         }
     }
 
