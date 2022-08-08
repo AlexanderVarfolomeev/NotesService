@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
+
 namespace Notes.Settings.Source;
 
 public class SettingsSource : ISettingsSource

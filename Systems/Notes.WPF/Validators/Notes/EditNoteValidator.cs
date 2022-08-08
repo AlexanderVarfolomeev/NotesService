@@ -1,5 +1,4 @@
-﻿using System;
-using Notes.WPF.Models.Notes;
+﻿using Notes.WPF.Models.Notes;
 using Notes.WPF.Services.UserDialog;
 
 namespace Notes.WPF.Validators.Notes;

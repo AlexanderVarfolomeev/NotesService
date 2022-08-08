@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Notes.Context.Context;
+﻿using Notes.Context.Context;
 using Notes.Context.Factories;
 using Notes.Context.Setup;
 using Notes.Settings.Interfaces;

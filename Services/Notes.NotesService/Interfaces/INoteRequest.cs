@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Notes.Entities;
+﻿using Notes.Entities;
 using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.NotesService.Interfaces;

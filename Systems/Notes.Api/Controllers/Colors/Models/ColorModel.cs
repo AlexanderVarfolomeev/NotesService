@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Notes.ColorService.Models;
-using Notes.Entities;
 
 namespace Notes.Api.Controllers.Colors.Models;
 

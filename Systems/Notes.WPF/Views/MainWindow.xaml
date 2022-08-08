@@ -3,14 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:com="clr-namespace:Notes.WPF.Infrastructure.Commands"
         xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         xmlns:ttmodel="clr-namespace:Notes.WPF.Models.TaskTypes"
         xmlns:notemodel="clr-namespace:Notes.WPF.Models.Notes"
-        xmlns:local="clr-namespace:Notes.WPF"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Ежедневник" Height="400" Width="1600">
     <Window.Resources>
@@ -362,8 +358,8 @@
             <TabItem Header="Типы задач" >
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"></RowDefinition>
-                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="5*" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Column="0" Grid.Row="0">
                         <Grid.ColumnDefinitions>
@@ -381,7 +377,7 @@
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="FontSize" Value="18"></Setter>
+                                <Setter Property="FontSize" Value="18" />
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.CellStyle>
@@ -391,8 +387,7 @@
                             </Style>
                         </DataGrid.CellStyle>
                         <DataGrid.ItemTemplate>
-                            <DataTemplate DataType="ttmodel:TaskType">
-                            </DataTemplate>
+                            <DataTemplate DataType="ttmodel:TaskType" />
                         </DataGrid.ItemTemplate>
                         <DataGrid.Columns>
                             <DataGridTextColumn FontSize="18" FontWeight="DemiBold" Header="Имя" IsReadOnly="True" Binding="{Binding Path=Name}" Width="*">
@@ -414,8 +409,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Активность">
-                <lvc:CartesianChart Series="{Binding Series, Source={StaticResource Container}}" XAxes="{Binding XAxes, Source={StaticResource Container}}" LegendPosition="Right">
-                </lvc:CartesianChart>
+                <lvc:CartesianChart Series="{Binding Series, Source={StaticResource Container}}" XAxes="{Binding XAxes, Source={StaticResource Container}}" LegendPosition="Right" />
             </TabItem>
         </TabControl>
     </DockPanel>

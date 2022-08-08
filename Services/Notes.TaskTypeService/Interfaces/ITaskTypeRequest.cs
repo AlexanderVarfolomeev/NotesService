@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Notes.TaskTypeService.Interfaces;
+﻿namespace Notes.TaskTypeService.Interfaces;
 
 public interface ITaskTypeRequest
 {

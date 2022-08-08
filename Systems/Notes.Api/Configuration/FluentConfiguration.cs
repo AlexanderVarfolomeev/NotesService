@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Notes.Common.Helpers;
 using Notes.Common.Responses;
 using Notes.Common.Validator;
-using Notes.Settings.Interfaces;
 
 namespace Notes.Api.Configuration;
 

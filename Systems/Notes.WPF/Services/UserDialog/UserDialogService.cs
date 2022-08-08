@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
-using Notes.WPF.Services.Colors;
-using Notes.WPF.Services.Colors.Models;
-using Notes.WPF.ViewModels;
 using Notes.WPF.Views;
 
 namespace Notes.WPF.Services.UserDialog;

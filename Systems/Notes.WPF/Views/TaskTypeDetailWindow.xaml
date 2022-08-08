@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notes.WPF.Views"
-        xmlns:taskTypes="clr-namespace:Notes.WPF.Models.TaskTypes"
         xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         xmlns:colors="clr-namespace:Notes.WPF.Services.Colors.Models"
         mc:Ignorable="d"
@@ -33,7 +32,7 @@
                   SelectedItem="{Binding SelectedColor, Source={StaticResource Container}}">
             <ComboBox.Resources>
                 <DataTemplate DataType="{x:Type colors:ColorResponse}">
-                    <TextBox FontSize="16" Text="{Binding Name}" Background="{Binding Code}"></TextBox>
+                    <TextBox FontSize="16" Text="{Binding Name}" Background="{Binding Code}" />
                 </DataTemplate>
             </ComboBox.Resources>
         </ComboBox>

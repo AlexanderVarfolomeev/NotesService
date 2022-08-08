@@ -12,7 +12,6 @@
         xmlns:types="clr-namespace:Notes.WPF.Models.TaskTypes"
         xmlns:notes="clr-namespace:Notes.WPF.Models.Notes"
         xmlns:commands="clr-namespace:Notes.WPF.Infrastructure.Commands"
-        xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         Title="Note Detail Window" Height="450" Width="350">
     <Window.Resources>
@@ -60,14 +59,13 @@
                       SelectedItem="{Binding SelectedTaskType, Source={StaticResource Container}}">
                 <ComboBox.Resources>
                     <DataTemplate DataType="{x:Type types:TaskType}">
-                        <TextBox FontSize="16" Text="{Binding Name}" Background="{Binding Color.Code}"></TextBox>
+                        <TextBox FontSize="16" Text="{Binding Name}" Background="{Binding Color.Code}" />
                     </DataTemplate>
                 </ComboBox.Resources>
             </ComboBox>
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding EditNote.Description, Source={StaticResource Container}}" FontSize="18"/>
             <ComboBox Grid.Row="6" Grid.Column="1" FontSize="18" ItemsSource="{Binding Source={StaticResource EnumRepeat}}"
-                      SelectedItem="{Binding EditNote.RepeatFrequency, Source={StaticResource Container} }">
-            </ComboBox>
+                      SelectedItem="{Binding EditNote.RepeatFrequency, Source={StaticResource Container} }" />
 
             <DatePicker Grid.Row="2" Grid.Column="1" 
                         SelectedDate="{Binding DayDateNote, Source={StaticResource Container}}" FontWeight="Bold" FontSize="18"/>

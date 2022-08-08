@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Notes.WPF.Models.TaskTypes;
 using Notes.WPF.Services.Colors.Models;
 using Notes.WPF.Services.UserDialog;
 

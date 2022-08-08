@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 
 namespace Notes.WPF.Models.Notes;
 

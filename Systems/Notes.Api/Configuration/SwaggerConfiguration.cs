@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Notes.Settings.Interfaces;
+﻿using Notes.Settings.Interfaces;
 
 namespace Notes.Api.Configuration;
 

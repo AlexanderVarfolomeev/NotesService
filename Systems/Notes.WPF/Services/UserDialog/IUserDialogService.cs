@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Notes.WPF.Services.UserDialog;
+﻿namespace Notes.WPF.Services.UserDialog;
 
 public interface IUserDialogService
 {

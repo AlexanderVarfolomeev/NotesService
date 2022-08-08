@@ -4,7 +4,6 @@ using Notes.ColorService;
 using Notes.Common.Exceptions;
 using Notes.Common.Validator;
 using Notes.Context.Context;
-using Notes.Context.Factories;
 using Notes.Entities;
 using Notes.NotesService;
 using Notes.TaskTypeService.Models;

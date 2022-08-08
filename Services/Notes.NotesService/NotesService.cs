@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Notes.Common.Exceptions;
 using Notes.Common.Validator;
 using Notes.Context.Context;
 using Notes.Entities;
 using Notes.NotesService.Models;
-using DateTime = System.DateTime;
 using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.NotesService;

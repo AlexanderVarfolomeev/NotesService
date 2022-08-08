@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Notes.Entities;
 
 namespace Notes.TaskTypeService.Models;
 

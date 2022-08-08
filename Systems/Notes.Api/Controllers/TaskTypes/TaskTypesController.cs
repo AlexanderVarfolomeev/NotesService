@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Notes.Api.Controllers.TaskTypes.Models;
-using Notes.NotesService;
 using Notes.TaskTypeService;
 using Notes.TaskTypeService.Models;
 
