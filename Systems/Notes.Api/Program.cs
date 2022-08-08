@@ -14,13 +14,17 @@ builder.Host.UseSerilog((host, cfg) =>
     cfg.ReadFrom.Configuration(host.Configuration);
 });
 
+services.AddHttpContextAccessor();
+
 services.AddAppDbContext(settings);
 
-services.AddAppSwagger();
+services.AddAppSwagger(settings);
 
 services.AddAppCors();
 
 services.AddAppServices();
+
+services.AddAppAuth(settings);
 
 services.AddControllers().AddValidator();
 
@@ -32,6 +36,8 @@ var app = builder.Build();
 
 app.UseAppMiddlewares();
 
+app.UseStaticFiles();
+
 app.UseAuthorization();
 
 app.UseRouting();
@@ -39,6 +45,8 @@ app.UseRouting();
 app.UseAppCors();
 
 app.UseSerilogRequestLogging();
+
+app.UseAppAuth();
 
 app.MapControllers();
 

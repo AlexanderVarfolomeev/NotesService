@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Notes.Api.Controllers.Colors.Models;
 using Notes.ColorService;
@@ -7,6 +8,7 @@ namespace Notes.Api.Controllers.Colors
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ColorController : ControllerBase
     {
         private readonly IMapper mapper;
