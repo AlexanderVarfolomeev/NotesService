@@ -94,7 +94,7 @@ public class NotesService : INotesService
         var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
 
         var result = data.Select(x => x)
-            .Where(x => IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done).ToList();
+            .Where(x => IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done && x.Type !="Empty").ToList();
 
         Dictionary<string, IEnumerable<NoteModel>> resultDictionary = new Dictionary<string, IEnumerable<NoteModel>>();
 
@@ -104,7 +104,7 @@ public class NotesService : INotesService
         for (int i = 0; i < 4; i++)
         {
             var start = startDate.AddDays(7 * i);
-            var end = i == 3 ? dateTimeNow : startDate.AddDays(7 * (i + 1));
+            var end = i == 3 ? dateTimeNow : start.AddDays(6);
 
             var startStr = start.Day + "." + start.Month;
             var endStr = end.Day + "." + end.Month;
@@ -239,7 +239,7 @@ public class NotesService : INotesService
         var dateTimeNow = DateTimeOffset.Now;
         var today = dateTimeNow.DayOfWeek;
         var startDate = dateTimeNow.AddDays(-21 - ((int)today == 0 ? 7 : (int)today) + 1);
-        return date >= startDate && date <= dateTimeNow;
+        return date.Date >= startDate.Date && date.Date <= dateTimeNow.Date;
     }
 
     private bool IncludeInInterval(DateTimeOffset startDate, DateTimeOffset endDate, DateTimeOffset current)
