@@ -396,8 +396,20 @@
                             </DataTemplate>
                         </DataGrid.ItemTemplate>
                         <DataGrid.Columns>
-                            <DataGridTextColumn FontSize="18" FontWeight="DemiBold" Header="Имя" IsReadOnly="True" Binding="{Binding Path=Name}" Width="*"/>
-                            <DataGridTextColumn FontSize="18" FontWeight="DemiBold" Header="Цвет" IsReadOnly="True" Binding="{Binding Path=Color.Name}" Width="1*"/>
+                            <DataGridTextColumn FontSize="18" FontWeight="DemiBold" Header="Имя" IsReadOnly="True" Binding="{Binding Path=Name}" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Background" Value="{Binding Path=Color.Code}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                                <DataGridTextColumn FontSize="18" FontWeight="DemiBold" Header="Цвет" IsReadOnly="True" Binding="{Binding Path=Color.Name}" Width="1*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Background" Value="{Binding Path=Color.Code}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
