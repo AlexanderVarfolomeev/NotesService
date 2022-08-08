@@ -16,9 +16,9 @@ public class DbSeed
         var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<MainDbContext>>();
         using var context = factory.CreateDbContext();
 
-        //AddColors(context);
-        //AddTaskTypes(context);
-        //AddNotes(context);
+        AddColors(context);
+        AddTaskTypes(context);
+        AddNotes(context);
     }
 
     private static void AddColors(MainDbContext context)
@@ -89,6 +89,15 @@ public class DbSeed
         };
 
         context.Colors.Add(c8);
+
+        var c9 = new TypeColor()
+        {
+            Code = "#D3D3D3",
+            Name = "LightGray",
+        };
+
+        context.Colors.Add(c9);
+
         context.SaveChanges();
 
     }
@@ -149,8 +158,8 @@ public class DbSeed
         var n1 = new Note()
         {
             Name = "Помыть пол",
-            StartDateTime = new DateTimeOffset(2022, 7, 22, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 22, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 8, 12, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8, 12, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Failed,
             TaskTypeId = 1
@@ -161,8 +170,8 @@ public class DbSeed
         var n2 = new Note()
         {
             Name = "Добавить кнопку на форму",
-            StartDateTime = new DateTimeOffset(2022, 7, 28, 15, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 28, 16, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 9, 18, 15, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 9, 18, 16, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.None,
             Status = TaskStatus.Waiting,
             TaskTypeId = 1
@@ -173,8 +182,8 @@ public class DbSeed
         var n3 = new Note()
         {
             Name = "Позвонить родителям",
-            StartDateTime = new DateTimeOffset(2022, 7, 28, 20, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 28, 20, 15, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 8, 13, 20, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8, 13, 20, 15, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Daily,
             Status = TaskStatus.Waiting,
             TaskTypeId = 4
