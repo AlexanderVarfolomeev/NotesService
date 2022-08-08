@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Duende.IdentityServer" Version="6.1.2" />
+    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.1.2" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
+    <ProjectReference Include="..\..\Data\Notes.Entities\Notes.Entities.csproj" />
+    <ProjectReference Include="..\..\Services\Notes.Settings\Notes.Settings.csproj" />
+    <ProjectReference Include="..\..\Shared\Notes.Common\Notes.Common.csproj" />
+  </ItemGroup>
+
+</Project>
