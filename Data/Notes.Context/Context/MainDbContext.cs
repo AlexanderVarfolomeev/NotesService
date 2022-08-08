@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Notes.Entities;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace Notes.Context.Context;
 
-public class MainDbContext : DbContext
+public class MainDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
 {
     public MainDbContext(DbContextOptions<MainDbContext> opts) : base(opts) { }
 

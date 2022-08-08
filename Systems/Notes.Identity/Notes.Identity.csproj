@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
     <ProjectReference Include="..\..\Data\Notes.Entities\Notes.Entities.csproj" />
     <ProjectReference Include="..\..\Services\Notes.Settings\Notes.Settings.csproj" />

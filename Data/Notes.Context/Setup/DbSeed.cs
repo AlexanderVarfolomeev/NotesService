@@ -5,7 +5,7 @@ using Notes.Entities;
 using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.Context.Setup;
-
+//TODO добавить юзера
 public class DbSeed
 {
     public static void Execute(IServiceProvider serviceProvider)
