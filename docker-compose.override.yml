@@ -14,7 +14,7 @@ services:
   notes_sqlserver:
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Password
+      - SA_PASSWORD=PassORd123
       - MSSQL_PID=Express
     ports:
       - "21433:1433"
