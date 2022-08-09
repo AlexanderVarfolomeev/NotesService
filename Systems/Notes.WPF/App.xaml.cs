@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
@@ -12,24 +16,42 @@ namespace Notes.WPF
     /// </summary>
     public partial class App : Application
     {
-        private ServiceProvider serviceProvider;
 
-        public App()
+        public static bool IsDesignMode { get; private set; } = true;
+
+        private static IHost? __Host;
+
+        public static IHost? Host => __Host ??= Program.CreateHostBuilder(Environment.GetCommandLineArgs()).Build();
+
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            ServiceCollection services = new ServiceCollection();
-            ConfigureServices(services);
-            serviceProvider = services.BuildServiceProvider();
+            IsDesignMode = false;
+            var host = Host;
+            base.OnStartup(e);
+
+            await host.StartAsync().ConfigureAwait(false);
         }
 
-        private void ConfigureServices(ServiceCollection services)
+        protected override async void OnExit(ExitEventArgs e)
         {
-            services.AddScoped<ITaskTypeService, TaskTypeService>();
-            services.AddScoped<IColorService, ColorService>();
-            services.AddScoped<INotesService, NotesService>();
-            services.AddScoped<IUserDialogService, UserDialogService>();
-            services.AddSingleton<MainWindow>();
+            base.OnExit(e);
+
+            var host = Host;
+            await host.StopAsync().ConfigureAwait(false);
+            host.Dispose();
+            __Host = null;
+        }
+
+        public static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
+        {
 
         }
-     
+
+        public static string CurrentDirectory => IsDesignMode
+            ? Path.GetDirectoryName(GetSourceCodePath())
+            : Environment.CurrentDirectory;
+
+        private static string GetSourceCodePath([CallerFilePath] string Path = null) => Path;
+
     }
 }
