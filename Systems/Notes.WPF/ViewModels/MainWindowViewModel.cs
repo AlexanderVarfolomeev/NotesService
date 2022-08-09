@@ -22,6 +22,7 @@ using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
 namespace Notes.WPF.ViewModels;
 //TODO вряди ли тут должно находится так много логики, мб перенести
+//TODO баг, если запускать в докере, время постоянно смещается
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly ITaskTypeService _taskTypeService;
