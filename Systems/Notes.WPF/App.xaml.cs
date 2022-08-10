@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Notes.WPF.Services.Auth;
 using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
@@ -53,6 +54,7 @@ namespace Notes.WPF
             services.AddScoped<ITaskTypeService, TaskTypeService>();
             services.AddScoped<IUserDialogService, UserDialogService>();
             services.AddSingleton<HttpClient>();
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         public static string CurrentDirectory => IsDesignMode

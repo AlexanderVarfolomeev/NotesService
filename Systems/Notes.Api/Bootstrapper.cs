@@ -1,4 +1,5 @@
-﻿using Notes.ColorService;
+﻿using Notes.AccountService;
+using Notes.ColorService;
 using Notes.NotesService;
 using Notes.Settings;
 using Notes.TaskTypeService;
@@ -13,7 +14,8 @@ public static class Bootstrapper
             .AddSettings()
             .AddTaskTypesService()
             .AddColorService()
-            .AddNotesService();
+            .AddNotesService()
+            .AddAccountService();
         return services;
     }
 }

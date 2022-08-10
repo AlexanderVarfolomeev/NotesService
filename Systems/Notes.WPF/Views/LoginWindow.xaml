@@ -18,9 +18,9 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Почта:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="1" Text="admin@gmail.com" VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="1" Text="{Binding Login, Source={StaticResource Container}}" VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="2" Text="Пароль:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="3" Text="password" VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="3" Text="{Binding Password, Source={StaticResource Container}}" VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
         <Button Grid.Row="4" Content="Войти" FontSize="16" FontWeight="Bold" Command="{Binding InitDataCommand, Source={StaticResource Container}}"/>
     </Grid>
 </Window>

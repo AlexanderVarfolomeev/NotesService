@@ -8,8 +8,10 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Notes.WPF.Models.Auth;
 using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.Services.Auth;
 using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.Colors.Models;
 using Notes.WPF.Services.Notes;
@@ -29,14 +31,16 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IColorService _colorServiceService;
     private readonly INotesService _notesService;
     private readonly IUserDialogService _userDialogService;
+    private readonly IAuthService _authService;
 
     //TODO добавить поддержку Dependency injection
-    public MainWindowViewModel(IColorService colorService, INotesService notesService, IUserDialogService userDialogService, ITaskTypeService taskTypeService)
+    public MainWindowViewModel(IColorService colorService, INotesService notesService, IUserDialogService userDialogService, ITaskTypeService taskTypeService, IAuthService authService)
     {
         _colorServiceService = colorService;
         _notesService = notesService;
         _userDialogService = userDialogService;
         _taskTypeService = taskTypeService;
+        _authService = authService;
 
         currentMonday = GetDateOfMondayOnThisWeek();
     }
@@ -44,9 +48,18 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Note? _selectedNote;
 
+    [ObservableProperty] private string _login;
+    [ObservableProperty] private string _password;
+
     [RelayCommand]
     private async Task InitData()
     {
+        LoginModel lg = new LoginModel()
+        {
+            Email = Login,
+            Password = Password
+        };
+        bool a =(await _authService.Login(lg)).Successful;
         Colors = new ObservableCollection<ColorResponse>(await _colorServiceService.GetColors());
         await RefreshData();
         //TODO авторизация
