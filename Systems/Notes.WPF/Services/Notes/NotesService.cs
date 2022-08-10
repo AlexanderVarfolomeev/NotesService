@@ -13,10 +13,10 @@ public class NotesService : INotesService
 {
     private readonly HttpClient client;
     private readonly IUserDialogService userDialogService;
-    public NotesService()
+    public NotesService(IUserDialogService userDialogService, HttpClient client)
     {
-        client = new HttpClient();
-        userDialogService = new UserDialogService();
+        this.userDialogService = userDialogService;
+        this.client = client;
     }
 
     public async Task<IEnumerable<Note>> GetNotes()

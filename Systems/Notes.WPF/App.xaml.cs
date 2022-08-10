@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Notes.WPF.Services.Colors;
 using Notes.WPF.Services.Notes;
 using Notes.WPF.Services.TaskTypes;
 using Notes.WPF.Services.UserDialog;
+using Notes.WPF.ViewModels;
 
 namespace Notes.WPF
 {
@@ -45,6 +47,12 @@ namespace Notes.WPF
         public static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
 
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddScoped<IColorService, ColorService>();
+            services.AddScoped<INotesService, NotesService>();
+            services.AddScoped<ITaskTypeService, TaskTypeService>();
+            services.AddScoped<IUserDialogService, UserDialogService>();
+            services.AddSingleton<HttpClient>();
         }
 
         public static string CurrentDirectory => IsDesignMode

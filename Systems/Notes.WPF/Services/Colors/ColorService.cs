@@ -11,11 +11,9 @@ namespace Notes.WPF.Services.Colors;
 public class ColorService : IColorService
 {
     private readonly HttpClient client;
-    private readonly UserDialogService userDialogService;
-    public ColorService()
+    public ColorService(HttpClient client)
     {
-        this.userDialogService = new UserDialogService();
-        client = new HttpClient();
+        this.client = client;
     }
     public  async Task<IEnumerable<ColorResponse>> GetColors()
     {

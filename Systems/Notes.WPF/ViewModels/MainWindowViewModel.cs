@@ -26,17 +26,17 @@ namespace Notes.WPF.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly ITaskTypeService _taskTypeService;
-    private readonly IColorService _colorService;
+    private readonly IColorService _colorServiceService;
     private readonly INotesService _notesService;
     private readonly IUserDialogService _userDialogService;
 
     //TODO добавить поддержку Dependency injection
-    public MainWindowViewModel()
+    public MainWindowViewModel(IColorService colorService, INotesService notesService, IUserDialogService userDialogService, ITaskTypeService taskTypeService)
     {
-        _colorService = new ColorService();
-        _notesService = new NotesService();
-        _taskTypeService = new TaskTypeService();
-        _userDialogService = new UserDialogService();
+        _colorServiceService = colorService;
+        _notesService = notesService;
+        _userDialogService = userDialogService;
+        _taskTypeService = taskTypeService;
 
         currentMonday = GetDateOfMondayOnThisWeek();
     }
@@ -47,7 +47,7 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task InitData()
     {
-        Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
+        Colors = new ObservableCollection<ColorResponse>(await _colorServiceService.GetColors());
         await RefreshData();
         //TODO авторизация
         if (true)

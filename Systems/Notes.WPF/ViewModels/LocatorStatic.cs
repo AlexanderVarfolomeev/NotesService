@@ -1,6 +1,8 @@
-﻿namespace Notes.WPF.ViewModels;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Notes.WPF.ViewModels;
 
 public static class LocatorStatic
 {
-    public static MainWindowViewModel mainVM = new MainWindowViewModel();
+    public static MainWindowViewModel mainVM = App.Host.Services.GetRequiredService<MainWindowViewModel>();
 }
