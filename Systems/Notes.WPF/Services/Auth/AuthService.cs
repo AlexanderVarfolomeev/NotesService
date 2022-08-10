@@ -33,7 +33,7 @@ namespace Notes.WPF.Services.Auth
             new KeyValuePair<string, string>("client_secret", Settings.ClientSecret),
             new KeyValuePair<string, string>("username", loginModel.Email!),
             new KeyValuePair<string, string>("password", loginModel.Password!)
-        };
+            };
 
             var requestContent = new FormUrlEncodedContent(request_body);
 
@@ -72,6 +72,10 @@ namespace Notes.WPF.Services.Auth
             if (!response.IsSuccessStatusCode)
             {
                 _userDialogService.ShowError("Ошибка при регистрации аккаунта.", "Ошибка!");
+            }
+            else
+            {
+                _userDialogService.ShowInformation("Аккаунт успешно зарегистрирован.", "Успешно.");
             }
         }
     }

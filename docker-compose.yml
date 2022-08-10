@@ -9,3 +9,11 @@ services:
 
   notes_sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
+
+  notes_identity:
+    image: ${DOCKER_REGISTRY-}notesis
+    build:
+      context: .
+      dockerfile: Systems/Notes.Identity/Dockerfile
+    depends_on:
+      - notes_sqlserver

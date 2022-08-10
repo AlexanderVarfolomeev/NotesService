@@ -16,9 +16,9 @@ public class DbSeed
         var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<MainDbContext>>();
         using var context = factory.CreateDbContext();
 
-        AddColors(context);
-        AddTaskTypes(context);
-        AddNotes(context);
+        //AddColors(context);
+        //AddTaskTypes(context);
+        //AddNotes(context);
     }
 
     private static void AddColors(MainDbContext context)

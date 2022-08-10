@@ -21,9 +21,11 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Введите вашу почту:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="1" Text="{Binding RegisterLogin, Source={StaticResource Container}}" VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="1" Text="{Binding RegisterLogin, Source={StaticResource Container}}" Width="150"
+                 VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="2" Text="Придумайте пароль:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="3" Text="{Binding RegisterPassword, Source={StaticResource Container}}" VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="3" Text="{Binding RegisterPassword, Source={StaticResource Container}}" Width="150"
+                 VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
         <Button Grid.Row="4" Content="Зарегистрироваться" IsDefault="True" 
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:RegisterWindow}}" FontWeight="Bold" FontSize="16">
             <Button.Command>

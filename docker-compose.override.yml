@@ -23,6 +23,14 @@ services:
     #volumes:      
     #  - sqlserver-data:/var/opt/mssql
 
+  notes_identity:
+    ports:
+      - "5020:80"
+    networks:
+      - shared-note
+    env_file:
+      - env.identity
+
 volumes:
   sqlserver-data:
 
