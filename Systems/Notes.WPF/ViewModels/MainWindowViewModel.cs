@@ -54,22 +54,21 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task InitData()
     {
-        LoginModel lg = new LoginModel()
+        bool succes = false;
+        LoginModel loginModel = new LoginModel()
         {
             Email = Login,
             Password = Password
         };
-        bool a =(await _authService.Login(lg)).Successful;
-        Colors = new ObservableCollection<ColorResponse>(await _colorServiceService.GetColors());
-        await RefreshData();
-        //TODO авторизация
-        if (true)
-        {
-            _userDialogService.OpenMainWindow();
-        }
+        succes = (await _authService.Login(loginModel)).Successful;
+        if (!succes)
+            _userDialogService.ShowError("Неверные логин или пароль!", "Ошибка идентификации.");
+
         else
         {
-            //_userDialogService.ShowError
+            Colors = new ObservableCollection<ColorResponse>(await _colorServiceService.GetColors());
+            await RefreshData();
+            _userDialogService.OpenMainWindow();
         }
     }
 
@@ -103,7 +102,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private TaskType? _selectedType;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private EditTaskType? _editType;
 
     #region Commands
@@ -174,7 +173,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Dictionary<string, double[]> _completedNotesLastFourWeeks;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private ISeries[] _series;
 
     [ObservableProperty]
