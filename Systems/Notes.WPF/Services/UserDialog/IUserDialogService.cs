@@ -3,6 +3,7 @@
 public interface IUserDialogService
 {
     void OpenMainWindow();
+    bool OpenRegisterWindow();
     bool Edit(object item);
     bool Add(object item);
     void ShowInformation(string Information, string Caption);

@@ -1,5 +1,7 @@
 ﻿using Notes.AccountService.Models;
 using Microsoft.AspNetCore.Identity;
+using Notes.Common.Exceptions;
+
 namespace Notes.AccountService;
 
 public class AccountService : IAccountService
@@ -17,8 +19,7 @@ public class AccountService : IAccountService
     public async Task<bool> RegisterAccount(RegisterAccountModel model)
     {
         var user = await userManager.FindByEmailAsync(model.Email);
-        if (user != null)
-            throw new Exception(""); // исправить на новое исключение
+        ProcessException.ThrowIf(() => user != null, "The user with this Email already exists.");
 
         user = new IdentityUser<Guid>()
         {
@@ -29,7 +30,6 @@ public class AccountService : IAccountService
             PhoneNumberConfirmed = false
         };
 
-
         var result = await userManager.CreateAsync(user, model.Password);
         return result.Succeeded;
     }
@@ -37,8 +37,7 @@ public class AccountService : IAccountService
     public async Task<bool> DeleteAccount(AccountModel model)
     {
         var user = await userManager.FindByEmailAsync(model.Email);
-        if (user == null)
-            throw new NotImplementedException();
+        ProcessException.ThrowIf(() => user is null, "The user with this Email was not found in the database.");
 
         var result = sgInManager.CheckPasswordSignInAsync(user, model.Password, false);
         if (result.Result.Succeeded)

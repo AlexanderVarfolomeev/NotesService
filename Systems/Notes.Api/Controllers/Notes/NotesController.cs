@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Notes.Api.Controllers.Notes.Models;
 using Notes.NotesService;
@@ -8,6 +9,7 @@ namespace Notes.Api.Controllers.Notes
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class NotesController : ControllerBase
     {
         private readonly IMapper mapper;

@@ -13,6 +13,12 @@ public class UserDialogService : IUserDialogService
         dialog.ShowDialog();
     }
 
+    public bool OpenRegisterWindow()
+    {
+        var dialog = new RegisterWindow();
+        return dialog.ShowDialog() ?? false;
+    }
+
     public bool Edit(object item)
     {
         if (item is null) throw new ArgumentNullException(nameof(item));

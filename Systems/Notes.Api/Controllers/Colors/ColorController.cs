@@ -8,6 +8,7 @@ namespace Notes.Api.Controllers.Colors
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ColorController : ControllerBase
     {
         private readonly IMapper mapper;

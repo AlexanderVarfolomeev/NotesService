@@ -33,8 +33,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IUserDialogService _userDialogService;
     private readonly IAuthService _authService;
 
-    //TODO добавить поддержку Dependency injection
-    public MainWindowViewModel(IColorService colorService, INotesService notesService, IUserDialogService userDialogService, ITaskTypeService taskTypeService, IAuthService authService)
+    public MainWindowViewModel(IColorService colorService, INotesService notesService,
+        IUserDialogService userDialogService, ITaskTypeService taskTypeService, IAuthService authService)
     {
         _colorServiceService = colorService;
         _notesService = notesService;
@@ -45,8 +45,7 @@ public partial class MainWindowViewModel : ObservableObject
         currentMonday = GetDateOfMondayOnThisWeek();
     }
 
-    [ObservableProperty]
-    private Note? _selectedNote;
+    #region Login
 
     [ObservableProperty] private string _login;
     [ObservableProperty] private string _password;
@@ -54,16 +53,14 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private async Task InitData()
     {
-        bool succes = false;
         LoginModel loginModel = new LoginModel()
         {
             Email = Login,
             Password = Password
         };
-        succes = (await _authService.Login(loginModel)).Successful;
-        if (!succes)
+        bool successful = (await _authService.Login(loginModel)).Successful;
+        if (!successful)
             _userDialogService.ShowError("Неверные логин или пароль!", "Ошибка идентификации.");
-
         else
         {
             Colors = new ObservableCollection<ColorResponse>(await _colorServiceService.GetColors());
@@ -71,6 +68,7 @@ public partial class MainWindowViewModel : ObservableObject
             _userDialogService.OpenMainWindow();
         }
     }
+    #endregion
 
     [RelayCommand]
     private async Task RefreshData()
@@ -483,7 +481,8 @@ public partial class MainWindowViewModel : ObservableObject
     #endregion
 
     #region Notes
-
+    [ObservableProperty]
+    private Note? _selectedNote;
     private void RefreshDaysLabels()
     {
         MondayLabel = currentMonday.ToString("dd/MM");
@@ -593,6 +592,25 @@ public partial class MainWindowViewModel : ObservableObject
                 await _notesService.AddNote(EditNote);
                 await RefreshData();
             }
+        }
+    }
+
+    #endregion
+
+    #region Register
+    [ObservableProperty] private string _registerLogin;
+    [ObservableProperty] private string _registerPassword;
+
+    [RelayCommand]
+    private async Task Register()
+    {
+        if (_userDialogService.OpenRegisterWindow())
+        {
+            await _authService.Register(new LoginModel()
+            {
+                Email = RegisterLogin,
+                Password = RegisterPassword
+            });
         }
     }
 

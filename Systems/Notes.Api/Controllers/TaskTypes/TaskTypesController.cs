@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Notes.Api.Controllers.TaskTypes.Models;
 using Notes.TaskTypeService;
@@ -8,6 +9,7 @@ namespace Notes.Api.Controllers.TaskTypes
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TaskTypesController : ControllerBase
     {
         private readonly IMapper mapper;

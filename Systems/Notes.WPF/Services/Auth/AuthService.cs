@@ -8,16 +8,18 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using Notes.WPF.Models.Auth;
+using Notes.WPF.Services.UserDialog;
 
 namespace Notes.WPF.Services.Auth
 {
     internal class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
-
-        public AuthService(HttpClient httpClient)
+        private readonly IUserDialogService _userDialogService;
+        public AuthService(HttpClient httpClient, IUserDialogService userDialogService)
         {
             _httpClient = httpClient;
+            _userDialogService = userDialogService;
         }
 
         public async Task<LoginResult> Login(LoginModel loginModel)
@@ -55,6 +57,22 @@ namespace Notes.WPF.Services.Auth
         {
 
             _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public async Task Register(LoginModel registerModel)
+        {
+            string url = $"{Settings.ApiRoot}/Account/Register";
+
+
+            var body = JsonSerializer.Serialize(registerModel);
+            var request = new StringContent(body, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(url, request);
+
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _userDialogService.ShowError("Ошибка при регистрации аккаунта.", "Ошибка!");
+            }
         }
     }
 }
