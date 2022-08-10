@@ -1,31 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Notes.Context.Context;
 using Notes.Entities;
 using TaskStatus = Notes.Entities.TaskStatus;
 
 namespace Notes.Context.Setup;
-//TODO добавить юзера
 public class DbSeed
 {
     public static void Execute(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.GetService<IServiceScopeFactory>()?.CreateScope();
+
         ArgumentNullException.ThrowIfNull(scope);
 
         var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<MainDbContext>>();
         using var context = factory.CreateDbContext();
+        AddData(context);
 
-        //AddColors(context);
-        //AddTaskTypes(context);
-        //AddNotes(context);
+    }
+
+    private static void AddData(MainDbContext context)
+    {
+        if (context.Colors.Any() || context.Tasks.Any() || context.Notes.Any())
+            return;
+        AddColors(context);
+        AddTaskTypes(context);
+        AddNotes(context);
     }
 
     private static void AddColors(MainDbContext context)
     {
-        if (context.Colors.Any())
-            return;
-
         var c1 = new TypeColor()
         {
             Code = "#FF0000",
@@ -104,8 +109,6 @@ public class DbSeed
 
     private static void AddTaskTypes(MainDbContext context)
     {
-        if (context.Tasks.Any())
-            return;
 
         var t1 = new TaskType()
         {
@@ -147,49 +150,250 @@ public class DbSeed
 
         context.Tasks.Add(t5);
 
+        var t6 = new TaskType()
+        {
+            Name = "Спорт",
+            TypeColorId = 6
+        };
+
+        context.Tasks.Add(t6);
+
         context.SaveChanges();
     }
 
     private static void AddNotes(MainDbContext context)
     {
-        if (context.Notes.Any())
-            return;
 
-        var n1 = new Note()
+        var n = new Note()
         {
-            Name = "Помыть пол",
-            StartDateTime = new DateTimeOffset(2022, 8, 12, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8, 12, 13, 30, 0, TimeSpan.Zero),
-            RepeatFrequency = RepeatFrequency.Weekly,
+            Name = "Убраться",
+            StartDateTime = new DateTimeOffset(2022, 7, 5, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 5, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Daily,
             Status = TaskStatus.Failed,
             TaskTypeId = 1
         };
 
-        context.Notes.Add(n1);
+        context.Notes.Add(n);
 
-        var n2 = new Note()
+        int day = 6;
+        for (int i = 0; i < 16; i++)
         {
-            Name = "Добавить кнопку на форму",
-            StartDateTime = new DateTimeOffset(2022, 9, 18, 15, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 9, 18, 16, 30, 0, TimeSpan.Zero),
-            RepeatFrequency = RepeatFrequency.None,
-            Status = TaskStatus.Waiting,
-            TaskTypeId = 1
-        };
+            n = new Note()
+            {
+                Name = "Убраться",
+                StartDateTime = new DateTimeOffset(2022, 7, day++, 13, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 7, day, 13, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 1
+            };
 
-        context.Notes.Add(n2);
+            context.Notes.Add(n);
+        }
 
-        var n3 = new Note()
+        day = 1;
+        for (int i = 0; i < 25; i++)
         {
-            Name = "Позвонить родителям",
-            StartDateTime = new DateTimeOffset(2022, 8, 13, 20, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8, 13, 20, 15, 0, TimeSpan.Zero),
-            RepeatFrequency = RepeatFrequency.Daily,
-            Status = TaskStatus.Waiting,
+            n = new Note()
+            {
+                Name = "Сделать дз",
+                StartDateTime = new DateTimeOffset(2022, 7, day++, 15, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 7, day, 15, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 3
+            };
+
+            context.Notes.Add(n);
+        }
+
+        day = 1;
+        for (int i = 0; i < 25; i++)
+        {
+            n = new Note()
+            {
+                Name = "Созвон",
+                StartDateTime = new DateTimeOffset(2022, 7, day++, 19, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 7, day, 20, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 2
+            };
+
+            context.Notes.Add(n);
+        }
+
+        n = new Note()
+        {
+            Name = "Поздравить леру с др",
+            StartDateTime = new DateTimeOffset(2022, 7, 11, 11, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 11, 11, 10, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Annually,
+            Status = TaskStatus.Done,
             TaskTypeId = 4
         };
 
-        context.Notes.Add(n3);
+        context.Notes.Add(n);
+
+        n = new Note()
+        {
+            Name = "Поздравить сашу с др",
+            StartDateTime = new DateTimeOffset(2022, 7, 16, 11, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 16, 11, 10, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Annually,
+            Status = TaskStatus.Done,
+            TaskTypeId = 4
+        };
+
+        context.Notes.Add(n);
+
+
+        n = new Note()
+        {
+            Name = "Встреча с максом",
+            StartDateTime = new DateTimeOffset(2022, 7, 19, 11, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 19, 16, 0, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Annually,
+            Status = TaskStatus.Waiting,
+            TaskTypeId = 2
+        };
+
+        context.Notes.Add(n);
+
+
+        day = 1;
+        for (int i = 0; i < 14; i++)
+        {
+            n = new Note()
+            {
+                Name = "Убраться",
+                StartDateTime = new DateTimeOffset(2022, 8, day++, 13, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 8, day, 13, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 1
+            };
+
+            context.Notes.Add(n);
+        }
+
+        day = 1;
+        for (int i = 0; i < 14; i++)
+        {
+            n = new Note()
+            {
+                Name = "Сделать дз",
+                StartDateTime = new DateTimeOffset(2022, 8, day++, 15, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 8, day, 15, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 3
+            };
+
+            context.Notes.Add(n);
+        }
+
+        day = 1;
+        for (int i = 0; i < 14; i++)
+        {
+            n = new Note()
+            {
+                Name = "Созвон",
+                StartDateTime = new DateTimeOffset(2022, 8, day++, 19, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 8, day, 20, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 2
+            };
+
+            context.Notes.Add(n);
+        }
+
+        day = 15;
+        for (int i = 0; i < 14; i++)
+        {
+            n = new Note()
+            {
+                Name = "Поход в зал",
+                StartDateTime = new DateTimeOffset(2022, 7, day++, 9, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 7, day, 12, 30, 0, TimeSpan.Zero),
+                RepeatFrequency = RepeatFrequency.Daily,
+                Status = TaskStatus.Done,
+                TaskTypeId = 5
+            };
+
+            context.Notes.Add(n);
+        }
+
+        n = new Note()
+        {
+            Name = "Поход в бассейн",
+            StartDateTime = new DateTimeOffset(2022, 7, 14, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 14, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Weekly,
+            Status = TaskStatus.Done,
+            TaskTypeId = 5
+        };
+        context.Notes.Add(n);
+
+        n = new Note()
+        {
+            Name = "Поход в бассейн",
+            StartDateTime = new DateTimeOffset(2022, 7, 21, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 21, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Weekly,
+            Status = TaskStatus.Done,
+            TaskTypeId = 5
+        };
+        context.Notes.Add(n);
+
+        n = new Note()
+        {
+            Name = "Поход в бассейн",
+            StartDateTime = new DateTimeOffset(2022, 7, 28, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 7, 28, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Weekly,
+            Status = TaskStatus.Failed,
+            TaskTypeId = 5
+        };
+        context.Notes.Add(n);
+
+
+        n = new Note()
+        {
+            Name = "Поход в бассейн",
+            StartDateTime = new DateTimeOffset(2022, 8, 4, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8, 4, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Weekly,
+            Status = TaskStatus.Done,
+            TaskTypeId = 5
+        };
+        context.Notes.Add(n);
+
+        n = new Note()
+        {
+            Name = "Поход в бассейн",
+            StartDateTime = new DateTimeOffset(2022, 8,11, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8,11, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Weekly,
+            Status = TaskStatus.Done,
+            TaskTypeId = 5
+        };
+
+        context.Notes.Add(n);
+        n = new Note()
+        {
+            Name = "Поход в бассейн",
+            StartDateTime = new DateTimeOffset(2022, 8, 18, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8, 18, 13, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Weekly,
+            Status = TaskStatus.Waiting,
+            TaskTypeId = 5
+        };
+        context.Notes.Add(n);
+
+
         context.SaveChanges();
     }
 }

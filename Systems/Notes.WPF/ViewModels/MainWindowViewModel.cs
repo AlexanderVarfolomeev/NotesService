@@ -43,6 +43,9 @@ public partial class MainWindowViewModel : ObservableObject
         _authService = authService;
 
         currentMonday = GetDateOfMondayOnThisWeek();
+
+        Login = "user@mail.ru";
+        Password = "pass123";
     }
 
     #region Login
