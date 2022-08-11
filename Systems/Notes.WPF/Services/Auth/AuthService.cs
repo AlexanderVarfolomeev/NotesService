@@ -53,12 +53,6 @@ namespace Notes.WPF.Services.Auth
             return loginResult;
         }
 
-        public async Task Logout()
-        {
-
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-        }
-
         public async Task Register(LoginModel registerModel)
         {
             string url = $"{Settings.ApiRoot}/Account/Register";
