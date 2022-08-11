@@ -326,6 +326,29 @@ public class DbSeed
             context.Notes.Add(n);
         }
 
+
+        context.Notes.Add(new Note()
+        {
+            Name = "Поход в зал",
+            StartDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 9, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 12, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Daily,
+            Status = TaskStatus.Waiting,
+            TaskTypeId = 5
+        });
+
+        n = new Note()
+        {
+            Name = "Созвон",
+            StartDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 19, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 20, 30, 0, TimeSpan.Zero),
+            RepeatFrequency = RepeatFrequency.Daily,
+            Status = TaskStatus.Waiting,
+            TaskTypeId = 2
+        };
+
+        context.Notes.Add(n);
+
         n = new Note()
         {
             Name = "Поход в бассейн",
