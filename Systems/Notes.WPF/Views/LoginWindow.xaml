@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Notes.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="Вход" Height="180" Width="350">
+        Title="Вход" Height="200" Width="400">
     <Window.Resources>
         <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
     </Window.Resources>

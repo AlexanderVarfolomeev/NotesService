@@ -81,7 +81,7 @@ public class NotesService : INotesService
         await context.SaveChangesAsync();
     }
 
-    //TODO разбить на методы?
+    //TODO разбить на методы? исправить код
     public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeksDictionary()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
