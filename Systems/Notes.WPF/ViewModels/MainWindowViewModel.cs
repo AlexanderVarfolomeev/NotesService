@@ -23,32 +23,29 @@ using SkiaSharp;
 using TaskStatus = Notes.WPF.Models.Notes.TaskStatus;
 
 namespace Notes.WPF.ViewModels;
-//TODO вряди ли тут должно находится так много логики, мб перенести
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly ITaskTypeService _taskTypeService;
-    private readonly IColorService _colorServiceService;
+    private readonly IColorService _colorService;
     private readonly INotesService _notesService;
     private readonly IUserDialogService _userDialogService;
-    private readonly IAuthService _authService;
 
     public MainWindowViewModel(IColorService colorService, INotesService notesService,
-        IUserDialogService userDialogService, ITaskTypeService taskTypeService, IAuthService authService)
+        IUserDialogService userDialogService, ITaskTypeService taskTypeService)
     {
-        _colorServiceService = colorService;
+        _colorService = colorService;
         _notesService = notesService;
         _userDialogService = userDialogService;
         _taskTypeService = taskTypeService;
-        _authService = authService;
 
         currentMonday = GetDateOfMondayOnThisWeek();
-        
     }
 
 
     [RelayCommand]
     public async Task RefreshData()
     {
+        Colors = new ObservableCollection<ColorResponse>(await _colorService.GetColors());
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
         await RepetitionNotesRefresh();
         CurrentWeekNotes = new ObservableCollection<Note>((await _notesService
@@ -153,7 +150,6 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Axis[] _xAxes;
 
-    //TODO подправить код
     private async Task RefreshLastFourWeeksNotes()
     {
         var dates = new string[4];
