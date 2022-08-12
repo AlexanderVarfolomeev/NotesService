@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="Регистрация" Height="200" Width="300">
     <Window.Resources>
-        <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
+        <x:Static Member="vm:LocatorStatic.registerVM" x:Key="Container"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,11 +26,7 @@
         <TextBlock Grid.Row="2" Text="Придумайте пароль:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
         <TextBox Grid.Row="3" Text="{Binding RegisterPassword, Source={StaticResource Container}}" Width="150"
                  VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
-        <Button Grid.Row="4" Content="Зарегистрироваться" IsDefault="True" 
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:RegisterWindow}}" FontWeight="Bold" FontSize="16">
-            <Button.Command>
-                <commands:CloseDialogCommand DialogResult="true"/>
-            </Button.Command>
-        </Button>
+        <Button Grid.Row="4" Content="Зарегистрироваться" IsDefault="True" FontSize="16" FontWeight="Bold" Command="{Binding CloseAndSaveCommand, Source={StaticResource Container}}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:RegisterWindow}}"/>
     </Grid>
 </Window>

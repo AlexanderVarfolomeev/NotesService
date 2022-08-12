@@ -7,5 +7,5 @@ public interface IAuthService
 {
 
     Task<LoginResult> Login(LoginModel loginModel);
-    Task Register(LoginModel registerModel);
+    Task<bool> Register(LoginModel registerModel);
 }

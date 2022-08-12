@@ -46,8 +46,6 @@ public partial class MainWindowViewModel : ObservableObject
         Login = "user@mail.ru";
         Password = "pass123";
 
-        RegisterLogin = "user@mail.ru";
-        RegisterPassword = "pass123";
     }
 
     #region Login
@@ -602,22 +600,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     #endregion
 
-    #region Register
-    [ObservableProperty] private string _registerLogin;
-    [ObservableProperty] private string _registerPassword;
-
     [RelayCommand]
-    private async Task Register()
+    private void Register()
     {
-        if (_userDialogService.OpenRegisterWindow())
-        {
-            await _authService.Register(new LoginModel()
-            {
-                Email = RegisterLogin,
-                Password = RegisterPassword
-            });
-        }
+        _userDialogService.OpenRegisterWindow();
     }
-
-    #endregion
 }

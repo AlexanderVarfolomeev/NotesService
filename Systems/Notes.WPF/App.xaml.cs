@@ -49,6 +49,7 @@ namespace Notes.WPF
         {
 
             services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<RegisterViewModel>();
             services.AddScoped<IColorService, ColorService>();
             services.AddScoped<INotesService, NotesService>();
             services.AddScoped<ITaskTypeService, TaskTypeService>();

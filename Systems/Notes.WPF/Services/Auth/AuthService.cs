@@ -53,7 +53,7 @@ namespace Notes.WPF.Services.Auth
             return loginResult;
         }
 
-        public async Task Register(LoginModel registerModel)
+        public async Task<bool> Register(LoginModel registerModel)
         {
             string url = $"{Settings.ApiRoot}/Account/Register";
 
@@ -63,14 +63,7 @@ namespace Notes.WPF.Services.Auth
             var response = await _httpClient.PostAsync(url, request);
 
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _userDialogService.ShowError("Ошибка при регистрации аккаунта.", "Ошибка!");
-            }
-            else
-            {
-                _userDialogService.ShowInformation("Аккаунт успешно зарегистрирован.", "Успешно.");
-            }
+            return response.IsSuccessStatusCode;
         }
     }
 }
