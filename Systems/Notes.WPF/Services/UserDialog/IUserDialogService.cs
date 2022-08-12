@@ -1,8 +1,10 @@
-﻿namespace Notes.WPF.Services.UserDialog;
+﻿using System.Threading.Tasks;
+
+namespace Notes.WPF.Services.UserDialog;
 
 public interface IUserDialogService
 {
-    void OpenMainWindow();
+    Task OpenMainWindow();
     bool OpenRegisterWindow();
     bool Edit(object item);
     bool Add(object item);

@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using Notes.WPF.Models.Notes;
 using Notes.WPF.Models.TaskTypes;
+using Notes.WPF.ViewModels;
 using Notes.WPF.Views;
 
 namespace Notes.WPF.Services.UserDialog;
 public class UserDialogService : IUserDialogService
 {
-    public void OpenMainWindow()
+    public async Task OpenMainWindow()
     {
         var dialog = new MainWindow();
+        await LocatorStatic.mainVM.RefreshData();
         dialog.ShowDialog();
     }
 

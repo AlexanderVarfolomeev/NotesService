@@ -43,38 +43,11 @@ public partial class MainWindowViewModel : ObservableObject
 
         currentMonday = GetDateOfMondayOnThisWeek();
         
-        Login = "user@mail.ru";
-        Password = "pass123";
-
     }
 
-    #region Login
-
-    [ObservableProperty] private string _login;
-    [ObservableProperty] private string _password;
 
     [RelayCommand]
-    private async Task InitData()
-    {
-        LoginModel loginModel = new LoginModel()
-        {
-            Email = Login,
-            Password = Password
-        };
-        bool successful = (await _authService.Login(loginModel)).Successful;
-        if (!successful)
-            _userDialogService.ShowError("Неверные логин или пароль!", "Ошибка идентификации.");
-        else
-        {
-            Colors = new ObservableCollection<ColorResponse>(await _colorServiceService.GetColors());
-            await RefreshData();
-            _userDialogService.OpenMainWindow();
-        }
-    }
-    #endregion
-
-    [RelayCommand]
-    private async Task RefreshData()
+    public async Task RefreshData()
     {
         TaskTypes = new ObservableCollection<TaskType>(await _taskTypeService.GetTaskTypes());
         await RepetitionNotesRefresh();
@@ -600,9 +573,4 @@ public partial class MainWindowViewModel : ObservableObject
 
     #endregion
 
-    [RelayCommand]
-    private void Register()
-    {
-        _userDialogService.OpenRegisterWindow();
-    }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Вход" Height="200" Width="400">
     <Window.Resources>
-        <x:Static Member="vm:LocatorStatic.mainVM" x:Key="Container"/>
+        <x:Static Member="vm:LocatorStatic.loginVM" x:Key="LoginContainer"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -22,12 +22,12 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Почта:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="1"  Grid.ColumnSpan="2" Text="{Binding Login, Source={StaticResource Container}}" Width="150"
+        <TextBox Grid.Row="1"  Grid.ColumnSpan="2" Text="{Binding Email, Source={StaticResource LoginContainer}}" Width="150"
                  VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="2"  Grid.ColumnSpan="2" Text="Пароль:" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="3"  Grid.ColumnSpan="2" Text="{Binding Password, Source={StaticResource Container}}" Width="150"
+        <TextBox Grid.Row="3"  Grid.ColumnSpan="2" Text="{Binding Password, Source={StaticResource LoginContainer}}" Width="150"
                  VerticalAlignment="Center" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center"/>
-        <Button Grid.Row="4"  Grid.Column="0" Content="Зарегистрироваться" FontSize="16" FontWeight="Bold" Command="{Binding RegisterCommand, Source={StaticResource Container}}"/>
-        <Button Grid.Row="4"  Grid.Column="1" Content="Войти" FontSize="16" FontWeight="Bold" Command="{Binding InitDataCommand, Source={StaticResource Container}}"/>
+        <Button Grid.Row="4"  Grid.Column="0" Content="Зарегистрироваться" FontSize="16" FontWeight="Bold" Command="{Binding RegisterCommand, Source={StaticResource LoginContainer}}"/>
+        <Button Grid.Row="4"  Grid.Column="1" Content="Войти" FontSize="16" FontWeight="Bold" Command="{Binding LoginCommand, Source={StaticResource LoginContainer}}"/>
     </Grid>
 </Window>
