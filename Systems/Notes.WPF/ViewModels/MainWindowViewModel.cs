@@ -293,28 +293,25 @@ public partial class MainWindowViewModel : ObservableObject
     //TODO ужасный код, оптимизировать, мб занести каждый день в массив и работать с ним, разнести по методам
     private void RefreshNotes()
     {
+        Func<Note, bool> checkNoneRepeat = x => 
+            (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done);
+
         var today = DateTimeOffset.Now;
         MondayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Monday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Monday && checkNoneRepeat(x)));
         TuesdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Tuesday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Tuesday && checkNoneRepeat(x)));
         WednesdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Wednesday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Wednesday && checkNoneRepeat(x)));
         ThursdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Thursday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Thursday && checkNoneRepeat(x)));
         FridayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Friday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Friday && checkNoneRepeat(x)));
         SaturdayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Saturday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Saturday && checkNoneRepeat(x)));
         SundayNotes = new ObservableCollection<Note>(CurrentWeekNotes
-            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Sunday &&
-                        (x.RepeatFrequency == RepeatFrequency.None || x.Status == TaskStatus.Failed || x.Status == TaskStatus.Done)));
+            .Where(x => x.StartDateTime.DayOfWeek == DayOfWeek.Sunday && checkNoneRepeat(x)));
+
 
         //TODO придумать как оптимизировать!!!!!
         foreach (var everyDayNote in _everyDayNotes)

@@ -81,7 +81,6 @@ public class NotesService : INotesService
         await context.SaveChangesAsync();
     }
 
-    //TODO разбить на методы? исправить код
     public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeksDictionary()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
@@ -89,33 +88,29 @@ public class NotesService : INotesService
             .Include(x => x.Type)
             .Include(x => x.Type.Color)
             .AsQueryable();
-        var data = (await notes.ToListAsync()).Select(x => mapper.Map<NoteModel>(x));
 
-        var result = data.Select(x => x)
-            .Where(x => IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done && x.Type !="Empty").ToList();
-
-        Dictionary<string, IEnumerable<NoteModel>> resultDictionary = new Dictionary<string, IEnumerable<NoteModel>>();
+        var result = (await notes.ToListAsync())
+            .Where(x => IncludeInLastFourWeek(x.StartDateTime.LocalDateTime) && x.Status == TaskStatus.Done &&
+                        x.Type.Name != "Empty").Select(x => mapper.Map<NoteModel>(x)).ToList();
 
         var dateTimeNow = DateTimeOffset.Now;
         var startDate = dateTimeNow.AddDays(-21 - ((int)dateTimeNow.DayOfWeek == 0 ? 7 : (int)dateTimeNow.DayOfWeek) + 1);
+
+        List<IEnumerable<NoteModel>> list = new List<IEnumerable<NoteModel>>();
 
         for (int i = 0; i < 4; i++)
         {
             var start = startDate.AddDays(7 * i);
             var end = i == 3 ? dateTimeNow : start.AddDays(6);
 
-            var startStr = start.Day + "." + start.Month;
-            var endStr = end.Day + "." + end.Month;
-
-            resultDictionary.Add(startStr + " - " + endStr,
-                result.Where(x => IncludeInInterval(start, end, x.StartDateTime)));
+            list.Add(result.Where(x => IncludeInInterval(start, end, x.StartDateTime)));
         }
 
         Dictionary<string, double[]> dictionary = new Dictionary<string, double[]>();
         int j = 0;
-        foreach (var week in resultDictionary)
+        foreach (var week in list)
         {
-            foreach (var note in week.Value)
+            foreach (var note in week)
             {
                 if (!dictionary.ContainsKey(note.Type))
                     dictionary.Add(note.Type, new double[4] { 0, 0, 0, 0 });

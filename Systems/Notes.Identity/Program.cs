@@ -2,7 +2,6 @@ using Notes.Identity;
 using Notes.Identity.Configuration;
 using Notes.Settings.Settings;
 using Notes.Settings.Source;
-//TODO добавить serilog
 var builder = WebApplication.CreateBuilder(args);
 
 var settings = new IS4Settings(new SettingsSource());
