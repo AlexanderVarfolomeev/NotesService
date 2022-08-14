@@ -17,7 +17,7 @@ public static class Bootstrapper
         services.AddSingleton<IDbSettings, DbSettings>();
         services.AddSingleton<IGeneralSettings, GeneralSettings>();
         services.AddSingleton<IIdentitySettings, IdentitySettings>();
-
+        services.AddSingleton<IEmailSettings, EmailSettings>();
         return services;
     }
 }

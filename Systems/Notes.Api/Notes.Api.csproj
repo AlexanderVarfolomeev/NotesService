@@ -44,6 +44,7 @@
     <ProjectReference Include="..\..\Data\Notes.Context\Notes.Context.csproj" />
     <ProjectReference Include="..\..\Services\Notes.AccountService\Notes.AccountService.csproj" />
     <ProjectReference Include="..\..\Services\Notes.ColorService\Notes.ColorService.csproj" />
+    <ProjectReference Include="..\..\Services\Notes.EmailService\Notes.EmailService.csproj" />
     <ProjectReference Include="..\..\Services\Notes.NotesService\Notes.NotesService.csproj" />
     <ProjectReference Include="..\..\Services\Notes.Settings\Notes.Settings.csproj" />
     <ProjectReference Include="..\..\Services\Notes.TaskTypeService\Notes.TaskTypeService.csproj" />

@@ -1,6 +1,8 @@
 ﻿using Notes.AccountService.Models;
 using Microsoft.AspNetCore.Identity;
 using Notes.Common.Exceptions;
+using Notes.EmailService;
+using Notes.EmailService.Models;
 
 namespace Notes.AccountService;
 
@@ -8,11 +10,12 @@ public class AccountService : IAccountService
 {
     private readonly UserManager<IdentityUser<Guid>> userManager;
     private readonly SignInManager<IdentityUser<Guid>> sgInManager;
-
-    public AccountService(UserManager<IdentityUser<Guid>> userManager, SignInManager<IdentityUser<Guid>> sgInManager)
+    private readonly IEmailSender emailSender;
+    public AccountService(UserManager<IdentityUser<Guid>> userManager, SignInManager<IdentityUser<Guid>> sgInManager, IEmailSender emailSender)
     {
         this.userManager = userManager;
         this.sgInManager = sgInManager;
+        this.emailSender = emailSender;
     }
 
 
@@ -31,6 +34,15 @@ public class AccountService : IAccountService
         };
 
         var result = await userManager.CreateAsync(user, model.Password);
+        if (result.Succeeded)
+        {
+            await emailSender.SendEmailAsync(new EmailModel()
+            {
+                Email = model.Email,
+                Subject = "NotesService",
+                Message = "Your account was  successfully registered!"
+            });
+        }
         return result.Succeeded;
     }
 
@@ -43,6 +55,12 @@ public class AccountService : IAccountService
         if (result.Result.Succeeded)
         {
             await userManager.DeleteAsync(user);
+            await emailSender.SendEmailAsync(new EmailModel()
+            {
+                Email = model.Email,
+                Subject = "NotesService",
+                Message = "Your account was  successfully deleted!"
+            });
         }
 
         return result.Result.Succeeded;
