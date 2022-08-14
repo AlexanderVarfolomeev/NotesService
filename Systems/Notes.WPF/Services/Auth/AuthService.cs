@@ -55,7 +55,7 @@ namespace Notes.WPF.Services.Auth
 
         public async Task<bool> Register(LoginModel registerModel)
         {
-            string url = $"{Settings.ApiRoot}/Account/Register";
+            string url = $"{Settings.ApiRoot}/v1/Accounts/Register";
 
 
             var body = JsonSerializer.Serialize(registerModel);

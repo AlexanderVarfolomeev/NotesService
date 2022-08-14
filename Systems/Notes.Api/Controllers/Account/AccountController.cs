@@ -6,7 +6,7 @@ using Notes.Api.Controllers.Account.Models;
 
 namespace Notes.Api.Controllers.Account
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/accounts")]
     [ApiController]
     [ApiVersion("1.0")]
     public class AccountController : Controller

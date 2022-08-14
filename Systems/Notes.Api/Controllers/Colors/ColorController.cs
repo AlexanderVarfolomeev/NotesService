@@ -6,7 +6,8 @@ using Notes.ColorService;
 
 namespace Notes.Api.Controllers.Colors
 {
-    [Route("api/[controller]")]
+  
+    [Route("api/v{version:apiVersion}/Color")]
     [ApiController]
     [ApiVersion("1.0")]
     [Authorize]

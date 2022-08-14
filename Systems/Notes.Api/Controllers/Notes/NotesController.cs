@@ -7,7 +7,8 @@ using Notes.NotesService.Models;
 
 namespace Notes.Api.Controllers.Notes
 {
-    [Route("api/[controller]")]
+    
+    [Route("api/v{version:apiVersion}/notes")]
     [ApiController]
     [ApiVersion("1.0")]
     [Authorize]

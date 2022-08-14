@@ -20,7 +20,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task<IEnumerable<TaskType>> GetTaskTypes()
     {
-        string url = $"{Settings.ApiRoot}/TaskTypes";
+        string url = $"{Settings.ApiRoot}/v1/TaskTypes";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
@@ -39,7 +39,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task<TaskType> GetTaskById(int taskId)
     {
-        string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
+        string url = $"{Settings.ApiRoot}/v1/TaskTypes/{taskId}";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
@@ -58,7 +58,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task AddTask(EditTaskType task)
     {
-        string url = $"{Settings.ApiRoot}/TaskTypes";
+        string url = $"{Settings.ApiRoot}/v1/TaskTypes";
 
 
         var body = JsonSerializer.Serialize(task);
@@ -73,7 +73,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task UpdateTask(EditTaskType task, int taskId)
     {
-        string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
+        string url = $"{Settings.ApiRoot}/v1/TaskTypes/{taskId}";
 
         var body = JsonSerializer.Serialize(task);
         var request = new StringContent(body, Encoding.UTF8, "application/json");
@@ -88,7 +88,7 @@ public class TaskTypeService : ITaskTypeService
 
     public async Task DeleteTask(int taskId)
     {
-        string url = $"{Settings.ApiRoot}/TaskTypes/{taskId}";
+        string url = $"{Settings.ApiRoot}/v1/TaskTypes/{taskId}";
 
         var response = await client.DeleteAsync(url);
 

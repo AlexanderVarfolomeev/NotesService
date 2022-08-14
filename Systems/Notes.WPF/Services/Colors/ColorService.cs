@@ -17,7 +17,7 @@ public class ColorService : IColorService
     }
     public  async Task<IEnumerable<ColorResponse>> GetColors()
     {
-        string url = $"{Settings.ApiRoot}/Color";
+        string url = $"{Settings.ApiRoot}/v1/Color";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();

@@ -7,7 +7,7 @@ using Notes.TaskTypeService.Models;
 
 namespace Notes.Api.Controllers.TaskTypes
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/tasktypes")]
     [ApiController]
     [ApiVersion("1.0")]
     [Authorize]

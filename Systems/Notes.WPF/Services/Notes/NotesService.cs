@@ -22,7 +22,7 @@ public class NotesService : INotesService
 
     public async Task<IEnumerable<Note>> GetNotes()
     {
-        string url = $"{Settings.ApiRoot}/Notes";
+        string url = $"{Settings.ApiRoot}/v1/Notes";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
@@ -41,7 +41,7 @@ public class NotesService : INotesService
 
     public async Task DoTask(int id)
     {
-        string url = $"{Settings.ApiRoot}/Notes/do-task-{id}";
+        string url = $"{Settings.ApiRoot}/v1/Notes/do-task-{id}";
 
         var body = "";
         var request = new StringContent(body, Encoding.UTF8, "application/json");
@@ -55,7 +55,7 @@ public class NotesService : INotesService
     }
     public async Task<Note> GetNoteById(int id)
     {
-        string url = $"{Settings.ApiRoot}/Notes/{id}";
+        string url = $"{Settings.ApiRoot}/v1/Notes/{id}";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
@@ -77,7 +77,7 @@ public class NotesService : INotesService
 
     public async Task AddNote(EditNote requestModel)
     {
-        string url = $"{Settings.ApiRoot}/Notes";
+        string url = $"{Settings.ApiRoot}/v1/Notes";
 
 
         var body = JsonSerializer.Serialize(requestModel);
@@ -93,7 +93,7 @@ public class NotesService : INotesService
 
     public async Task DeleteNote(int id)
     {
-        string url = $"{Settings.ApiRoot}/Notes/{id}";
+        string url = $"{Settings.ApiRoot}/v1/Notes/{id}";
 
         var response = await client.DeleteAsync(url);
 
@@ -105,7 +105,7 @@ public class NotesService : INotesService
 
     public async Task UpdateNote(int id, EditNote requestModel)
     {
-        string url = $"{Settings.ApiRoot}/Notes/{id}";
+        string url = $"{Settings.ApiRoot}/v1/Notes/{id}";
 
         var body = JsonSerializer.Serialize(requestModel);
         var request = new StringContent(body, Encoding.UTF8, "application/json");
@@ -121,7 +121,7 @@ public class NotesService : INotesService
 
     public async Task<Dictionary<string, double[]>> GetCompletedTaskForLastFourWeeks()
     {
-        string url = $"{Settings.ApiRoot}/Notes/get-last-four-weeks-completed";
+        string url = $"{Settings.ApiRoot}/v1/Notes/get-last-four-weeks-completed";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
@@ -140,7 +140,7 @@ public class NotesService : INotesService
 
     public async Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end)
     {
-        string url = $"{Settings.ApiRoot}/Notes/get-in-interval-{start.ToString("MM/dd/yyyyZ")}-{end.ToString("MM/dd/yyyyZ")}";
+        string url = $"{Settings.ApiRoot}/v1/Notes/get-in-interval-{start.ToString("MM/dd/yyyyZ")}-{end.ToString("MM/dd/yyyyZ")}";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
