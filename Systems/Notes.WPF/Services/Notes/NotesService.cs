@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -28,14 +29,14 @@ public class NotesService : INotesService
 
         if (!response.IsSuccessStatusCode)
         {
-           userDialogService.ShowError("Ошибка при получени списка задач.", "Ошибка!");
+            userDialogService.ShowError("Ошибка при получени списка задач.", "Ошибка!");
         }
 
         var data = JsonSerializer.Deserialize<IEnumerable<Note>>
                        (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
                    ?? new List<Note>();
-
-        return data;
+        
+        return ToLocalTime(data);
     }
 
     public async Task DoTask(int id)
@@ -67,6 +68,9 @@ public class NotesService : INotesService
         var data = JsonSerializer.Deserialize<Note>
                        (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
                    ?? new Note();
+
+        data.StartDateTime = data.StartDateTime.LocalDateTime;
+        data.EndDateTime = data.EndDateTime.LocalDateTime;
 
         return data;
     }
@@ -108,8 +112,7 @@ public class NotesService : INotesService
 
         var response = await client.PutAsync(url, request);
 
-        var content = await response.Content.ReadAsStringAsync();
-
+      
         if (!response.IsSuccessStatusCode)
         {
             userDialogService.ShowError("Ошибка при обновлении задачи.", "Ошибка!");
@@ -150,6 +153,17 @@ public class NotesService : INotesService
         var data = JsonSerializer.Deserialize<IEnumerable<Note>>
                        (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
                    ?? new List<Note>();
+
+        return ToLocalTime(data);
+    }
+
+    private IEnumerable<Note> ToLocalTime(IEnumerable<Note> data)
+    {
+        foreach (var note in data)
+        {
+            note.StartDateTime = note.StartDateTime.LocalDateTime;
+            note.EndDateTime = note.EndDateTime.LocalDateTime;
+        }
 
         return data;
     }
