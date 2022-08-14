@@ -8,6 +8,7 @@ namespace Notes.Api.Controllers.Colors
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     [Authorize]
     public class ColorController : ControllerBase
     {

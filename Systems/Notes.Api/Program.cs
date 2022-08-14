@@ -16,6 +16,8 @@ builder.Host.UseSerilog((host, cfg) =>
 
 services.AddHttpContextAccessor();
 
+services.AddAppVersions();
+
 services.AddAppDbContext(settings);
 
 services.AddAppSwagger(settings);
@@ -28,6 +30,7 @@ services.AddAppAuth(settings);
 
 services.AddControllers().AddValidator();
 
+services.AddRazorPages();
 
 services.AddAutoMappers();
 
@@ -47,6 +50,8 @@ app.UseAppCors();
 app.UseSerilogRequestLogging();
 
 app.UseAppAuth();
+
+app.MapRazorPages();
 
 app.MapControllers();
 

@@ -9,6 +9,7 @@ namespace Notes.Api.Controllers.TaskTypes
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     [Authorize]
     public class TaskTypesController : ControllerBase
     {

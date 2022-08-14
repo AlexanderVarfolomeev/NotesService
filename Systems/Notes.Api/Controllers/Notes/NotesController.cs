@@ -9,6 +9,7 @@ namespace Notes.Api.Controllers.Notes
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     [Authorize]
     public class NotesController : ControllerBase
     {

@@ -8,6 +8,7 @@ namespace Notes.Api.Controllers.Account
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class AccountController : Controller
     {
         private readonly IAccountService accountService;

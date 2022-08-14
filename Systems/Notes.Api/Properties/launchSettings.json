@@ -7,7 +7,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "launchUrl": "swagger",
+      "launchUrl": "api",
       "applicationUrl": "http://localhost:5000",
       "dotnetRunMessages": true
     },

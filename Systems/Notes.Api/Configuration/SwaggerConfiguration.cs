@@ -16,7 +16,18 @@ public static class SwaggerConfiguration
         if (!settings.General.SwaggerVisible)
             return services;
 
-        services.AddOptions<SwaggerGenOptions>();
+        services.AddOptions<SwaggerGenOptions>()
+            .Configure<IApiVersionDescriptionProvider>((options, provider) =>
+            {
+                foreach (var avd in provider.ApiVersionDescriptions)
+                {
+                    options.SwaggerDoc(avd.GroupName, new OpenApiInfo
+                    {
+                        Version = avd.GroupName,
+                        Title = $"NotesService"
+                    });
+                }
+            });
 
         services.AddSwaggerGen(options =>
         {
@@ -79,15 +90,22 @@ public static class SwaggerConfiguration
     public static WebApplication UseAppSwagger(this WebApplication app)
     {
         var settings = app.Services.GetService<IApiSettings>();
-
+        var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
         if (!settings.General.SwaggerVisible)
             return app;
 
-        app.UseSwagger();
+        app.UseSwagger(options =>
+        {
+            options.RouteTemplate = "api/{documentname}/api.yaml";
+        });
 
         app.UseSwaggerUI(
             options =>
-            {  
+            {
+                options.RoutePrefix = "api";
+                provider.ApiVersionDescriptions.ToList().ForEach(
+                    description => options.SwaggerEndpoint($"/api/{description.GroupName}/api.yaml", description.GroupName.ToUpperInvariant())
+                );
 
                 options.DocExpansion(DocExpansion.List);
                 options.DefaultModelsExpandDepth(-1);
