@@ -4,6 +4,6 @@ namespace Notes.AccountService;
 
 public interface IAccountService
 {
-    Task<bool> RegisterAccount(RegisterAccountModel model);
+    Task<bool> RegisterAccount(AccountModel model);
     Task<bool> DeleteAccount(AccountModel model);
 }

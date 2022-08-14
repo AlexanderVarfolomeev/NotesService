@@ -20,9 +20,9 @@ namespace Notes.Api.Controllers.Account
         }
 
         [HttpPost("Register")]
-        public async Task Register([FromBody] RegisterAccount model)
+        public async Task Register([FromBody] Models.Account model)
         {
-            var user = mapper.Map<RegisterAccountModel>(model);
+            var user = mapper.Map<AccountModel>(model);
             await accountService.RegisterAccount(user);
         }
 

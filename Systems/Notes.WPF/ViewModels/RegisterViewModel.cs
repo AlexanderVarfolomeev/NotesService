@@ -32,9 +32,12 @@ public partial class RegisterViewModel : ObservableObject
     {
         if (await Save())
         {
-            var window = (Window)parameter;
+            var window = (Window) parameter;
+            _userDialogService.ShowInformation("Аккаунт успешно зарегистрирован!", "Успешная регистрация.");
             window.Close();
         }
+        else
+            _userDialogService.ShowError("Аккаунт с данным Email уже существует!", "Ошибка регистрации.");
     }
 
     private async Task<bool> Save()

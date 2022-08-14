@@ -19,7 +19,7 @@ public class AccountService : IAccountService
     }
 
 
-    public async Task<bool> RegisterAccount(RegisterAccountModel model)
+    public async Task<bool> RegisterAccount(AccountModel model)
     {
         var user = await userManager.FindByEmailAsync(model.Email);
         ProcessException.ThrowIf(() => user != null, "The user with this Email already exists.");
@@ -68,4 +68,3 @@ public class AccountService : IAccountService
    
 
 }
-
