@@ -40,8 +40,8 @@ namespace Notes.Api.Controllers.Notes
             return data;
         }
 
-        [HttpGet("get-in-interval-{start}-{end}")]
-        public async Task<IEnumerable<NoteResponse>> GetNotesInInterval([FromRoute]DateTimeOffset start, [FromRoute]DateTimeOffset end)
+        [HttpGet("get-in-interval")]
+        public async Task<IEnumerable<NoteResponse>> GetNotesInInterval([FromQuery]DateTimeOffset start, [FromQuery] DateTimeOffset end)
         {
             await notesService.UpdateNoteStatus();
             var data = await notesService.GetNotesInInterval(start.ToUniversalTime(), end.ToUniversalTime());

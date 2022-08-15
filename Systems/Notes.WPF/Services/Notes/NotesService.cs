@@ -140,7 +140,9 @@ public class NotesService : INotesService
 
     public async Task<IEnumerable<Note>> GetNotesInInterval(DateTimeOffset start, DateTimeOffset end)
     {
-        string url = $"{Settings.ApiRoot}/v1/Notes/get-in-interval-{start.ToString("MM/dd/yyyyZ")}-{end.ToString("MM/dd/yyyyZ")}";
+        string startStr = start.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        string endStr = end.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        string url = $"{Settings.ApiRoot}/v1/Notes/get-in-interval?start={startStr}&end={endStr}";
 
         var response = await client.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
