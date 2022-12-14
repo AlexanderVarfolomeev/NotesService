@@ -166,8 +166,6 @@ public class NotesService : INotesService
         {
             var newNote = CreateNextNoteFromRepeat(note);
             newNote.Status = TaskStatus.Waiting;
-            newNote.Id = 0;
-            newNote.Type = null;
             await context.Notes.AddAsync(newNote);
             await context.SaveChangesAsync();
         }
@@ -200,26 +198,37 @@ public class NotesService : INotesService
 
     private Note CreateNextNoteFromRepeat(Note note)
     {
-        switch (note.RepeatFrequency)
+        Note newNote = new Note()
+        {
+            Description = note.Description,
+            EndDateTime = note.EndDateTime,
+            Status = note.Status,
+            StartDateTime = note.StartDateTime,
+            Name = note.Name,
+            RepeatFrequency = note.RepeatFrequency,
+            TaskTypeId = note.TaskTypeId,
+            Type = note.Type
+        };
+        switch (newNote.RepeatFrequency)
         {
             case RepeatFrequency.Daily:
-                note.StartDateTime = note.StartDateTime.AddDays(1);
-                note.EndDateTime = note.EndDateTime.AddDays(1);
+                newNote.StartDateTime = newNote.StartDateTime.AddDays(1);
+                newNote.EndDateTime = newNote.EndDateTime.AddDays(1);
                 break;
             case RepeatFrequency.Weekly:
-                note.StartDateTime = note.StartDateTime.AddDays(7);
-                note.EndDateTime = note.EndDateTime.AddDays(7);
+                newNote.StartDateTime = newNote.StartDateTime.AddDays(7);
+                newNote.EndDateTime = newNote.EndDateTime.AddDays(7);
                 break;
             case RepeatFrequency.Monthly:
-                note.StartDateTime = note.StartDateTime.AddMonths(1);
-                note.EndDateTime = note.EndDateTime.AddMonths(1);
+                newNote.StartDateTime = newNote.StartDateTime.AddMonths(1);
+                newNote.EndDateTime = newNote.EndDateTime.AddMonths(1);
                 break;
             case RepeatFrequency.Annually:
-                note.StartDateTime = note.StartDateTime.AddYears(1);
-                note.EndDateTime = note.EndDateTime.AddYears(1);
+                newNote.StartDateTime = newNote.StartDateTime.AddYears(1);
+                newNote.EndDateTime = newNote.EndDateTime.AddYears(1);
                 break;
         }
-        return note;
+        return newNote;
     }
 
     /// <summary>

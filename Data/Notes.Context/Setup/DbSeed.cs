@@ -167,8 +167,8 @@ public class DbSeed
         var n = new Note()
         {
             Name = "Убраться",
-            StartDateTime = new DateTimeOffset(2022, 7, 5, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 5, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 28, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 28, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Daily,
             Status = TaskStatus.Failed,
             TaskTypeId = 1
@@ -182,8 +182,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Убраться",
-                StartDateTime = new DateTimeOffset(2022, 7, day++, 13, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 7, day, 13, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 13, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 13, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 1
@@ -198,8 +198,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Сделать дз",
-                StartDateTime = new DateTimeOffset(2022, 7, day++, 15, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 7, day, 15, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 15, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 15, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 3
@@ -214,8 +214,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Созвон",
-                StartDateTime = new DateTimeOffset(2022, 7, day++, 19, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 7, day, 20, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 19, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 20, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 2
@@ -227,8 +227,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поздравить леру с др",
-            StartDateTime = new DateTimeOffset(2022, 7, 11, 11, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 11, 11, 10, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 27, 11, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 27, 11, 10, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Annually,
             Status = TaskStatus.Done,
             TaskTypeId = 4
@@ -239,8 +239,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поздравить сашу с др",
-            StartDateTime = new DateTimeOffset(2022, 7, 16, 11, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 16, 11, 10, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 28, 11, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 28, 11, 10, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Annually,
             Status = TaskStatus.Done,
             TaskTypeId = 4
@@ -252,8 +252,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Встреча с максом",
-            StartDateTime = new DateTimeOffset(2022, 7, 19, 11, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 19, 16, 0, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 29, 11, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 29, 16, 0, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Annually,
             Status = TaskStatus.Waiting,
             TaskTypeId = 2
@@ -268,8 +268,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Убраться",
-                StartDateTime = new DateTimeOffset(2022, 8, day++, 13, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 8, day, 13, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 13, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 13, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 1
@@ -284,8 +284,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Сделать дз",
-                StartDateTime = new DateTimeOffset(2022, 8, day++, 15, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 8, day, 15, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 15, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 15, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 3
@@ -300,8 +300,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Созвон",
-                StartDateTime = new DateTimeOffset(2022, 8, day++, 19, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 8, day, 20, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 19, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 20, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 2
@@ -316,8 +316,8 @@ public class DbSeed
             n = new Note()
             {
                 Name = "Поход в зал",
-                StartDateTime = new DateTimeOffset(2022, 7, day++, 9, 0, 0, TimeSpan.Zero),
-                EndDateTime = new DateTimeOffset(2022, 7, day, 12, 30, 0, TimeSpan.Zero),
+                StartDateTime = new DateTimeOffset(2022, 12, day++, 9, 0, 0, TimeSpan.Zero),
+                EndDateTime = new DateTimeOffset(2022, 12, day, 12, 30, 0, TimeSpan.Zero),
                 RepeatFrequency = RepeatFrequency.Daily,
                 Status = TaskStatus.Done,
                 TaskTypeId = 5
@@ -330,8 +330,8 @@ public class DbSeed
         context.Notes.Add(new Note()
         {
             Name = "Поход в зал",
-            StartDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 9, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 12, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, DateTime.Today.Day + 1, 9, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, DateTime.Today.Day + 1, 12, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Daily,
             Status = TaskStatus.Waiting,
             TaskTypeId = 5
@@ -340,8 +340,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Созвон",
-            StartDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 19, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8, DateTime.Today.Day + 1, 20, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, DateTime.Today.Day + 1, 19, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, DateTime.Today.Day + 1, 20, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Daily,
             Status = TaskStatus.Waiting,
             TaskTypeId = 2
@@ -352,8 +352,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поход в бассейн",
-            StartDateTime = new DateTimeOffset(2022, 7, 14, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 14, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 14, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 14, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Done,
             TaskTypeId = 5
@@ -363,8 +363,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поход в бассейн",
-            StartDateTime = new DateTimeOffset(2022, 7, 21, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 21, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 21, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 21, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Done,
             TaskTypeId = 5
@@ -374,8 +374,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поход в бассейн",
-            StartDateTime = new DateTimeOffset(2022, 7, 28, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 7, 28, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 28, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 28, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Failed,
             TaskTypeId = 5
@@ -386,8 +386,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поход в бассейн",
-            StartDateTime = new DateTimeOffset(2022, 8, 4, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8, 4, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 4, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 4, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Done,
             TaskTypeId = 5
@@ -397,8 +397,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поход в бассейн",
-            StartDateTime = new DateTimeOffset(2022, 8,11, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8,11, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12,11, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12,11, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Done,
             TaskTypeId = 5
@@ -408,8 +408,8 @@ public class DbSeed
         n = new Note()
         {
             Name = "Поход в бассейн",
-            StartDateTime = new DateTimeOffset(2022, 8, 18, 13, 0, 0, TimeSpan.Zero),
-            EndDateTime = new DateTimeOffset(2022, 8, 18, 13, 30, 0, TimeSpan.Zero),
+            StartDateTime = new DateTimeOffset(2022, 12, 18, 13, 0, 0, TimeSpan.Zero),
+            EndDateTime = new DateTimeOffset(2022, 12, 18, 13, 30, 0, TimeSpan.Zero),
             RepeatFrequency = RepeatFrequency.Weekly,
             Status = TaskStatus.Waiting,
             TaskTypeId = 5
